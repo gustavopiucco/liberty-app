@@ -12,6 +12,6 @@ const router = express.Router();
 router.post('auth/login');
 
 //User
-router.post('/users', validate(userValidation.createUser), userController.createUser);
+router.post('/users', validate(userValidation.create), userController.create);
 
 module.exports = router;

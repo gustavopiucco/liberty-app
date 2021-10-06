@@ -10,12 +10,12 @@ async function cpfExists(cpf) {
     return rows.length > 0;
 }
 
-async function createUser(email, passwordHash, firstName, lastName, cpf, phone) {
-    await mysql.pool.execute('INSERT INTO users (email, password_hash, first_name, last_name, cpf, phone) VALUES (?, ?, ?, ?, ?, ?)', [email, passwordHash, firstName, lastName, cpf, phone]);
+async function create(email, passwordHash, firstName, lastName, cpf, phone, birthDate, country, city, state, postalCode) {
+    await mysql.pool.execute('INSERT INTO users (email, password_hash, first_name, last_name, cpf, phone, birth_date, country, city, state, postal_code) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [email, passwordHash, firstName, lastName, cpf, phone, birthDate, country, city, state, postalCode]);
 }
 
 module.exports = {
     emailExists,
     cpfExists,
-    createUser
+    create
 }
