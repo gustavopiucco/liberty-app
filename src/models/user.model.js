@@ -14,8 +14,15 @@ async function create(email, passwordHash, firstName, lastName, cpf, phone, birt
     await mysql.pool.execute('INSERT INTO users (email, password_hash, first_name, last_name, cpf, phone, birth_date, country, city, state, postal_code) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [email, passwordHash, firstName, lastName, cpf, phone, birthDate, country, city, state, postalCode]);
 }
 
+async function getByEmail(email) {
+    const [rows, fields] = await mysql.pool.execute('SELECT * FROM users WHERE email = ?', [email]);
+    return rows[0];
+}
+
+
 module.exports = {
     emailExists,
     cpfExists,
-    create
+    create,
+    getByEmail
 }

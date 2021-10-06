@@ -6,7 +6,7 @@ CREATE TABLE users (
   id int NOT NULL AUTO_INCREMENT,
   email varchar(100) NOT NULL,
   password_hash char(60) NOT NULL,
-  role enum('admin', 'user'),
+  role enum('admin', 'user') DEFAULT 'user',
   first_name varchar(30) NOT NULL,
   last_name varchar(60) NOT NULL,
   cpf char(11) NOT NULL,
