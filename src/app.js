@@ -4,11 +4,17 @@ const xss = require('xss-clean');
 const compression = require('compression');
 const cors = require('cors');
 const httpStatus = require('http-status');
-const routes = require('./routes/v1');
+const routes = require('./routes');
 const { errorConverter, errorHandler } = require('./middlewares/error');
 const ApiError = require('./utils/ApiError');
+const morgan = require('morgan');
 
 const app = express();
+
+//morgan http log
+if (process.env.NODE_ENV == 'development') {
+    app.use(morgan('dev'));
+}
 
 //set security HTTP headers
 app.use(helmet());
@@ -30,7 +36,7 @@ app.use(cors());
 app.options('*', cors());
 
 //api routes
-app.use('/v1', routes);
+app.use('/api', routes);
 
 //send back a 404 error for any unknown api request
 app.use((req, res, next) => {
