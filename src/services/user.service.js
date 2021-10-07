@@ -13,9 +13,24 @@ async function create(body) {
     }
 
     const passwordHash = await bcrypt.hash(body.password, 8);
-    await userModel.create(body.email, passwordHash, body.firstName, body.lastName, body.cpf, body.phone, body.birthDate, body.country, body.city, body.state, body.postalCode);
+    const inviteCode = generateRandomInviteCode();
+
+    await userModel.create(1, inviteCode, body.email, passwordHash, body.firstName, body.lastName, body.cpf, body.phone, body.birthDate, body.country, body.city, body.state, body.postalCode);
+}
+
+function generateRandomInviteCode() {
+    const length = 8;
+    const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
+    let result = '';
+
+    for (var i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+
+    return result;
 }
 
 module.exports = {
-    create
+    create,
+    generateRandomInviteCode
 }

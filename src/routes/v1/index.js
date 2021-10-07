@@ -16,4 +16,7 @@ router.post('/auth/login', validate(authValidation.login), authController.login)
 //User
 router.post('/users', validate(userValidation.create), userController.create);
 
+//Multilevel
+router.get('/multilevel', validate(), );
+
 module.exports = router;
