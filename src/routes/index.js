@@ -17,8 +17,10 @@ router.post('/auth/login', validate(authValidation.login), authController.login)
 
 //User
 router.post('/users', validate(userValidation.create), userController.create);
+router.get('/users/me', auth('get_user'), userController.getCurrentUser);
+router.patch('/users/me/password', auth('update_password'), validate(userValidation.updatePassword), userController.updatePassword);
 
 //Multilevel
-router.get('/multilevel/:level', auth('get_multilevel'), validate(multilevelValidation.getByLevel), multilevelController.getByLevel);
+router.get('/multilevel/me/:level', auth('get_multilevel'), validate(multilevelValidation.getByLevel), multilevelController.getByLevel);
 
 module.exports = router;

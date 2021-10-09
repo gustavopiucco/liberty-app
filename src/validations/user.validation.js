@@ -1,5 +1,5 @@
 const Joi = require('joi');
-const { password, date } = require('./custom.validation');
+const { date } = require('./custom.validation');
 
 const create = {
     body: Joi.object().keys({
@@ -17,11 +17,13 @@ const create = {
     }),
 };
 
-const update = {
-
+const updatePassword = {
+    body: Joi.object().keys({
+        newPassword: Joi.string().required().min(6).max(50),
+    }),
 };
 
 module.exports = {
     create,
-    update
+    updatePassword
 }

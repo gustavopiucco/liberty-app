@@ -18,6 +18,24 @@ async function create(body) {
     await userModel.create(1, inviteCode, body.email, passwordHash, body.firstName, body.lastName, body.cpf, body.phone, body.birthDate, body.country, body.city, body.state, body.postalCode);
 }
 
+async function getById(id) {
+    const user = await userModel.getById(id);
+
+    delete user.password_hash;
+
+    return user;
+}
+
+async function updatePassword(id, newPassword) {
+    let passwordHash = await bcrypt.hash(newPassword, 8);
+
+    await userModel.updatePasswordHash(id, passwordHash);
+}
+
+async function updateUserData(loggedInUser, firstName, lastName, phone, birthDate) {
+    await userModel.updateUserData(loggedInUser.id, firstName, lastName, phone, birthDate);
+}
+
 function generateRandomInviteCode() {
     const length = 8;
     const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
@@ -32,5 +50,8 @@ function generateRandomInviteCode() {
 
 module.exports = {
     create,
+    getById,
+    updatePassword,
+    updateUserData,
     generateRandomInviteCode
 }

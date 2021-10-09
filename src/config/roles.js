@@ -4,12 +4,16 @@ const rolePermissions = new Map();
 
 rolePermissions.set(roles[0],
     [
+        'get_user', ,
+        'update_password',
         'get_multilevel'
     ]);
 
 rolePermissions.set(roles[1],
     [
-        'get_multilevel'
+        'get_user',
+        'get_multilevel',
+        'update_password'
     ]);
 
 module.exports = {
