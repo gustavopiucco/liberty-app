@@ -6,6 +6,8 @@ CREATE TABLE users (
   id int NOT NULL AUTO_INCREMENT,
   sponsor_id int,
   invite_code varchar(20) NOT NULL,
+  kyc_verified boolean NOT NULL DEFAULT false,
+  email_verified boolean NOT NULL DEFAULT false,
   email varchar(100) NOT NULL,
   password_hash char(60) NOT NULL,
   role enum('admin', 'user') DEFAULT 'user',

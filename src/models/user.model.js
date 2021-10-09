@@ -24,6 +24,11 @@ async function getByEmail(email) {
     return rows[0];
 }
 
+async function getByInviteCode(inviteCode) {
+    const [rows, fields] = await mysql.pool.execute('SELECT * FROM users WHERE invite_code = ?', [inviteCode]);
+    return rows[0];
+}
+
 async function updatePasswordHash(id, passwordHash) {
     await mysql.pool.execute('UPDATE users SET password_hash = ? WHERE id = ?', [passwordHash, id]);
 }
@@ -38,6 +43,7 @@ module.exports = {
     create,
     getById,
     getByEmail,
+    getByInviteCode,
     updatePasswordHash,
     updateUserData
 }

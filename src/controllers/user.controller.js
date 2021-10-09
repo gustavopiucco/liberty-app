@@ -15,7 +15,7 @@ const getCurrentUser = catchAsync(async (req, res) => {
 });
 
 const updatePassword = catchAsync(async (req, res) => {
-    await userService.updatePassword(req.user.id, req.body.newPassword);
+    await userService.updatePassword(req.user.id, req.body.new_password);
 
     res.status(httpStatus.OK).send();
 });

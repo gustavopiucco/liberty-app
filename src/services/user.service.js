@@ -1,6 +1,7 @@
 const ApiError = require('../utils/ApiError');
 const httpStatus = require('http-status');
 const bcrypt = require('bcryptjs');
+const emailService = require('../services/email.service');
 const userModel = require('../models/user.model');
 
 async function create(body) {
@@ -12,10 +13,18 @@ async function create(body) {
         throw new ApiError(httpStatus.BAD_REQUEST, 'Este CPF já está cadastrado');
     }
 
+    const sponsor = await userModel.getByInviteCode(body.invite_code);
+
+    if (!sponsor) {
+        throw new ApiError(httpStatus.BAD_REQUEST, 'Este patrocinador não existe');
+    }
+
+
+
     const passwordHash = await bcrypt.hash(body.password, 8);
     const inviteCode = generateRandomInviteCode();
 
-    await userModel.create(1, inviteCode, body.email, passwordHash, body.firstName, body.lastName, body.cpf, body.phone, body.birthDate, body.country, body.city, body.state, body.postalCode);
+    await userModel.create(sponsor.id, inviteCode, body.email, passwordHash, body.first_name, body.last_name, body.cpf, body.phone, body.birth_date, body.country, body.city, body.state, body.postal_code);
 }
 
 async function getById(id) {
@@ -52,6 +61,5 @@ module.exports = {
     create,
     getById,
     updatePassword,
-    updateUserData,
-    generateRandomInviteCode
+    updateUserData
 }
