@@ -1,6 +1,7 @@
 const ApiError = require('../utils/ApiError');
 const httpStatus = require('http-status');
 const bcrypt = require('bcryptjs');
+const random = require('../utils/random');
 const emailService = require('../services/email.service');
 const userModel = require('../models/user.model');
 
@@ -19,12 +20,17 @@ async function create(body) {
         throw new ApiError(httpStatus.BAD_REQUEST, 'Este patrocinador não existe');
     }
 
-
+    if (sponsor.email_verified == 0) {
+        throw new ApiError(httpStatus.BAD_REQUEST, 'Este patrocinador ainda não verificou o email');
+    }
 
     const passwordHash = await bcrypt.hash(body.password, 8);
-    const inviteCode = generateRandomInviteCode();
+    const inviteCode = random.generateString(8);
+    const emailValidationCode = random.generateString(20);
 
-    await userModel.create(sponsor.id, inviteCode, body.email, passwordHash, body.first_name, body.last_name, body.cpf, body.phone, body.birth_date, body.country, body.city, body.state, body.postal_code);
+    await userModel.create(sponsor.id, inviteCode, emailValidationCode, body.email, passwordHash, body.first_name, body.last_name, body.cpf, body.phone, body.birth_date, body.country, body.city, body.state, body.postal_code);
+
+    //enviar email com o código de validação
 }
 
 async function getById(id) {
@@ -43,18 +49,6 @@ async function updatePassword(id, newPassword) {
 
 async function updateUserData(loggedInUser, firstName, lastName, phone, birthDate) {
     await userModel.updateUserData(loggedInUser.id, firstName, lastName, phone, birthDate);
-}
-
-function generateRandomInviteCode() {
-    const length = 8;
-    const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
-    let result = '';
-
-    for (var i = 0; i < length; i++) {
-        result += characters.charAt(Math.floor(Math.random() * characters.length));
-    }
-
-    return result;
 }
 
 module.exports = {
