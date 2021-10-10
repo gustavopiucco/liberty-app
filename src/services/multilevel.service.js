@@ -8,6 +8,13 @@ async function getByLevel(loggedInUser, level) {
     return multilevel;
 }
 
+async function addGains(levels, percentage, value) {
+    //levels = quantidade de niveis
+    //percentage = array com o nivel e a %
+    //value = valor q vai ser calculado a % por nivel
+}
+
 module.exports = {
-    getByLevel
+    getByLevel,
+    addGains
 }

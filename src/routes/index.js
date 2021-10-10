@@ -14,11 +14,12 @@ const router = express.Router();
 
 //Auth
 router.post('/auth/login', validate(authValidation.login), authController.login);
+router.patch('/auth/email/confirmation', validate(authValidation.emailConfirmation), authController.emailConfirmation);
+router.patch('/auth/password', auth('update_password'), validate(authValidation.updatePassword), authController.updatePassword);
 
 //User
 router.post('/users', validate(userValidation.create), userController.create);
 router.get('/users/me', auth('get_user'), userController.getCurrentUser);
-router.patch('/users/me/password', auth('update_password'), validate(userValidation.updatePassword), userController.updatePassword);
 
 //Multilevel
 router.get('/multilevel/me/:level', auth('get_multilevel'), validate(multilevelValidation.getByLevel), multilevelController.getByLevel);

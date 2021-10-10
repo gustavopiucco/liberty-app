@@ -26,11 +26,13 @@ async function create(body) {
 
     const passwordHash = await bcrypt.hash(body.password, 8);
     const inviteCode = random.generateString(8);
-    const emailValidationCode = random.generateString(20);
+    const emailConfirmationCode = random.generateString(20);
 
-    await userModel.create(sponsor.id, inviteCode, emailValidationCode, body.email, passwordHash, body.first_name, body.last_name, body.cpf, body.phone, body.birth_date, body.country, body.city, body.state, body.postal_code);
+    await userModel.create(sponsor.id, inviteCode, emailConfirmationCode, body.email, passwordHash, body.first_name, body.last_name, body.cpf, body.phone, body.birth_date, body.country, body.city, body.state, body.postal_code);
 
-    //enviar email com o código de validação
+    await emailService.sendEmailConfirmation(body.email, emailConfirmationCode);
+
+    //pagar a comissão em x niveis
 }
 
 async function getById(id) {
@@ -41,19 +43,7 @@ async function getById(id) {
     return user;
 }
 
-async function updatePassword(id, newPassword) {
-    let passwordHash = await bcrypt.hash(newPassword, 8);
-
-    await userModel.updatePasswordHash(id, passwordHash);
-}
-
-async function updateUserData(loggedInUser, firstName, lastName, phone, birthDate) {
-    await userModel.updateUserData(loggedInUser.id, firstName, lastName, phone, birthDate);
-}
-
 module.exports = {
     create,
-    getById,
-    updatePassword,
-    updateUserData
+    getById
 }

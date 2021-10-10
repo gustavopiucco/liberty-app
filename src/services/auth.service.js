@@ -11,6 +11,22 @@ async function loginWithEmailAndPassword(email, password) {
     return user;
 }
 
+async function updatePassword(id, newPassword) {
+    let passwordHash = await bcrypt.hash(newPassword, 8);
+
+    await userModel.updatePasswordHash(id, passwordHash);
+}
+
+async function emailConfirmation(code) {
+    if (!await userModel.emailConfirmationCodeExists(code)) {
+        throw new ApiError(httpStatus.BAD_REQUEST, 'Código de validação incorreto');
+    }
+
+    await userModel.updateEmailConfirmation(code);
+}
+
 module.exports = {
-    loginWithEmailAndPassword
+    loginWithEmailAndPassword,
+    updatePassword,
+    emailConfirmation
 }

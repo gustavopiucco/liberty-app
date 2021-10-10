@@ -7,8 +7,8 @@ CREATE TABLE users (
   sponsor_id int,
   invite_code varchar(20) NOT NULL,
   kyc_verified boolean NOT NULL DEFAULT false,
-  email_verified boolean NOT NULL DEFAULT false,
-  email_validation_code char(20),
+  email_confirmed boolean NOT NULL DEFAULT false,
+  email_confirmation_code char(20),
   email varchar(100) NOT NULL,
   password_hash char(60) NOT NULL,
   role enum('admin', 'user') DEFAULT 'user',
@@ -25,6 +25,7 @@ CREATE TABLE users (
   updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   CONSTRAINT pk_id PRIMARY KEY (id),
   CONSTRAINT uc_invite_code UNIQUE (invite_code),
+  CONSTRAINT uc_email_confirmation_code UNIQUE (email_confirmation_code),
   CONSTRAINT uc_email UNIQUE (email),
   CONSTRAINT uc_cpf UNIQUE (cpf),
   CONSTRAINT fk_sponsor_id_users_id FOREIGN KEY (sponsor_id) REFERENCES users (id)

@@ -18,13 +18,6 @@ const create = {
     }),
 };
 
-const updatePassword = {
-    body: Joi.object().keys({
-        new_password: Joi.string().required().min(6).max(50),
-    }),
-};
-
 module.exports = {
-    create,
-    updatePassword
+    create
 }

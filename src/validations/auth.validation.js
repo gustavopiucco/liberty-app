@@ -7,6 +7,20 @@ const login = {
     }),
 };
 
+const updatePassword = {
+    body: Joi.object().keys({
+        new_password: Joi.string().required().min(6).max(50),
+    }),
+};
+
+const emailConfirmation = {
+    body: Joi.object().keys({
+        code: Joi.string().required().length(20),
+    }),
+};
+
 module.exports = {
-    login
+    login,
+    updatePassword,
+    emailConfirmation
 };

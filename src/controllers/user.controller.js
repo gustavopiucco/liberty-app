@@ -14,14 +14,7 @@ const getCurrentUser = catchAsync(async (req, res) => {
     res.status(httpStatus.OK).send(user);
 });
 
-const updatePassword = catchAsync(async (req, res) => {
-    await userService.updatePassword(req.user.id, req.body.new_password);
-
-    res.status(httpStatus.OK).send();
-});
-
 module.exports = {
     create,
-    getCurrentUser,
-    updatePassword
+    getCurrentUser
 }
