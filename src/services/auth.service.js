@@ -1,8 +1,11 @@
 const ApiError = require('../utils/ApiError');
 const httpStatus = require('http-status');
 const bcrypt = require('bcryptjs');
+const random = require('../utils/random');
 const userModel = require('../models/user.model');
-const authValidationsModel = require('../models/authvalidations.model');
+const emailValidationModel = require('../models/emailvalidation.model');
+const resetPasswordValidationModel = require('../models/resetpasswordvalidation.model');
+const emailService = require('../services/email.service');
 
 async function loginWithEmailAndPassword(email, password) {
     const user = await userModel.getByEmail(email);
@@ -24,15 +27,27 @@ async function updatePassword(id, newPassword) {
     await userModel.updatePasswordHash(id, passwordHash);
 }
 
-async function emailValidation(code) {
-    const emailAuthValidation = await authValidationsModel.getByCode('email', code);
+async function requestPasswordReset(email) {
+    const user = await userModel.getByEmail(email);
 
-    if (!emailAuthValidation) {
+    if (!user) return; //for satefy, if email is not found, just return (200 OK) to prevent emails from being known
+
+    const resetPasswordValidationCode = random.generateString(30);
+
+    await resetPasswordValidationModel.create(user.id, resetPasswordValidationCode);
+
+    await emailService.sendResetPasswordValidation(user.email, resetPasswordValidationCode);
+}
+
+async function emailValidation(code) {
+    const emailValidation = await emailValidationModel.getByCode(code);
+
+    if (!emailValidation) {
         throw new ApiError(httpStatus.BAD_REQUEST, 'Código de validação incorreto ou já utilizado');
     }
 
     const currentDate = new Date();
-    const createdAt = emailAuthValidation.created_at;
+    const createdAt = emailValidation.created_at;
     let expires = new Date(createdAt);
     expires.setTime(createdAt.getTime() + process.env.AUTH_EMAIL_VALIDATION_EXPIRES_IN_MINUTES * 60 * 1000);
 
@@ -40,13 +55,34 @@ async function emailValidation(code) {
         throw new ApiError(httpStatus.GONE, 'Código expirado');
     }
 
-    await userModel.setEmailVerified(emailAuthValidation.user_id);
+    await userModel.setEmailVerified(emailValidation.user_id);
 
-    await authValidationsModel.deleteById(emailAuthValidation.id);
+    await emailValidationModel.deleteById(emailValidation.id);
+}
+
+async function passwordResetValidation(code) {
+    const resetValidation = await resetPasswordValidationModel.getByCode(code);
+
+    if (!resetValidation) {
+        throw new ApiError(httpStatus.BAD_REQUEST, 'Código de validação incorreto ou já utilizado');
+    }
+
+    const currentDate = new Date();
+    const createdAt = resetValidation.created_at;
+    let expires = new Date(createdAt);
+    expires.setTime(createdAt.getTime() + process.env.AUTH_EMAIL_VALIDATION_EXPIRES_IN_MINUTES * 60 * 1000);
+
+    if (expires <= currentDate) {
+        throw new ApiError(httpStatus.GONE, 'Código expirado');
+    }
+
+    //
 }
 
 module.exports = {
     loginWithEmailAndPassword,
     updatePassword,
-    emailValidation
+    emailValidation,
+    requestPasswordReset,
+    passwordResetValidation
 }

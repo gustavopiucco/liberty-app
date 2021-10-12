@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs');
 const random = require('../utils/random');
 const emailService = require('../services/email.service');
 const userModel = require('../models/user.model');
-const authValidationsModel = require('../models/authvalidations.model');
+const emailValidationModel = require('../models/emailvalidation.model');
 
 async function create(body) {
     if (await userModel.emailExists(body.email)) {
@@ -27,13 +27,13 @@ async function create(body) {
 
     const passwordHash = await bcrypt.hash(body.password, 8);
     const inviteCode = random.generateString(8);
-    const emailConfirmationCode = random.generateString(20);
+    const emailValidationCode = random.generateString(30);
 
     const createUserResult = await userModel.create(sponsor.id, inviteCode, body.email, passwordHash, body.first_name, body.last_name, body.cpf, body.phone, body.birth_date, body.country, body.city, body.state, body.postal_code, new Date);
 
-    await authValidationsModel.create(createUserResult.insertId, 'email', emailConfirmationCode);
+    await emailValidationModel.create(createUserResult.insertId, emailValidationCode);
 
-    await emailService.sendEmailConfirmation(body.email, emailConfirmationCode);
+    await emailService.sendEmailValidation(body.email, emailValidationCode);
 
     //pagar a comissão em x niveis
 }

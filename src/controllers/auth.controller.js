@@ -22,8 +22,20 @@ const updatePassword = catchAsync(async (req, res) => {
     res.status(httpStatus.OK).send();
 });
 
+const requestPasswordReset = catchAsync(async (req, res) => {
+    await authService.requestPasswordReset(req.body.email);
+
+    res.status(httpStatus.OK).send();
+});
+
 const emailValidation = catchAsync(async (req, res) => {
     await authService.emailValidation(req.body.code);
+
+    res.status(httpStatus.OK).send();
+});
+
+const passwordResetValidation = catchAsync(async (req, res) => {
+    await authService.passwordResetValidation(req.body.code);
 
     res.status(httpStatus.OK).send();
 });
@@ -31,5 +43,7 @@ const emailValidation = catchAsync(async (req, res) => {
 module.exports = {
     login,
     emailValidation,
-    updatePassword
+    updatePassword,
+    requestPasswordReset,
+    passwordResetValidation
 }
