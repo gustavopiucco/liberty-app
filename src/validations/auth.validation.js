@@ -21,13 +21,13 @@ const passwordResetRequest = {
 
 const emailValidation = {
     body: Joi.object().keys({
-        code: Joi.string().required().length(20),
+        code: Joi.string().required().length(30),
     }),
 };
 
 const resetPasswordValidation = {
     body: Joi.object().keys({
-        code: Joi.string().required().length(20),
+        code: Joi.string().required().length(30),
         new_password: Joi.string().required().min(6).max(50),
     }),
 };
