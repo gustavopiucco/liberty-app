@@ -39,7 +39,7 @@ async function passwordResetRequest(email) {
     await emailService.sendResetPasswordValidation(user.email, resetPasswordValidationCode);
 }
 
-async function passwordResetValidation(code) {
+async function resetPasswordValidation(code) {
     const resetValidation = await resetPasswordValidationModel.getByCode(code);
 
     if (!resetValidation) {
@@ -49,7 +49,7 @@ async function passwordResetValidation(code) {
     const currentDate = new Date();
     const createdAt = resetValidation.created_at;
     let expires = new Date(createdAt);
-    expires.setTime(createdAt.getTime() + process.env.AUTH_EMAIL_VALIDATION_EXPIRES_IN_MINUTES * 60 * 1000);
+    expires.setTime(createdAt.getTime() + process.env.AUTH_RESET_PASSWORD_VALIDATION_EXPIRES_IN_MINUTES * 60 * 1000);
 
     if (expires <= currentDate) {
         throw new ApiError(httpStatus.GONE, 'Código expirado');
@@ -84,5 +84,5 @@ module.exports = {
     updatePassword,
     emailValidation,
     passwordResetRequest,
-    passwordResetValidation
+    resetPasswordValidation
 }
