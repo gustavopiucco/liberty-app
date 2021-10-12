@@ -27,7 +27,7 @@ async function updatePassword(id, newPassword) {
     await userModel.updatePasswordHash(id, passwordHash);
 }
 
-async function passwordResetRequest(email) {
+async function resetPasswordRequest(email) {
     const user = await userModel.getByEmail(email);
 
     if (!user) return; //for satefy, if email is not found, just return (200 OK) to prevent emails from being known
@@ -39,7 +39,7 @@ async function passwordResetRequest(email) {
     await emailService.sendResetPasswordValidation(user.email, resetPasswordValidationCode);
 }
 
-async function resetPasswordValidation(code) {
+async function resetPasswordValidation(code, newPassword) {
     const resetValidation = await resetPasswordValidationModel.getByCode(code);
 
     if (!resetValidation) {
@@ -55,7 +55,9 @@ async function resetPasswordValidation(code) {
         throw new ApiError(httpStatus.GONE, 'Código expirado');
     }
 
-    //
+    await updatePassword(resetValidation.user_id, newPassword);
+
+    await resetPasswordValidationModel.deleteById(resetValidation.id);
 }
 
 async function emailValidation(code) {
@@ -83,6 +85,6 @@ module.exports = {
     loginWithEmailAndPassword,
     updatePassword,
     emailValidation,
-    passwordResetRequest,
+    resetPasswordRequest,
     resetPasswordValidation
 }
