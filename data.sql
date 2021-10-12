@@ -33,6 +33,7 @@ VALUES ('5bc12gh49c', 1, 1, 'admin@admin.com', '$2a$08$69AXpIyN21uYCDyTMCxnLuOro
 CREATE TABLE email_validations (
   id int NOT NULL AUTO_INCREMENT,
   user_id int NOT NULL,
+  used boolean NOT NULL DEFAULT false,
   code char(30) NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   CONSTRAINT pk_id PRIMARY KEY (id),
@@ -43,6 +44,7 @@ CREATE TABLE email_validations (
 CREATE TABLE reset_password_validations (
   id int NOT NULL AUTO_INCREMENT,
   user_id int NOT NULL,
+  used boolean NOT NULL DEFAULT false,
   code char(30) NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   CONSTRAINT pk_id PRIMARY KEY (id),

@@ -16,13 +16,13 @@ async function create(userId, code) {
     await mysql.pool.execute('INSERT INTO email_validations (user_id, code) VALUES (?, ?)', [userId, code]);
 }
 
-async function deleteById(id) {
-    await mysql.pool.execute('DELETE FROM email_validations WHERE id = ?', [id])
+async function setUsed(id) {
+    await mysql.pool.execute('UPDATE email_validations SET used = 1 WHERE id = ?', [id])
 }
 
 module.exports = {
     codeExists,
     getByCode,
     create,
-    deleteById
+    setUsed
 }

@@ -22,8 +22,8 @@ async function create(userId, code) {
     await mysql.pool.execute('INSERT INTO reset_password_validations (user_id, code) VALUES (?, ?)', [userId, code]);
 }
 
-async function deleteById(id) {
-    await mysql.pool.execute('DELETE FROM reset_password_validations WHERE id = ?', [id])
+async function setUsed(id) {
+    await mysql.pool.execute('UPDATE reset_password_validations SET used = 1 WHERE id = ?', [id])
 }
 
 module.exports = {
@@ -31,5 +31,5 @@ module.exports = {
     getAllByUserId,
     getByCode,
     create,
-    deleteById
+    setUsed
 }

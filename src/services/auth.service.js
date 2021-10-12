@@ -57,7 +57,7 @@ async function resetPasswordValidation(code, newPassword) {
 
     await updatePassword(resetValidation.user_id, newPassword);
 
-    await resetPasswordValidationModel.deleteById(resetValidation.id);
+    await resetPasswordValidationModel.setUsed(resetValidation.id);
 }
 
 async function emailValidation(code) {
@@ -78,7 +78,7 @@ async function emailValidation(code) {
 
     await userModel.setEmailVerified(emailValidation.user_id);
 
-    await emailValidationModel.deleteById(emailValidation.id);
+    await emailValidationModel.setUsed(emailValidation.id);
 }
 
 module.exports = {
