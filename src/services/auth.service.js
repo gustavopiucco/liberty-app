@@ -42,7 +42,7 @@ async function resetPasswordRequest(email) {
 async function resetPasswordValidation(code, newPassword) {
     const resetValidation = await resetPasswordValidationModel.getByCode(code);
 
-    if (!resetValidation) {
+    if (!resetValidation || resetValidation.used == 1) {
         throw new ApiError(httpStatus.BAD_REQUEST, 'Código de validação incorreto ou já utilizado');
     }
 
@@ -63,7 +63,7 @@ async function resetPasswordValidation(code, newPassword) {
 async function emailValidation(code) {
     const emailValidation = await emailValidationModel.getByCode(code);
 
-    if (!emailValidation) {
+    if (!emailValidation || resetValidation.used == 1) {
         throw new ApiError(httpStatus.BAD_REQUEST, 'Código de validação incorreto ou já utilizado');
     }
 
