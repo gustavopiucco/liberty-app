@@ -20,16 +20,15 @@ CREATE TABLE users (
   city varchar(50) NOT NULL,
   state varchar(50) NOT NULL,
   postal_code varchar(20) NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ,
-  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  created_at TIMESTAMP NOT NULL,
   CONSTRAINT pk_id PRIMARY KEY (id),
   CONSTRAINT uc_invite_code UNIQUE (invite_code),
   CONSTRAINT uc_email UNIQUE (email),
   CONSTRAINT uc_cpf UNIQUE (cpf),
   CONSTRAINT fk_sponsor_id_users_id FOREIGN KEY (sponsor_id) REFERENCES users (id)
 ) ENGINE=InnoDB;
-INSERT INTO users (invite_code, kyc_verified, email_verified, email, password_hash, role, first_name, last_name, cpf, phone, birth_date, country, city, state, postal_code) 
-VALUES ('5bc12gh49c', 1, 1, 'admin@admin.com', '$2a$08$69AXpIyN21uYCDyTMCxnLuOro28Jv0IrcTgWZjuZczD64Vk1ThBai', 'admin', 'Admin', 'Admin', '99999999999', '999999999', '2000-01-01', 'Brazil', 'São Paulo', 'São Paulo', '999999999');
+INSERT INTO users (invite_code, kyc_verified, email_verified, email, password_hash, role, first_name, last_name, cpf, phone, birth_date, country, city, state, postal_code, created_at) 
+VALUES ('5bc12gh49c', 1, 1, 'admin@admin.com', '$2a$08$69AXpIyN21uYCDyTMCxnLuOro28Jv0IrcTgWZjuZczD64Vk1ThBai', 'admin', 'Admin', 'Admin', '99999999999', '999999999', '2000-01-01', 'Brazil', 'São Paulo', 'São Paulo', '999999999', NOW());
 
 CREATE TABLE auth_validations (
   id int NOT NULL AUTO_INCREMENT,
