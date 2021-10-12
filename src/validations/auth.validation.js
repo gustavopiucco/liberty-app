@@ -13,7 +13,7 @@ const updatePassword = {
     }),
 };
 
-const emailConfirmation = {
+const emailValidation = {
     body: Joi.object().keys({
         code: Joi.string().required().length(20),
     }),
@@ -22,5 +22,5 @@ const emailConfirmation = {
 module.exports = {
     login,
     updatePassword,
-    emailConfirmation
+    emailValidation
 };

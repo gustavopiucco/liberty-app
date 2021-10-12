@@ -14,7 +14,7 @@ const router = express.Router();
 
 //Auth
 router.post('/auth/login', validate(authValidation.login), authController.login);
-router.patch('/auth/email/confirmation', validate(authValidation.emailConfirmation), authController.emailConfirmation);
+router.patch('/auth/email/validation', validate(authValidation.emailValidation), authController.emailValidation);
 router.patch('/auth/password', auth('update_password'), validate(authValidation.updatePassword), authController.updatePassword);
 
 //User

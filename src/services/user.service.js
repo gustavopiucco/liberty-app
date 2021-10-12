@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 const random = require('../utils/random');
 const emailService = require('../services/email.service');
 const userModel = require('../models/user.model');
+const authValidationsModel = require('../models/authvalidations.model');
 
 async function create(body) {
     if (await userModel.emailExists(body.email)) {
@@ -28,7 +29,9 @@ async function create(body) {
     const inviteCode = random.generateString(8);
     const emailConfirmationCode = random.generateString(20);
 
-    await userModel.create(sponsor.id, inviteCode, emailConfirmationCode, body.email, passwordHash, body.first_name, body.last_name, body.cpf, body.phone, body.birth_date, body.country, body.city, body.state, body.postal_code);
+    const createUserResult = await userModel.create(sponsor.id, inviteCode, body.email, passwordHash, body.first_name, body.last_name, body.cpf, body.phone, body.birth_date, body.country, body.city, body.state, body.postal_code);
+
+    await authValidationsModel.create(createUserResult.insertId, 'email', emailConfirmationCode);
 
     await emailService.sendEmailConfirmation(body.email, emailConfirmationCode);
 

@@ -22,14 +22,14 @@ const updatePassword = catchAsync(async (req, res) => {
     res.status(httpStatus.OK).send();
 });
 
-const emailConfirmation = catchAsync(async (req, res) => {
-    await authService.emailConfirmation(req.body.code);
+const emailValidation = catchAsync(async (req, res) => {
+    await authService.emailValidation(req.body.code);
 
     res.status(httpStatus.OK).send();
 });
 
 module.exports = {
     login,
-    emailConfirmation,
+    emailValidation,
     updatePassword
 }
