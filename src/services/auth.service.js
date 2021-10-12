@@ -27,7 +27,7 @@ async function updatePassword(id, newPassword) {
     await userModel.updatePasswordHash(id, passwordHash);
 }
 
-async function requestPasswordReset(email) {
+async function passwordResetRequest(email) {
     const user = await userModel.getByEmail(email);
 
     if (!user) return; //for satefy, if email is not found, just return (200 OK) to prevent emails from being known
@@ -37,6 +37,25 @@ async function requestPasswordReset(email) {
     await resetPasswordValidationModel.create(user.id, resetPasswordValidationCode);
 
     await emailService.sendResetPasswordValidation(user.email, resetPasswordValidationCode);
+}
+
+async function passwordResetValidation(code) {
+    const resetValidation = await resetPasswordValidationModel.getByCode(code);
+
+    if (!resetValidation) {
+        throw new ApiError(httpStatus.BAD_REQUEST, 'Código de validação incorreto ou já utilizado');
+    }
+
+    const currentDate = new Date();
+    const createdAt = resetValidation.created_at;
+    let expires = new Date(createdAt);
+    expires.setTime(createdAt.getTime() + process.env.AUTH_EMAIL_VALIDATION_EXPIRES_IN_MINUTES * 60 * 1000);
+
+    if (expires <= currentDate) {
+        throw new ApiError(httpStatus.GONE, 'Código expirado');
+    }
+
+    //
 }
 
 async function emailValidation(code) {
@@ -60,29 +79,10 @@ async function emailValidation(code) {
     await emailValidationModel.deleteById(emailValidation.id);
 }
 
-async function passwordResetValidation(code) {
-    const resetValidation = await resetPasswordValidationModel.getByCode(code);
-
-    if (!resetValidation) {
-        throw new ApiError(httpStatus.BAD_REQUEST, 'Código de validação incorreto ou já utilizado');
-    }
-
-    const currentDate = new Date();
-    const createdAt = resetValidation.created_at;
-    let expires = new Date(createdAt);
-    expires.setTime(createdAt.getTime() + process.env.AUTH_EMAIL_VALIDATION_EXPIRES_IN_MINUTES * 60 * 1000);
-
-    if (expires <= currentDate) {
-        throw new ApiError(httpStatus.GONE, 'Código expirado');
-    }
-
-    //
-}
-
 module.exports = {
     loginWithEmailAndPassword,
     updatePassword,
     emailValidation,
-    requestPasswordReset,
+    passwordResetRequest,
     passwordResetValidation
 }
