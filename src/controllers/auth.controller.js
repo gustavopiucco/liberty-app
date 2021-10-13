@@ -22,6 +22,12 @@ const updatePassword = catchAsync(async (req, res) => {
     res.status(httpStatus.OK).send();
 });
 
+const resendEmailRequest = catchAsync(async (req, res) => {
+    await authService.resendEmailRequest(req.body.email);
+
+    res.status(httpStatus.OK).send();
+});
+
 const resetPasswordRequest = catchAsync(async (req, res) => {
     await authService.resetPasswordRequest(req.body.email);
 
@@ -43,6 +49,7 @@ const emailValidation = catchAsync(async (req, res) => {
 module.exports = {
     login,
     updatePassword,
+    resendEmailRequest,
     resetPasswordRequest,
     resetPasswordValidation,
     emailValidation

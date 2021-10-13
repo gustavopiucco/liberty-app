@@ -27,6 +27,18 @@ async function updatePassword(id, newPassword) {
     await userModel.updatePasswordHash(id, passwordHash);
 }
 
+async function resendEmailRequest(email) {
+    const user = await userModel.getByEmail(email);
+
+    if (!user) return; //for satefy, if email is not found, just return (200 OK) to prevent emails from being known
+
+    const emailValidationCode = random.generateString(30);
+
+    await emailValidationModel.create(user.id, emailValidationCode);
+
+    await emailService.sendEmailValidation(email, emailValidationCode);
+}
+
 async function resetPasswordRequest(email) {
     const user = await userModel.getByEmail(email);
 
@@ -84,6 +96,7 @@ async function emailValidation(code) {
 module.exports = {
     loginWithEmailAndPassword,
     updatePassword,
+    resendEmailRequest,
     emailValidation,
     resetPasswordRequest,
     resetPasswordValidation

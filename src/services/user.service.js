@@ -34,8 +34,6 @@ async function create(body) {
     await emailValidationModel.create(createUserResult.insertId, emailValidationCode);
 
     await emailService.sendEmailValidation(body.email, emailValidationCode);
-
-    //pagar a comissão em x niveis
 }
 
 async function getById(id) {

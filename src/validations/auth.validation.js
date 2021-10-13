@@ -13,6 +13,12 @@ const updatePassword = {
     }),
 };
 
+const resendEmailRequest = {
+    body: Joi.object().keys({
+        email: Joi.string().required().email(),
+    }),
+};
+
 const resetPasswordRequest = {
     body: Joi.object().keys({
         email: Joi.string().required().email(),
@@ -35,6 +41,7 @@ const resetPasswordValidation = {
 module.exports = {
     login,
     updatePassword,
+    resendEmailRequest,
     resetPasswordRequest,
     emailValidation,
     resetPasswordValidation

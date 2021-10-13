@@ -14,9 +14,10 @@ const router = express.Router();
 
 //Auth
 router.post('/auth/login', validate(authValidation.login), authController.login);
-router.post('/auth/email/validation', validate(authValidation.emailValidation), authController.emailValidation);
+router.post('/auth/resend-email/request', validate(authValidation.resendEmailRequest), authController.resendEmailRequest);
 router.post('/auth/reset-password/request', validate(authValidation.resetPasswordRequest), authController.resetPasswordRequest);
 router.post('/auth/reset-password/validation', validate(authValidation.resetPasswordValidation), authController.resetPasswordValidation);
+router.post('/auth/email/validation', validate(authValidation.emailValidation), authController.emailValidation);
 router.patch('/auth/password', auth('update_password'), validate(authValidation.updatePassword), authController.updatePassword);
 
 //User
