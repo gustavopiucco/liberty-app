@@ -75,7 +75,7 @@ async function resetPasswordValidation(code, newPassword) {
 async function emailValidation(code) {
     const emailValidation = await emailValidationModel.getByCode(code);
 
-    if (!emailValidation || resetValidation.used == 1) {
+    if (!emailValidation || emailValidation.used == 1) {
         throw new ApiError(httpStatus.BAD_REQUEST, 'Código de validação incorreto ou já utilizado');
     }
 
