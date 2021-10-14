@@ -16,9 +16,7 @@ async function sendResetPasswordValidation(toEmail, code) {
         `
     };
 
-    mg.messages().send(data, function (error, body) {
-        console.log(error, body);
-    });
+    await sendEmail(data);
 }
 
 async function sendEmailValidation(toEmail, code) {
@@ -32,9 +30,16 @@ async function sendEmailValidation(toEmail, code) {
         `
     };
 
-    mg.messages().send(data, function (error, body) {
-        console.log(error, body);
-    });
+    await sendEmail(data);
+}
+
+async function sendEmail(data) {
+    try {
+        await mg.messages().send(data);
+    }
+    catch (err) {
+        throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, err);
+    }
 }
 
 module.exports = {
