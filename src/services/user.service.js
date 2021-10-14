@@ -44,7 +44,12 @@ async function getById(id) {
     return user;
 }
 
+async function kycUpload(file) {
+    console.log(file);
+}
+
 module.exports = {
     create,
-    getById
+    getById,
+    kycUpload
 }
