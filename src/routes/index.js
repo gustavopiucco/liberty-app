@@ -1,26 +1,15 @@
 const express = require('express');
 const auth = require('../middlewares/auth');
 const validate = require('../middlewares/validate');
-const multer = require('multer');
-
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, 'uploads/')
-    },
-    filename: (req, file, cb) => {
-        cb(null, Date.now() + '-' + file.originalname)
-    },
-    fileSize: 5242880
-});
-
-const upload = multer({ storage });
 
 const authValidation = require('../validations/auth.validation');
 const userValidation = require('../validations/user.validation');
+const uploadValidation = require('../validations/upload.validation');
 const multilevelValidation = require('../validations/multilevel.validation');
 
 const authController = require('../controllers/auth.controller');
 const userController = require('../controllers/user.controller');
+const uploadController = require('../controllers/upload.controller');
 const multilevelController = require('../controllers/multilevel.controller');
 
 const router = express.Router();
@@ -36,7 +25,9 @@ router.patch('/auth/password', auth('update_password'), validate(authValidation.
 //User
 router.post('/users', validate(userValidation.create), userController.create);
 router.get('/users/me', auth('get_user'), userController.getCurrentUser);
-router.post('/users/kyc/upload', auth('kyc_upload'), upload.single('kyc'), userController.kycUpload);
+
+//Upload
+router.post('/upload', auth('upload'), uploadController.fileUpload);
 
 //Multilevel
 router.get('/multilevel/me/:level', auth('get_multilevel'), validate(multilevelValidation.getByLevel), multilevelController.getByLevel);

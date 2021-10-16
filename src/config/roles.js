@@ -7,7 +7,7 @@ rolePermissions.set(roles[0],
         'get_user', ,
         'update_password',
         'get_multilevel',
-        'kyc_upload'
+        'upload'
     ]);
 
 rolePermissions.set(roles[1],
@@ -15,7 +15,7 @@ rolePermissions.set(roles[1],
         'get_user',
         'get_multilevel',
         'update_password',
-        'kyc_upload'
+        'upload'
     ]);
 
 module.exports = {

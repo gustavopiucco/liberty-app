@@ -14,14 +14,7 @@ const getCurrentUser = catchAsync(async (req, res) => {
     res.status(httpStatus.OK).send(user);
 });
 
-const kycUpload = catchAsync(async (req, res) => {
-    await userService.kycUpload(req.file);
-
-    res.status(httpStatus.OK).send();
-});
-
 module.exports = {
     create,
-    getCurrentUser,
-    kycUpload
+    getCurrentUser
 }
