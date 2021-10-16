@@ -40,7 +40,7 @@ app.options('*', cors());
 //api routes
 app.use('/api', routes);
 
-//static public files
+//static public files with auth
 app.use('/public', auth('download_uploaded_files'), (req, res, next) => {
     next();
 }, express.static(path.join(__dirname, '../public')));
