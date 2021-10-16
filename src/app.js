@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const helmet = require('helmet');
 const xss = require('xss-clean');
 const compression = require('compression');
@@ -8,6 +9,7 @@ const routes = require('./routes');
 const { errorConverter, errorHandler } = require('./middlewares/error');
 const ApiError = require('./utils/ApiError');
 const morgan = require('morgan');
+const auth = require('./middlewares/auth');
 
 const app = express();
 
@@ -37,6 +39,11 @@ app.options('*', cors());
 
 //api routes
 app.use('/api', routes);
+
+//static public files
+app.use('/public', auth('download_uploaded_files'), (req, res, next) => {
+    next();
+}, express.static(path.join(__dirname, '../public')));
 
 //send back a 404 error for any unknown api request
 app.use((req, res, next) => {

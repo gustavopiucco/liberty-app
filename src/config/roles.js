@@ -7,7 +7,8 @@ rolePermissions.set(roles[0],
         'get_user', ,
         'update_password',
         'get_multilevel',
-        'upload'
+        'upload',
+        'download_uploaded_files'
     ]);
 
 rolePermissions.set(roles[1],
