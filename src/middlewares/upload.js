@@ -20,7 +20,7 @@ const upload = multer({
 const uploadMiddleware = (fileName) => (req, res, next) => {
     upload.single(fileName)(req, res, (err) => {
         if (err)
-            next(new ApiError(httpStatus.UNAUTHORIZED, 'File too large'));
+            next(new ApiError(httpStatus.BAD_REQUEST, err));
         else
             next();
     });
