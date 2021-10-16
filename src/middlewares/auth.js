@@ -17,8 +17,6 @@ const auth = (requiredPermission) => (req, res, next) => {
 
         req.user = user;
 
-        console.log(user)
-
         if (requiredPermission) {
             if (!user.role || !rolePermissions.get(user.role).includes(requiredPermission)) {
                 return next(new ApiError(httpStatus.FORBIDDEN, 'Permissão negada'));

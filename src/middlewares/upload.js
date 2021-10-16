@@ -1,3 +1,5 @@
+const httpStatus = require('http-status');
+const ApiError = require('../utils/ApiError');
 const path = require('path');
 const multer = require('multer');
 
@@ -7,14 +9,21 @@ const storage = multer.diskStorage({
     },
     filename: (req, file, cb) => {
         cb(null, Date.now() + '-' + file.originalname);
-    },
-    fileSize: 5242880
+    }
 });
 
-const upload = multer({ storage });
+const upload = multer({
+    limits: { fileSize: 1024 * 1024 * 5 },
+    storage
+});
 
 const uploadMiddleware = (fileName) => (req, res, next) => {
-    return upload.single(fileName)(req, res, next);
+    upload.single(fileName)(req, res, (err) => {
+        if (err)
+            next(new ApiError(httpStatus.UNAUTHORIZED, 'File too large'));
+        else
+            next();
+    });
 };
 
 module.exports = uploadMiddleware;
