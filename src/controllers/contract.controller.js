@@ -14,7 +14,14 @@ const create = catchAsync(async (req, res) => {
     res.status(httpStatus.CREATED).send();
 });
 
+const deleteById = catchAsync(async (req, res) => {
+    await contractService.deleteById(req.user, req.params.id);
+
+    res.status(httpStatus.CREATED).send();
+});
+
 module.exports = {
     getByUserId,
-    create
+    create,
+    deleteById
 }

@@ -3,10 +3,18 @@ const { date } = require('./custom.validation');
 
 const create = {
     body: Joi.object().keys({
+        payment_type: Joi.string().required().valid('pix'),
         plan_id: Joi.number().integer().required()
     }),
 };
 
+const deleteById = {
+    params: Joi.object().keys({
+        id: Joi.number().integer().required()
+    }),
+};
+
 module.exports = {
-    create
+    create,
+    deleteById
 }
