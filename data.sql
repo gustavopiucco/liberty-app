@@ -30,6 +30,29 @@ CREATE TABLE users (
 INSERT INTO users (invite_code, kyc_verified, email_verified, email, password_hash, role, first_name, last_name, cpf, phone, birth_date, country, city, state, postal_code, created_at) 
 VALUES ('5bc12gh49c', 1, 1, 'admin@admin.com', '$2a$08$69AXpIyN21uYCDyTMCxnLuOro28Jv0IrcTgWZjuZczD64Vk1ThBai', 'admin', 'Admin', 'Admin', '99999999999', '999999999', '2000-01-01', 'Brazil', 'São Paulo', 'São Paulo', '999999999', NOW());
 
+CREATE TABLE plans (
+  id int NOT NULL AUTO_INCREMENT,
+  name varchar(30) NOT NULL,
+  price decimal(12, 2) NOT NULL,
+  CONSTRAINT pk_id PRIMARY KEY (id)
+) ENGINE=InnoDB;
+INSERT INTO plans (name, price) VALUES ('starter', 100.00);
+INSERT INTO plans (name, price) VALUES ('junior', 200.00);
+INSERT INTO plans (name, price) VALUES ('senior', 300.00);
+INSERT INTO plans (name, price) VALUES ('master', 500.00);
+
+CREATE TABLE contracts (
+  id int NOT NULL AUTO_INCREMENT,
+  user_id int NOT NULL,
+  plan_id int NOT NULL,
+  status enum('waiting_payment', 'payment_confirmed') NOT NULL DEFAULT 'waiting_payment',
+  created_at TIMESTAMP NOT NULL,
+  CONSTRAINT pk_id PRIMARY KEY (id),
+  CONSTRAINT uc_user_id UNIQUE (user_id),
+  CONSTRAINT fk_contracts_user_id_users_id FOREIGN KEY (user_id) REFERENCES users (id),
+  CONSTRAINT fk_contracts_plan_id_plans_id FOREIGN KEY (plan_id) REFERENCES plans (id)
+) ENGINE=InnoDB;
+
 CREATE TABLE email_validations (
   id int NOT NULL AUTO_INCREMENT,
   user_id int NOT NULL,

@@ -4,11 +4,13 @@ const rolePermissions = new Map();
 
 rolePermissions.set(roles[0],
     [
+        'download_uploaded_files',
         'get_user', ,
         'update_password',
         'get_multilevel',
         'upload',
-        'download_uploaded_files'
+        'create_contract',
+        'get_all_plans'
     ]);
 
 rolePermissions.set(roles[1],
@@ -16,7 +18,9 @@ rolePermissions.set(roles[1],
         'get_user',
         'get_multilevel',
         'update_password',
-        'upload'
+        'upload',
+        'create_contract',
+        'get_all_plans'
     ]);
 
 module.exports = {

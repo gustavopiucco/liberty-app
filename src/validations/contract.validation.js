@@ -3,7 +3,7 @@ const { date } = require('./custom.validation');
 
 const create = {
     body: Joi.object().keys({
-
+        plan_id: Joi.number().integer().required()
     }),
 };
 
