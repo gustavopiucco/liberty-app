@@ -2,6 +2,12 @@ const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
 const contractService = require('../services/contract.service');
 
+const getByUserId = catchAsync(async (req, res) => {
+    const contract = await contractService.getByUserId(req.user.id);
+
+    res.status(httpStatus.OK).send(contract);
+});
+
 const create = catchAsync(async (req, res) => {
     await contractService.create(req.user, req.body);
 
@@ -9,5 +15,6 @@ const create = catchAsync(async (req, res) => {
 });
 
 module.exports = {
-    create,
+    getByUserId,
+    create
 }

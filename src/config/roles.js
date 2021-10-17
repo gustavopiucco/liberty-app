@@ -10,7 +10,8 @@ rolePermissions.set(roles[0],
         'get_multilevel',
         'upload',
         'create_contract',
-        'get_all_plans'
+        'get_all_plans',
+        'get_contracts'
     ]);
 
 rolePermissions.set(roles[1],
@@ -20,7 +21,8 @@ rolePermissions.set(roles[1],
         'update_password',
         'upload',
         'create_contract',
-        'get_all_plans'
+        'get_all_plans',
+        'get_contracts'
     ]);
 
 module.exports = {

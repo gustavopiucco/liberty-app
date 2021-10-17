@@ -3,6 +3,12 @@ const httpStatus = require('http-status');
 const contractModel = require('../models/contract.model');
 const planModel = require('../models/plan.model');
 
+async function getByUserId(userId) {
+    const contract = await contractModel.getByUserId(userId);
+
+    return contract;
+}
+
 async function create(loggedInUser, body) {
     const plan = await planModel.getById(body.plan_id);
 
@@ -14,5 +20,6 @@ async function create(loggedInUser, body) {
 }
 
 module.exports = {
+    getByUserId,
     create
 }
