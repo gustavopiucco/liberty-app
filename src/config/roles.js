@@ -13,7 +13,8 @@ rolePermissions.set(roles[0],
         'get_all_plans',
         'get_contracts_me',
         'get_all_contracts',
-        'delete_contract'
+        'delete_contract',
+        'get_all_uploads'
     ]);
 
 rolePermissions.set(roles[1],
@@ -25,7 +26,8 @@ rolePermissions.set(roles[1],
         'create_contract',
         'get_all_plans',
         'get_contracts_me',
-        'delete_contract'
+        'delete_contract',
+        'get_all_uploads'
     ]);
 
 module.exports = {

@@ -75,7 +75,7 @@ CREATE TABLE reset_password_validations (
   CONSTRAINT uc_code UNIQUE (code)
 );
 
-CREATE TABLE uploaded_files (
+CREATE TABLE uploads (
   id int NOT NULL AUTO_INCREMENT,
   user_id int NOT NULL,
   type enum('kyc', 'proof_of_payment') NOT NULL,

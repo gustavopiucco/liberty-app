@@ -27,7 +27,8 @@ router.post('/auth/email/validation', validate(authValidation.emailValidation), 
 router.patch('/auth/password', auth('update_password'), validate(authValidation.updatePassword), authController.updatePassword);
 
 //Upload
-router.post('/upload', auth('upload'), upload('file'), uploadController.fileUpload);
+router.get('/uploads/user/:user_id', auth('get_all_uploads'), validate(uploadValidation.getAllByUserId), uploadController.getAllByUserId);
+router.post('/uploads', auth('upload'), upload('file'), validate(uploadValidation.upload), uploadController.upload);
 
 //Users
 router.post('/users', validate(userValidation.create), userController.create);
