@@ -5,9 +5,9 @@ async function getById(id) {
     return rows[0];
 }
 
-async function getByUserId(userId) {
+async function getAllByUserId(userId) {
     const [rows, fields] = await mysql.pool.execute('SELECT * FROM contracts WHERE user_id = ?', [userId]);
-    return rows[0];
+    return rows;
 }
 
 async function create(userId, planId, paymentType, createdAt) {
@@ -21,7 +21,7 @@ async function deleteById(id) {
 
 module.exports = {
     getById,
-    getByUserId,
+    getAllByUserId,
     create,
     deleteById
 }

@@ -49,7 +49,6 @@ CREATE TABLE contracts (
   payment_type enum('pix') NOT NULL,
   created_at TIMESTAMP NOT NULL,
   CONSTRAINT pk_id PRIMARY KEY (id),
-  CONSTRAINT uc_user_id UNIQUE (user_id),
   CONSTRAINT fk_contracts_user_id_users_id FOREIGN KEY (user_id) REFERENCES users (id),
   CONSTRAINT fk_contracts_plan_id_plans_id FOREIGN KEY (plan_id) REFERENCES plans (id)
 ) ENGINE=InnoDB;
