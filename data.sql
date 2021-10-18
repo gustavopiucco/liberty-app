@@ -74,3 +74,13 @@ CREATE TABLE reset_password_validations (
   CONSTRAINT fk_reset_password_validations_user_id_users_id FOREIGN KEY (user_id) REFERENCES users (id),
   CONSTRAINT uc_code UNIQUE (code)
 );
+
+CREATE TABLE uploaded_files (
+  id int NOT NULL AUTO_INCREMENT,
+  user_id int NOT NULL,
+  type enum('kyc', 'proof_of_payment') NOT NULL,
+  filename varchar(100) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT pk_id PRIMARY KEY (id),
+  CONSTRAINT fk_uf_user_id_users_id FOREIGN KEY (user_id) REFERENCES users (id)
+);

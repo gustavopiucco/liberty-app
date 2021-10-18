@@ -2,10 +2,16 @@ const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
 const contractService = require('../services/contract.service');
 
-const getAllByUserId = catchAsync(async (req, res) => {
-    const contract = await contractService.getAllByUserId(req.user.id);
+const getAll = catchAsync(async (req, res) => {
+    const contracts = await contractService.getAll();
 
-    res.status(httpStatus.OK).send(contract);
+    res.status(httpStatus.OK).send(contracts);
+});
+
+const getAllByUserId = catchAsync(async (req, res) => {
+    const contracts = await contractService.getAllByUserId(req.user.id);
+
+    res.status(httpStatus.OK).send(contracts);
 });
 
 const create = catchAsync(async (req, res) => {
@@ -21,6 +27,7 @@ const deleteById = catchAsync(async (req, res) => {
 });
 
 module.exports = {
+    getAll,
     getAllByUserId,
     create,
     deleteById

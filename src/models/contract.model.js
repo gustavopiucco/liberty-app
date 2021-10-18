@@ -5,6 +5,11 @@ async function getById(id) {
     return rows[0];
 }
 
+async function getAll(userId) {
+    const [rows, fields] = await mysql.pool.execute('SELECT * FROM contracts ORDER BY created_at DESC');
+    return rows;
+}
+
 async function getAllByUserId(userId) {
     const [rows, fields] = await mysql.pool.execute('SELECT * FROM contracts WHERE user_id = ?', [userId]);
     return rows;
@@ -21,6 +26,7 @@ async function deleteById(id) {
 
 module.exports = {
     getById,
+    getAll,
     getAllByUserId,
     create,
     deleteById

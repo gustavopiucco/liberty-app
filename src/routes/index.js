@@ -41,7 +41,8 @@ router.get('/plans', auth('get_all_plans'), planController.getAll);
 
 //Contracts
 router.post('/contracts', auth('create_contract'), validate(contractValidation.create), contractController.create);
-router.get('/contracts/user/me', auth('get_contracts'), contractController.getAllByUserId);
+router.get('/contracts/me', auth('get_contracts_me'), contractController.getAllByUserId);
+router.get('/contracts', auth('get_all_contracts'), contractController.getAll);
 router.delete('/contracts/:id', auth('delete_contract'), validate(contractValidation.deleteById), contractController.deleteById);
 
 module.exports = router;

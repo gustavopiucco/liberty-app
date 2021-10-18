@@ -3,10 +3,16 @@ const httpStatus = require('http-status');
 const contractModel = require('../models/contract.model');
 const planModel = require('../models/plan.model');
 
-async function getAllByUserId(userId) {
-    const contract = await contractModel.getAllByUserId(userId);
+async function getAll() {
+    const contracts = await contractModel.getAll();
 
-    return contract;
+    return contracts;
+}
+
+async function getAllByUserId(userId) {
+    const contracts = await contractModel.getAllByUserId(userId);
+
+    return contracts;
 }
 
 async function create(loggedInUser, body) {
@@ -20,7 +26,12 @@ async function create(loggedInUser, body) {
 
     for (contract of contracts) {
         if (contract.status == 'waiting_payment') {
-            throw new ApiError(httpStatus.BAD_REQUEST, 'Existe um contrato aguardando pagamento');
+            throw new ApiError(httpStatus.BAD_REQUEST, 'Já existe um contrato aguardando pagamento');
+        }
+
+        //permitir apenas um contrato no sistema, futuramente vai permitir 2 ou 3
+        if (contract.status == 'payment_confirmed') {
+            throw new ApiError(httpStatus.BAD_REQUEST, 'Já existe um contrato em aberto');
         }
     }
 
@@ -46,6 +57,7 @@ async function deleteById(loggedInUser, id) {
 }
 
 module.exports = {
+    getAll,
     getAllByUserId,
     create,
     deleteById
