@@ -1,6 +1,6 @@
 const ApiError = require('../utils/ApiError');
 const httpStatus = require('http-status');
-const userModel = require('../models/user.model');
+const multilevelService = require('../services/multilevel.service');
 const contractModel = require('../models/contract.model');
 const planModel = require('../models/plan.model');
 
@@ -31,11 +31,7 @@ async function approve(loggedInUser, id) {
         throw new ApiError(httpStatus.BAD_REQUEST, 'Este contrato já foi negado anteriormente');
     }
 
-    //const sponsorUnilevel = await userModel.getSponsorUnilevel(contract.user_id);
-
-    for (sponsor of sponsorUnilevel) {
-        console.log(sponsor)
-    }
+    await multilevelService.payMultilevelBonus(contract.user_id, contract.plan_id);
 
     //await contractModel.updateStatus(id, 'payment_confirmed');
 }
