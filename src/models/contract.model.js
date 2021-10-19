@@ -20,6 +20,10 @@ async function create(userId, planId, paymentType, createdAt) {
     return rows;
 }
 
+async function updateStatus(id, status) {
+    await mysql.pool.execute('UPDATE contracts SET status = ? WHERE id = ?', [status, id]);
+}
+
 async function deleteById(id) {
     await mysql.pool.execute('DELETE FROM contracts WHERE id = ?', [id]);
 }
@@ -29,5 +33,6 @@ module.exports = {
     getAll,
     getAllByUserId,
     create,
+    updateStatus,
     deleteById
 }

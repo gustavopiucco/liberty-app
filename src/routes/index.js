@@ -44,6 +44,8 @@ router.get('/plans', auth('get_all_plans'), planController.getAll);
 router.post('/contracts', auth('create_contract'), validate(contractValidation.create), contractController.create);
 router.get('/contracts/me', auth('get_contracts_me'), contractController.getAllByUserId);
 router.get('/contracts', auth('get_all_contracts'), contractController.getAll);
+router.patch('/contracts/:id/approve', auth('approve_contract'), validate(contractValidation.approve), contractController.approve);
+router.patch('/contracts/:id/deny', auth('deny_contract'), validate(contractValidation.deny), contractController.deny);
 router.delete('/contracts/:id', auth('delete_contract'), validate(contractValidation.deleteById), contractController.deleteById);
 
 module.exports = router;

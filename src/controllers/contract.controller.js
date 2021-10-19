@@ -14,6 +14,18 @@ const getAllByUserId = catchAsync(async (req, res) => {
     res.status(httpStatus.OK).send(contracts);
 });
 
+const approve = catchAsync(async (req, res) => {
+    await contractService.approve(req.user, req.params.id);
+
+    res.status(httpStatus.OK).send();
+});
+
+const deny = catchAsync(async (req, res) => {
+    await contractService.deny(req.user, req.params.id);
+
+    res.status(httpStatus.OK).send();
+});
+
 const create = catchAsync(async (req, res) => {
     await contractService.create(req.user, req.body);
 
@@ -29,6 +41,8 @@ const deleteById = catchAsync(async (req, res) => {
 module.exports = {
     getAll,
     getAllByUserId,
+    approve,
+    deny,
     create,
     deleteById
 }

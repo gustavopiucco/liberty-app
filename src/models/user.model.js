@@ -30,6 +30,15 @@ async function getByInviteCode(inviteCode) {
     return rows[0];
 }
 
+async function getSponsorUnilevel(id) {
+    const [rows, fields] = await mysql.pool.execute(`
+    WITH RECURSIVE 
+	    parents AS (SELECT * FROM users WHERE id = ? UNION ALL SELECT users.* FROM users JOIN parents ON parents.sponsor_id = users.id) 
+    SELECT id FROM parents WHERE id != ? ORDER BY id DESC`, [id, id]);
+
+    return rows;
+}
+
 async function setEmailVerified(id) {
     await mysql.pool.execute('UPDATE users SET email_verified = 1 WHERE id = ?', [id]);
 }
@@ -45,6 +54,7 @@ module.exports = {
     getById,
     getByEmail,
     getByInviteCode,
+    getSponsorUnilevel,
     setEmailVerified,
     updatePasswordHash
 }

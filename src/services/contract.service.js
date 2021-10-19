@@ -1,5 +1,6 @@
 const ApiError = require('../utils/ApiError');
 const httpStatus = require('http-status');
+const userModel = require('../models/user.model');
 const contractModel = require('../models/contract.model');
 const planModel = require('../models/plan.model');
 
@@ -13,6 +14,44 @@ async function getAllByUserId(userId) {
     const contracts = await contractModel.getAllByUserId(userId);
 
     return contracts;
+}
+
+async function approve(loggedInUser, id) {
+    const contract = await contractModel.getById(id);
+
+    if (!contract) {
+        throw new ApiError(httpStatus.BAD_REQUEST, 'Este contrato não existe');
+    }
+
+    if (contract.status == 'payment_confirmed') {
+        throw new ApiError(httpStatus.BAD_REQUEST, 'Este contrato já foi aprovado');
+    }
+
+    if (contract.status == 'payment_denied') {
+        throw new ApiError(httpStatus.BAD_REQUEST, 'Este contrato já foi negado anteriormente');
+    }
+
+    //const sponsorUnilevel = await userModel.getSponsorUnilevel(contract.user_id);
+
+    for (sponsor of sponsorUnilevel) {
+        console.log(sponsor)
+    }
+
+    //await contractModel.updateStatus(id, 'payment_confirmed');
+}
+
+async function deny(loggedInUser, id) {
+    const contract = await contractModel.getById(id);
+
+    if (!contract) {
+        throw new ApiError(httpStatus.BAD_REQUEST, 'Este contrato não existe');
+    }
+
+    if (contract.status == 'payment_denied') {
+        throw new ApiError(httpStatus.BAD_REQUEST, 'Este contrato já foi negado');
+    }
+
+    await contractModel.updateStatus(id, 'payment_denied');
 }
 
 async function create(loggedInUser, body) {
@@ -59,6 +98,8 @@ async function deleteById(loggedInUser, id) {
 module.exports = {
     getAll,
     getAllByUserId,
+    approve,
+    deny,
     create,
     deleteById
 }

@@ -14,7 +14,9 @@ rolePermissions.set(roles[0],
         'get_contracts_me',
         'get_all_contracts',
         'delete_contract',
-        'get_all_uploads'
+        'get_all_uploads',
+        'approve_contract',
+        'deny_contract'
     ]);
 
 rolePermissions.set(roles[1],

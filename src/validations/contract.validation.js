@@ -8,6 +8,18 @@ const create = {
     }),
 };
 
+const approve = {
+    params: Joi.object().keys({
+        id: Joi.number().integer().required()
+    }),
+};
+
+const deny = {
+    params: Joi.object().keys({
+        id: Joi.number().integer().required()
+    }),
+};
+
 const deleteById = {
     params: Joi.object().keys({
         id: Joi.number().integer().required()
@@ -15,6 +27,8 @@ const deleteById = {
 };
 
 module.exports = {
+    approve,
+    deny,
     create,
     deleteById
 }
