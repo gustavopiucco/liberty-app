@@ -1,8 +1,10 @@
 const ApiError = require('../utils/ApiError');
 const httpStatus = require('http-status');
+const contractService = require('../services/contract.service');
 const multilevelModel = require('../models/multilevel.model');
 const userModel = require('../models/user.model');
 const planModel = require('../models/plan.model');
+const multilevelRecordsModel = require('../models/multilevelrecords.model');
 
 const maxLevels = 5;
 const bonusPercentageByLevel = [10, 2, 1, 1, 1];
@@ -39,8 +41,14 @@ async function payMultilevelBonus(userId, planId) {
     const sponsorsId = await getSponsorsIdByUserId(userId);
 
     for (let level = 1; level <= sponsorsId.length; level++) {
-        //adiciona o bonus baseado no level para o usuario (saldo pendente)
-        //cria o registro de pagamento do bonus
+        const fromUserId = sponsorsId[level - 1];
+        const value = ((bonusPercentageByLevel[level - 1]) / 100) * plan.price;
+
+        await userModel.addPendingBalance(fromUserId, value);
+
+        await multilevelRecordsModel.create(userId, fromUserId, 'affiliate_program', level, value, new Date());
+
+        await contractService.handleContractCycle(fromUserId, value);
     }
 }
 

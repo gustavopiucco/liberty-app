@@ -56,6 +56,19 @@ CREATE TABLE contracts (
   CONSTRAINT fk_contracts_plan_id_plans_id FOREIGN KEY (plan_id) REFERENCES plans (id)
 ) ENGINE=InnoDB;
 
+CREATE TABLE multilevel_records (
+  id int NOT NULL AUTO_INCREMENT,
+  user_id INT NOT NULL,
+  from_user_id INT NOT NULL,
+  type enum('affiliate_program', 'affiliate_portfolio') NOT NULL,
+  level SMALLINT NOT NULL,
+  value DECIMAL(12, 2) NOT NULL,
+  created_at TIMESTAMP NOT NULL,
+  CONSTRAINT pk_id PRIMARY KEY (id),
+  CONSTRAINT fk_mr_user_id_users_id FOREIGN KEY (user_id) REFERENCES users (id),
+  CONSTRAINT fk_mr_from_user_id_users_id FOREIGN KEY (user_id) REFERENCES users (id)
+) ENGINE=InnoDB
+
 CREATE TABLE email_validations (
   id int NOT NULL AUTO_INCREMENT,
   user_id int NOT NULL,

@@ -33,7 +33,7 @@ async function approve(loggedInUser, id) {
 
     await multilevelService.payMultilevelBonus(contract.user_id, contract.plan_id);
 
-    //await contractModel.updateStatus(id, 'payment_confirmed');
+    await contractModel.updateStatus(id, 'payment_confirmed');
 }
 
 async function deny(loggedInUser, id) {
@@ -64,7 +64,7 @@ async function create(loggedInUser, body) {
             throw new ApiError(httpStatus.BAD_REQUEST, 'Já existe um contrato aguardando pagamento');
         }
 
-        //permitir apenas um contrato no sistema, futuramente vai permitir 2 ou 3
+        //permitir apenas um contrato no sistema, futuramente vai permitir mais
         if (contract.status == 'payment_confirmed') {
             throw new ApiError(httpStatus.BAD_REQUEST, 'Já existe um contrato em aberto');
         }
@@ -91,11 +91,18 @@ async function deleteById(loggedInUser, id) {
     await contractModel.deleteById(id);
 }
 
+async function handleContractCycle(userId, value) {
+    const cyclePercentage = 50;
+
+
+}
+
 module.exports = {
     getAll,
     getAllByUserId,
     approve,
     deny,
     create,
-    deleteById
+    deleteById,
+    handleContractCycle,
 }

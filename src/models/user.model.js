@@ -47,6 +47,26 @@ async function updatePasswordHash(id, passwordHash) {
     await mysql.pool.execute('UPDATE users SET password_hash = ? WHERE id = ?', [passwordHash, id]);
 }
 
+async function addPendingBalance(id, value) {
+    await mysql.pool.execute('UPDATE users SET pending_balance = pending_balance + ? WHERE id = ?', [value, id]);
+}
+
+async function subtractPendingBalance(id, value) {
+    await mysql.pool.execute('UPDATE users SET pending_balance = pending_balance - ? WHERE id = ?', [value, id]);
+}
+
+async function addAvailableBalance(id, value) {
+    await mysql.pool.execute('UPDATE users SET available_balance = available_balance + ? WHERE id = ?', [value, id]);
+}
+
+async function subtractAvailableBalance(id, value) {
+    await mysql.pool.execute('UPDATE users SET available_balance = available_balance - ? WHERE id = ?', [value, id]);
+}
+
+async function addTotalBalance(id, value) {
+    await mysql.pool.execute('UPDATE users SET total_balance = total_balance + ? WHERE id = ?', [value, id]);
+}
+
 module.exports = {
     emailExists,
     cpfExists,
@@ -56,5 +76,10 @@ module.exports = {
     getByInviteCode,
     getSponsorUnilevel,
     setEmailVerified,
-    updatePasswordHash
+    updatePasswordHash,
+    addPendingBalance,
+    subtractPendingBalance,
+    addAvailableBalance,
+    subtractAvailableBalance,
+    addTotalBalance
 }
