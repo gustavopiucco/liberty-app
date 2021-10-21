@@ -1,0 +1,1 @@
+- Onde tiver funções nos models (MYSQL command) de incrementar ou decrementar, também incrementar ou decrementar o total_received pra ir somando e ter essa métrica disponivel

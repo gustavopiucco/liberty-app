@@ -33,7 +33,7 @@ async function approve(loggedInUser, id) {
 
     await multilevelService.payMultilevelBonus(contract.user_id, contract.plan_id);
 
-    await contractModel.updateStatus(id, 'payment_confirmed');
+    //await contractModel.updateStatus(id, 'payment_confirmed');
 }
 
 async function deny(loggedInUser, id) {

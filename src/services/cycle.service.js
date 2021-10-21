@@ -1,16 +1,25 @@
 const userModel = require('../models/user.model');
 
-async function handleContractCycle(userId, value) {
-    const cyclePercentage = 50;
+const maxCyclePercentage = 50;
 
-    //TODO: otimizar o userCycle, pois o user.cycle pode vir direto no multilevelService.payMultilevelBonus, ao invés só de trazer só o userId
-
-    const userCycle = await userModel.getById(userId);
-
-    //a soma do value ao ciclo do usuario, for superior a 100%, então precisa verificar quanto falta pra chegar a 100%, e só pagar essa diferença
+async function handleUserCycle(user, planPrice, value) {
+    //a soma do value ao ciclo do usuario, for superior a 100%, então precisa verificar quanto falta pra chegar a 100%, e só pagar essa diferenç
     //caso contrario, apenas soma o ciclo
+
+    const maxUserCycleValue = planPrice + (planPrice * (maxCyclePercentage / 100));
+    const totalBalance = user.available_balance + user.pending_balance;
+
+    if (totalBalance + value < maxUserCycleValue) {
+        //apenas soma o ciclo
+        console.log('somar ciclo em ', value / 100)
+    }
+    else {
+        //calcula a diferença
+        //encerra o ciclo
+        console.log('encerrar ciclo')
+    }
 }
 
 module.exports = {
-    handleContractCycle
+    handleUserCycle
 }
