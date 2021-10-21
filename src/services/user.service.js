@@ -31,9 +31,14 @@ async function create(body) {
 
     const createUserResult = await userModel.create(sponsor.id, inviteCode, body.email, passwordHash, body.first_name, body.last_name, body.cpf, body.phone, body.birth_date, body.country, body.city, body.state, body.postal_code, new Date);
 
-    await emailValidationModel.create(createUserResult.insertId, emailValidationCode);
+    if (process.env.NODE_ENV == 'development') {
+        await userModel.setEmailVerified(createUserResult.insertId);
+    }
+    else {
+        await emailValidationModel.create(createUserResult.insertId, emailValidationCode);
 
-    await emailService.sendEmailValidation(body.email, emailValidationCode);
+        await emailService.sendEmailValidation(body.email, emailValidationCode);
+    }
 }
 
 async function getById(id) {
