@@ -68,7 +68,7 @@ CREATE TABLE multilevel_records (
   CONSTRAINT pk_id PRIMARY KEY (id),
   CONSTRAINT fk_mr_user_id_users_id FOREIGN KEY (user_id) REFERENCES users (id),
   CONSTRAINT fk_mr_from_user_id_users_id FOREIGN KEY (user_id) REFERENCES users (id)
-) ENGINE=InnoDB
+) ENGINE=InnoDB;
 
 CREATE TABLE email_validations (
   id int NOT NULL AUTO_INCREMENT,
