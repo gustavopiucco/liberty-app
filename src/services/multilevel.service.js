@@ -64,11 +64,11 @@ async function payMultilevelBonus(rootUserId, planId) {
         const user = sponsors[level - 1];
         const value = ((bonusPercentageByLevel[level - 1]) / 100) * plan.price;
 
-        //await userModel.addPendingBalance(user.id, value);
+        await userModel.addPendingBalance(user.id, value);
 
         await cycleService.handleUserCycle(user, plan.price, value);
 
-        //await multilevelRecordsModel.create(user.id, rootUserId, 'affiliate_program', level, value, new Date());
+        await multilevelRecordsModel.create(user.id, rootUserId, 'affiliate_program', level, value, new Date());
     }
 }
 
