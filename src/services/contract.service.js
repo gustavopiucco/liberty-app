@@ -91,18 +91,11 @@ async function deleteById(loggedInUser, id) {
     await contractModel.deleteById(id);
 }
 
-async function handleContractCycle(userId, value) {
-    const cyclePercentage = 50;
-
-
-}
-
 module.exports = {
     getAll,
     getAllByUserId,
     approve,
     deny,
     create,
-    deleteById,
-    handleContractCycle,
+    deleteById
 }

@@ -9,6 +9,7 @@ CREATE TABLE users (
   available_balance decimal(12, 2) NOT NULL DEFAULT 0,
   pending_balance decimal(12, 2) NOT NULL DEFAULT 0,
   total_received decimal(12, 2) NOT NULL DEFAULT 0,
+  cycle DECIMAL(5,2) NOT NULL,
   kyc_verified boolean NOT NULL DEFAULT false,
   email_verified boolean NOT NULL DEFAULT false,
   email varchar(100) NOT NULL,

@@ -1,6 +1,6 @@
 const ApiError = require('../utils/ApiError');
 const httpStatus = require('http-status');
-const contractService = require('../services/contract.service');
+const cycleService = require('../services/cycle.service');
 const multilevelModel = require('../models/multilevel.model');
 const userModel = require('../models/user.model');
 const planModel = require('../models/plan.model');
@@ -35,20 +35,20 @@ async function getSponsorsIdByUserId(rootUserId) {
     return sponsors;
 }
 
-async function payMultilevelBonus(userId, planId) {
+async function payMultilevelBonus(rootUserId, planId) {
     const plan = await planModel.getById(planId);
 
-    const sponsorsId = await getSponsorsIdByUserId(userId);
+    const sponsorsId = await getSponsorsIdByUserId(rootUserId);
 
     for (let level = 1; level <= sponsorsId.length; level++) {
-        const fromUserId = sponsorsId[level - 1];
+        const userId = sponsorsId[level - 1];
         const value = ((bonusPercentageByLevel[level - 1]) / 100) * plan.price;
 
-        await userModel.addPendingBalance(fromUserId, value);
+        await userModel.addPendingBalance(userId, value);
 
-        await multilevelRecordsModel.create(userId, fromUserId, 'affiliate_program', level, value, new Date());
+        await multilevelRecordsModel.create(userId, rootUserId, 'affiliate_program', level, value, new Date());
 
-        await contractService.handleContractCycle(fromUserId, value);
+        await cycleService.handleContractCycle(userId, value);
     }
 }
 

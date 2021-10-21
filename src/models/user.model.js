@@ -67,6 +67,19 @@ async function addTotalBalance(id, value) {
     await mysql.pool.execute('UPDATE users SET total_balance = total_balance + ? WHERE id = ?', [value, id]);
 }
 
+async function getCycle(id) {
+    const [rows, fields] = await mysql.pool.execute('SELECT cycle FROM users WHERE id = ?', [id]);
+    return rows[0];
+}
+
+async function addCycle(id, value) {
+    await mysql.pool.execute('UPDATE users SET cycle = cycle + ? WHERE id = ?', [value, id]);
+}
+
+async function setCycle(id, value) {
+    await mysql.pool.execute('UPDATE users SET cycle = ? WHERE id = ?', [value, id]);
+}
+
 module.exports = {
     emailExists,
     cpfExists,
@@ -81,5 +94,8 @@ module.exports = {
     subtractPendingBalance,
     addAvailableBalance,
     subtractAvailableBalance,
-    addTotalBalance
+    addTotalBalance,
+    getCycle,
+    addCycle,
+    setCycle
 }
