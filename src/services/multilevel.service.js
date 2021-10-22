@@ -68,11 +68,11 @@ async function payMultilevelBonus(rootUserId, planId) {
 
         if (!contract) continue; //user does not have an active contract, so he does not receive the bonus
 
-        //await userModel.addPendingBalance(user.id, value);
+        await userModel.addPendingBalance(user.id, value);
 
         await cycleService.handleUserCycle(user, contract, plan.price, value);
 
-        //await multilevelRecordsModel.create(user.id, rootUserId, 'affiliate_program', level, value, new Date());
+        await multilevelRecordsModel.create(user.id, rootUserId, 'affiliate_program', level, value, new Date());
     }
 }
 
