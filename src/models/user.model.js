@@ -39,6 +39,11 @@ async function getSponsorUnilevel(id) {
     return rows;
 }
 
+async function getAllDirectsById(id) {
+    const [rows, fields] = await mysql.pool.execute('SELECT * FROM users WHERE sponsor_id = ?', [id]);
+    return rows;
+}
+
 async function setEmailVerified(id) {
     await mysql.pool.execute('UPDATE users SET email_verified = 1 WHERE id = ?', [id]);
 }
@@ -88,6 +93,7 @@ module.exports = {
     getByEmail,
     getByInviteCode,
     getSponsorUnilevel,
+    getAllDirectsById,
     setEmailVerified,
     updatePasswordHash,
     addPendingBalance,

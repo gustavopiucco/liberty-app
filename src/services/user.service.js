@@ -49,12 +49,14 @@ async function getById(id) {
     return user;
 }
 
-async function kycUpload(file) {
-    console.log(file);
+async function getAllDirectsById(id) {
+    const directs = await userModel.getAllDirectsById(id);
+
+    return directs;
 }
 
 module.exports = {
     create,
     getById,
-    kycUpload
+    getAllDirectsById
 }
