@@ -50,7 +50,7 @@ CREATE TABLE contracts (
   plan_id int NOT NULL,
   status enum('waiting_payment', 'payment_confirmed', 'payment_denied', 'completed') NOT NULL DEFAULT 'waiting_payment',
   payment_type enum('pix') NOT NULL,
-  total_received DECIMAL(5,2) NOT NULL,
+  total_received DECIMAL(5,2) NOT NULL DEFAULT 0,
   created_at TIMESTAMP NOT NULL,
   CONSTRAINT pk_id PRIMARY KEY (id),
   CONSTRAINT fk_contracts_user_id_users_id FOREIGN KEY (user_id) REFERENCES users (id),
