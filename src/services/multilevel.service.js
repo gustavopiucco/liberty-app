@@ -4,6 +4,7 @@ const cycleService = require('../services/cycle.service');
 const multilevelModel = require('../models/multilevel.model');
 const userModel = require('../models/user.model');
 const planModel = require('../models/plan.model');
+const contractModel = require('../models/contract.model');
 const multilevelRecordsModel = require('../models/multilevelrecords.model');
 
 const maxLevels = 5;
@@ -63,12 +64,15 @@ async function payMultilevelBonus(rootUserId, planId) {
     for (let level = 1; level <= sponsors.length; level++) {
         const user = sponsors[level - 1];
         const value = ((bonusPercentageByLevel[level - 1]) / 100) * plan.price;
+        const contract = await contractModel.getByUserIdAndPaymentConfirmed(user.id);
 
-        await userModel.addPendingBalance(user.id, value);
+        if (!contract) continue; //user does not have an active contract, so he does not receive the bonus
 
-        await cycleService.handleUserCycle(user, plan.price, value);
+        //await userModel.addPendingBalance(user.id, value);
 
-        await multilevelRecordsModel.create(user.id, rootUserId, 'affiliate_program', level, value, new Date());
+        await cycleService.handleUserCycle(user, contract, plan.price, value);
+
+        //await multilevelRecordsModel.create(user.id, rootUserId, 'affiliate_program', level, value, new Date());
     }
 }
 

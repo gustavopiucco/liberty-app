@@ -30,7 +30,7 @@ async function updateStatus(id, status) {
 }
 
 async function addTotalReceived(id, value) {
-    await mysql.pool.execute(`UPDATE contracts SET total_received = totalreceived + ? WHERE id = ?`, [value, id]);
+    await mysql.pool.execute(`UPDATE contracts SET total_received = total_received + ? WHERE id = ?`, [value, id]);
 }
 
 async function deleteById(id) {

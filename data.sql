@@ -48,7 +48,7 @@ CREATE TABLE contracts (
   id int NOT NULL AUTO_INCREMENT,
   user_id int NOT NULL,
   plan_id int NOT NULL,
-  status enum('waiting_payment', 'payment_confirmed', 'payment_denied') NOT NULL DEFAULT 'waiting_payment',
+  status enum('waiting_payment', 'payment_confirmed', 'payment_denied', 'completed') NOT NULL DEFAULT 'waiting_payment',
   payment_type enum('pix') NOT NULL,
   total_received DECIMAL(5,2) NOT NULL,
   created_at TIMESTAMP NOT NULL,
