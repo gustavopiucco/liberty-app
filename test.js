@@ -8,7 +8,9 @@ mysql.testConnection().then(() => {
 });
 
 async function test() {
+    const directs = await userService.getAllDirectsById(1);
 
+    console.log(directs)
 }
 
 test();

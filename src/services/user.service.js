@@ -3,6 +3,7 @@ const httpStatus = require('http-status');
 const bcrypt = require('bcryptjs');
 const random = require('../utils/random');
 const emailService = require('../services/email.service');
+const contractModel = require('../models/contract.model');
 const userModel = require('../models/user.model');
 const emailValidationModel = require('../models/emailvalidation.model');
 
@@ -50,7 +51,13 @@ async function getById(id) {
 }
 
 async function getAllDirectsById(id) {
-    const directs = await userModel.getAllDirectsById(id);
+    let directs = await userModel.getAllDirectsById(id);
+
+    for (let i = 0; i < directs.length; i++) {
+        const contracts = await contractModel.getAllByUserIdWithPlan(directs[i].id);
+
+        directs[i].contracts = contracts;
+    }
 
     return directs;
 }

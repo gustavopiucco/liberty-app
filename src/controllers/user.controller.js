@@ -14,7 +14,14 @@ const getCurrentUser = catchAsync(async (req, res) => {
     res.status(httpStatus.OK).send(user);
 });
 
+const getAllDirects = catchAsync(async (req, res) => {
+    const directs = await userService.getAllDirectsById(req.user.id);
+
+    res.status(httpStatus.OK).send(directs);
+});
+
 module.exports = {
     create,
-    getCurrentUser
+    getCurrentUser,
+    getAllDirects
 }

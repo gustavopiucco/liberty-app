@@ -40,7 +40,7 @@ async function getSponsorUnilevel(id) {
 }
 
 async function getAllDirectsById(id) {
-    const [rows, fields] = await mysql.pool.execute('SELECT * FROM users WHERE sponsor_id = ?', [id]);
+    const [rows, fields] = await mysql.pool.execute('SELECT id, first_name, last_name FROM users WHERE sponsor_id = ?', [id]);
     return rows;
 }
 

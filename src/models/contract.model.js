@@ -15,6 +15,15 @@ async function getAllByUserId(userId) {
     return rows;
 }
 
+async function getAllByUserIdWithPlan(userId) {
+    const [rows, fields] = await mysql.pool.execute(`
+    SELECT contracts.id, contracts.plan_id, plans.price AS plan_price, plans.name AS plan_name, contracts.status, contracts.payment_type, contracts.total_received, contracts.created_at FROM contracts
+    JOIN plans ON plans.id = contracts.plan_id
+    WHERE contracts.user_id = ?`, [userId]);
+
+    return rows;
+}
+
 async function getByUserIdAndPaymentConfirmed(userId) {
     const [rows, fields] = await mysql.pool.execute(`SELECT * FROM contracts WHERE user_id = ? AND status = 'payment_confirmed'`, [userId]);
     return rows[0];
@@ -41,6 +50,7 @@ module.exports = {
     getById,
     getAll,
     getAllByUserId,
+    getAllByUserIdWithPlan,
     getByUserIdAndPaymentConfirmed,
     create,
     updateStatus,
