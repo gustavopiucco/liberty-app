@@ -36,10 +36,10 @@ async function getSponsorsByUserId(rootUserId) {
     return sponsors;
 }
 
-async function payMultilevelBonus(rootUserId, planId) {
-    const plan = await planModel.getById(planId);
+async function payMultilevelBonus(contract, type) {
+    const plan = await planModel.getById(contract.plan_id);
 
-    const sponsors = await getSponsorsByUserId(rootUserId);
+    const sponsors = await getSponsorsByUserId(contract.user_id);
 
     for (let level = 1; level <= sponsors.length; level++) {
         const user = sponsors[level - 1];
@@ -52,7 +52,7 @@ async function payMultilevelBonus(rootUserId, planId) {
 
         await cycleService.handleUserCycle(user, contract, plan.price, value);
 
-        await multilevelRecordsModel.create(user.id, rootUserId, 'affiliate_program', level, value, new Date());
+        await multilevelRecordsModel.create(user.id, contract.user_id, contract.id, type, level, value, new Date());
     }
 }
 

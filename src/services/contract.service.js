@@ -31,7 +31,7 @@ async function approve(loggedInUser, id) {
         throw new ApiError(httpStatus.BAD_REQUEST, 'Este contrato já foi negado anteriormente');
     }
 
-    await multilevelService.payMultilevelBonus(contract.user_id, contract.plan_id);
+    await multilevelService.payMultilevelBonus(contract, 'contract_payment_bonus');
 
     await contractModel.updateStatus(id, 'payment_confirmed');
 }

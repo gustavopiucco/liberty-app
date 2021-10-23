@@ -2,6 +2,8 @@ const ApiError = require('../utils/ApiError');
 const httpStatus = require('http-status');
 const { format } = require('date-fns');
 const dailybonusModel = require('../models/dailybonus.model');
+const contractModel = require('../models/contract.model');
+const userModel = require('../models/user.model');
 
 async function getByDate(date) {
     const dailyBonus = await dailybonusModel.getByDate(date);
@@ -30,6 +32,12 @@ async function payDailyBonus() {
     const todayBonus = await dailybonusModel.getByDate(todayDate);
 
     if (!todayBonus) return;
+
+    const contracts = await contractModel.getAllWithPaymentConfirmed();
+
+    for (contract of contracts) {
+        console.log(contract)
+    }
 
     //agora pega todo mundo q tem contrato ativo e paga o todayBonus.percentage baseado no plano dele ativo
     //cria o registro q foi pago na tabela daily_bonus_records q ainda precisa criar no mysql

@@ -29,6 +29,11 @@ async function getByUserIdAndPaymentConfirmed(userId) {
     return rows[0];
 }
 
+async function getAllWithPaymentConfirmed() {
+    const [rows, fields] = await mysql.pool.execute(`SELECT * FROM contracts WHERE status = 'payment_confirmed'`);
+    return rows;
+}
+
 async function create(userId, planId, paymentType, createdAt) {
     const [rows, fields] = await mysql.pool.execute('INSERT INTO contracts (user_id, plan_id, payment_type, created_at) VALUES (?, ?, ?, ?)', [userId, planId, paymentType, createdAt]);
     return rows;
@@ -52,6 +57,7 @@ module.exports = {
     getAllByUserId,
     getAllByUserIdWithPlan,
     getByUserIdAndPaymentConfirmed,
+    getAllWithPaymentConfirmed,
     create,
     updateStatus,
     addTotalReceived,
