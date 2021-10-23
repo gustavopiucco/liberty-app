@@ -31,7 +31,7 @@ CREATE TABLE users (
   CONSTRAINT fk_sponsor_id_users_id FOREIGN KEY (sponsor_id) REFERENCES users (id)
 ) ENGINE=InnoDB;
 INSERT INTO users (invite_code, kyc_verified, email_verified, email, password_hash, role, first_name, last_name, cpf, phone, birth_date, country, city, state, postal_code, created_at) 
-VALUES ('5bc12gh49c', 1, 1, 'admin@admin.com', '$2a$08$69AXpIyN21uYCDyTMCxnLuOro28Jv0IrcTgWZjuZczD64Vk1ThBai', 'admin', 'Admin', 'Admin', '99999999999', '999999999', '2000-01-01', 'Brazil', 'São Paulo', 'São Paulo', '999999999', NOW());
+VALUES ('5bc12gh49c', 1, 1, 'admin@admin.com', '$2a$08$4/36O823ItMtjqgjsKTJh.vHFru8ob0FwyInH9kkTj.0zic/y6CwW', 'admin', 'Admin', 'Admin', '99999999999', '999999999', '2000-01-01', 'Brazil', 'São Paulo', 'São Paulo', '999999999', NOW());
 
 CREATE TABLE plans (
   id int NOT NULL AUTO_INCREMENT,
