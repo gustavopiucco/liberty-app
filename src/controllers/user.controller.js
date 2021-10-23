@@ -8,7 +8,7 @@ const create = catchAsync(async (req, res) => {
     res.status(httpStatus.CREATED).send();
 });
 
-const getCurrentUser = catchAsync(async (req, res) => {
+const getMe = catchAsync(async (req, res) => {
     const user = await userService.getById(req.user.id);
 
     res.status(httpStatus.OK).send(user);
@@ -22,6 +22,6 @@ const getAllDirects = catchAsync(async (req, res) => {
 
 module.exports = {
     create,
-    getCurrentUser,
+    getMe,
     getAllDirects
 }
