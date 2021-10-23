@@ -33,6 +33,7 @@ router.post('/uploads', auth('upload'), upload('file'), validate(uploadValidatio
 //Users
 router.post('/users', validate(userValidation.create), userController.create);
 router.get('/users/me', auth('get_user'), userController.getMe);
+router.get('/users/:id', auth('admin_get_user'), validate(userValidation.getById), userController.getById);
 router.get('/users/directs/me', auth('get_directs'), userController.getAllDirects);
 
 //Multilevel

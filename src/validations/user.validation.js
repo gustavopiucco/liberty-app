@@ -1,6 +1,12 @@
 const Joi = require('joi');
 const { date } = require('./custom.validation');
 
+const getById = {
+    params: Joi.object().keys({
+        id: Joi.number().integer().required()
+    }),
+};
+
 const create = {
     body: Joi.object().keys({
         invite_code: Joi.string().required(),
@@ -19,5 +25,6 @@ const create = {
 };
 
 module.exports = {
+    getById,
     create
 }

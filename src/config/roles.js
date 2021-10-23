@@ -5,6 +5,7 @@ const rolePermissions = new Map();
 rolePermissions.set(roles[0],
     [
         'download_uploaded_files',
+        'admin_get_user',
         'get_user',
         'get_directs',
         'update_password',
