@@ -61,7 +61,7 @@ CREATE TABLE multilevel_records (
   id int NOT NULL AUTO_INCREMENT,
   user_id INT NOT NULL,
   from_user_id INT NOT NULL,
-  type enum('affiliate_program', 'affiliate_portfolio') NOT NULL,
+  type enum('contract_payment_bonus', 'daily_bonus') NOT NULL,
   level SMALLINT NOT NULL,
   value DECIMAL(12, 2) NOT NULL,
   created_at TIMESTAMP NOT NULL,
@@ -69,6 +69,23 @@ CREATE TABLE multilevel_records (
   CONSTRAINT fk_mr_user_id_users_id FOREIGN KEY (user_id) REFERENCES users (id),
   CONSTRAINT fk_mr_from_user_id_users_id FOREIGN KEY (user_id) REFERENCES users (id)
 ) ENGINE=InnoDB;
+
+CREATE TABLE daily_bonus (
+  id int NOT NULL AUTO_INCREMENT,
+  percentage DECIMAL(5, 2) NOT NULL,
+  date DATE NOT NULL,
+  CONSTRAINT pk_id PRIMARY KEY (id),
+  CONSTRAINT uc_date UNIQUE (date)
+) ENGINE=InnoDB;
+
+-- CREATE TABLE daily_bonus_records (
+--   id int NOT NULL AUTO_INCREMENT,
+--   user_id INT NOT NULL
+--   value DECIMAL(12, 2) NOT NULL,
+--   created_at TIMESTAMP NOT NULL,
+--   CONSTRAINT pk_id PRIMARY KEY (id),
+--   CONSTRAINT fk_mr_user_id_users_id FOREIGN KEY (user_id) REFERENCES users (id)
+-- ) ENGINE=InnoDB;
 
 CREATE TABLE email_validations (
   id int NOT NULL AUTO_INCREMENT,

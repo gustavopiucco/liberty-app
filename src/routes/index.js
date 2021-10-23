@@ -8,6 +8,7 @@ const userValidation = require('../validations/user.validation');
 const uploadValidation = require('../validations/upload.validation');
 const multilevelValidation = require('../validations/multilevel.validation');
 const contractValidation = require('../validations/contract.validation');
+const dailyBonusValidation = require('../validations/dailybonus.validation');
 
 const authController = require('../controllers/auth.controller');
 const userController = require('../controllers/user.controller');
@@ -15,6 +16,7 @@ const uploadController = require('../controllers/upload.controller');
 const multilevelController = require('../controllers/multilevel.controller');
 const planController = require('../controllers/plan.controller');
 const contractController = require('../controllers/contract.controller');
+const dailyBonusController = require('../controllers/dailybonus.controller');
 
 const router = express.Router();
 
@@ -49,5 +51,10 @@ router.get('/contracts', auth('get_all_contracts'), contractController.getAll);
 router.patch('/contracts/:id/approve', auth('approve_contract'), validate(contractValidation.approve), contractController.approve);
 router.patch('/contracts/:id/deny', auth('deny_contract'), validate(contractValidation.deny), contractController.deny);
 router.delete('/contracts/:id', auth('delete_contract'), validate(contractValidation.deleteById), contractController.deleteById);
+
+//Daily Bonus
+router.get('/daily-bonus/:date', auth('get_daily_bonus'), validate(dailyBonusValidation.getByDate), dailyBonusController.getByDate);
+router.get('/daily-bonus', auth('get_daily_bonus'), dailyBonusController.getAll);
+router.post('/daily-bonus', auth('create_daily_bonus'), validate(dailyBonusValidation.create), dailyBonusController.create);
 
 module.exports = router;

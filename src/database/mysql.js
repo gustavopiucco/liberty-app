@@ -6,7 +6,8 @@ const pool = mysql.createPool({
     user: process.env.MYSQL_USER,
     password: process.env.MYSQL_PASSWORD,
     database: process.env.MYSQL_DATABASE,
-    decimalNumbers: true //return mysql decimal type as JavaScript float type
+    decimalNumbers: true, //return mysql decimal type as JavaScript float type
+    dateStrings: true //return mysql dates to javascript as they are in mysql
 });
 
 async function testConnection() {
