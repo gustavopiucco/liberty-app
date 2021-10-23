@@ -3,7 +3,7 @@ const catchAsync = require('../utils/catchAsync');
 const multilevelService = require('../services/multilevel.service');
 
 const getByLevel = catchAsync(async (req, res) => {
-    const multilevel = await multilevelService.getByLevel(req.user, req.params.level);
+    const multilevel = await multilevelService.getByLevel(req.user.id, req.params.level);
 
     res.status(httpStatus.OK).send(multilevel);
 });

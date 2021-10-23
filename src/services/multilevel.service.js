@@ -10,8 +10,8 @@ const multilevelRecordsModel = require('../models/multilevelrecords.model');
 const maxLevels = 5;
 const bonusPercentageByLevel = [10, 2, 1, 1, 1];
 
-async function getByLevel(loggedInUser, level) {
-    const multilevel = await multilevelModel.getByLevel(loggedInUser.id, level);
+async function getByLevel(userId, level) {
+    const multilevel = await multilevelModel.getByLevel(userId, level);
 
     return multilevel;
 }
