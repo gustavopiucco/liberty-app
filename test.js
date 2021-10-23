@@ -10,9 +10,7 @@ mysql.testConnection().then(() => {
 });
 
 async function test() {
-    const multilevel = await multilevelService.getUntilLevel(1, 5);
 
-    console.log(multilevel);
 }
 
 test();

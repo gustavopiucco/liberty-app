@@ -53,7 +53,7 @@ async function updatePasswordHash(id, passwordHash) {
 }
 
 async function addPendingBalance(id, value) {
-    await mysql.pool.execute('UPDATE users SET pending_balance = pending_balance + ? WHERE id = ?', [value, id]);
+    await mysql.pool.execute('UPDATE users SET pending_balance = pending_balance + ?, total_balance_received = total_balance_received + ? WHERE id = ?', [value, value, id]);
 }
 
 async function subtractPendingBalance(id, value) {
@@ -61,28 +61,11 @@ async function subtractPendingBalance(id, value) {
 }
 
 async function addAvailableBalance(id, value) {
-    await mysql.pool.execute('UPDATE users SET available_balance = available_balance + ? WHERE id = ?', [value, id]);
+    await mysql.pool.execute('UPDATE users SET available_balance = available_balance + ?, total_balance_received = total_balance_received + ? WHERE id = ?', [value, value, id]);
 }
 
 async function subtractAvailableBalance(id, value) {
     await mysql.pool.execute('UPDATE users SET available_balance = available_balance - ? WHERE id = ?', [value, id]);
-}
-
-async function addTotalBalance(id, value) {
-    await mysql.pool.execute('UPDATE users SET total_balance = total_balance + ? WHERE id = ?', [value, id]);
-}
-
-async function getCycle(id) {
-    const [rows, fields] = await mysql.pool.execute('SELECT cycle FROM users WHERE id = ?', [id]);
-    return rows[0];
-}
-
-async function addCycle(id, value) {
-    await mysql.pool.execute('UPDATE users SET cycle = cycle + ? WHERE id = ?', [value, id]);
-}
-
-async function setCycle(id, value) {
-    await mysql.pool.execute('UPDATE users SET cycle = ? WHERE id = ?', [value, id]);
 }
 
 module.exports = {
@@ -99,9 +82,5 @@ module.exports = {
     addPendingBalance,
     subtractPendingBalance,
     addAvailableBalance,
-    subtractAvailableBalance,
-    addTotalBalance,
-    getCycle,
-    addCycle,
-    setCycle
+    subtractAvailableBalance
 }
