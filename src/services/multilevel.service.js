@@ -7,16 +7,13 @@ const planModel = require('../models/plan.model');
 const contractModel = require('../models/contract.model');
 const multilevelRecordsModel = require('../models/multilevelrecords.model');
 
-const maxLevels = 5;
-const bonusPercentageByLevel = [10, 2, 1, 1, 1];
-
 async function getByLevel(userId, level) {
     const multilevel = await multilevelModel.getByLevel(userId, level);
 
     return multilevel;
 }
 
-async function getSponsorsByUserId(rootUserId) {
+async function getSponsorsByUserId(rootUserId, maxLevels) {
     let sponsors = [];
 
     const rootUser = await userModel.getById(rootUserId);
@@ -36,23 +33,18 @@ async function getSponsorsByUserId(rootUserId) {
     return sponsors;
 }
 
-async function payMultilevelBonus(contract, type) {
-    const plan = await planModel.getById(contract.plan_id);
-
-    const sponsors = await getSponsorsByUserId(contract.user_id);
+async function payMultilevelBonus(baseContractId, baseContractUserId, baseValue, type, maxLevels, bonusPercentageByLevel) {
+    const sponsors = await getSponsorsByUserId(baseContractUserId, maxLevels);
 
     for (let level = 1; level <= sponsors.length; level++) {
         const user = sponsors[level - 1];
-        const value = ((bonusPercentageByLevel[level - 1]) / 100) * plan.price;
+        const value = ((bonusPercentageByLevel[level - 1]) / 100) * baseValue;
         const contract = await contractModel.getByUserIdAndPaymentConfirmed(user.id);
 
         if (!contract) continue; //user does not have an active contract, so he does not receive the bonus
 
-        await userModel.addPendingBalance(user.id, value);
-
-        await cycleService.handleUserCycle(user, contract, plan.price, value);
-
-        await multilevelRecordsModel.create(user.id, contract.user_id, contract.id, type, level, value, new Date());
+        const cycleValue = await cycleService.handleUserCycle(contract.id, contract.user_id, contract.total_received, baseValue, value);
+        await multilevelRecordsModel.create(user.id, baseContractUserId, baseContractId, type, level, cycleValue, new Date());
     }
 }
 

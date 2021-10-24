@@ -47,7 +47,7 @@ async function payDailyBonus() {
 
         await dailyBonusRecordModel.create(contract.user_id, contract.id, cycleValue, new Date());
 
-        //await multilevelService.payMultilevelBonus(contract, 'daily_bonus');
+        await multilevelService.payMultilevelBonus();
     }
 }
 

@@ -1,7 +1,10 @@
 const mysql = require('../database/mysql');
 
 async function getById(id) {
-    const [rows, fields] = await mysql.pool.execute('SELECT * FROM contracts WHERE id = ?', [id]);
+    const [rows, fields] = await mysql.pool.execute(`
+    SELECT contracts.*, plans.price AS plan_price FROM contracts
+    JOIN plans ON plans.id = contracts.plan_id
+    WHERE contracts.id = ?`, [id]);
     return rows[0];
 }
 
@@ -25,13 +28,17 @@ async function getAllByUserIdWithPlan(userId) {
 }
 
 async function getByUserIdAndPaymentConfirmed(userId) {
-    const [rows, fields] = await mysql.pool.execute(`SELECT * FROM contracts WHERE user_id = ? AND status = 'payment_confirmed'`, [userId]);
+    const [rows, fields] = await mysql.pool.execute(`
+    SELECT contracts.*, plans.price AS plan_price FROM contracts
+    JOIN plans ON plans.id = contracts.plan_id
+    WHERE contracts.user_id = ?
+    AND contracts.status = 'payment_confirmed'`, [userId]);
     return rows[0];
 }
 
 async function getAllWithPaymentConfirmed() {
     const [rows, fields] = await mysql.pool.execute(`
-    SELECT contracts.id, contracts.user_id, contracts.total_received, plans.price FROM contracts
+    SELECT contracts.id, contracts.user_id, contracts.total_received, plans.id AS plan_id, plans.price FROM contracts
     JOIN plans ON plans.id = contracts.plan_id
     WHERE contracts.status = 'payment_confirmed'`);
 

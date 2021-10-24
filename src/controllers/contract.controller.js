@@ -15,7 +15,7 @@ const getAllByUserId = catchAsync(async (req, res) => {
 });
 
 const approve = catchAsync(async (req, res) => {
-    await contractService.approve(req.user, req.params.id);
+    await contractService.approve(req.params.id);
 
     res.status(httpStatus.OK).send();
 });

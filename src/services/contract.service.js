@@ -16,7 +16,7 @@ async function getAllByUserId(userId) {
     return contracts;
 }
 
-async function approve(loggedInUser, id) {
+async function approve(id) {
     const contract = await contractModel.getById(id);
 
     if (!contract) {
@@ -31,7 +31,7 @@ async function approve(loggedInUser, id) {
         throw new ApiError(httpStatus.BAD_REQUEST, 'Este contrato já foi negado anteriormente');
     }
 
-    await multilevelService.payMultilevelBonus(contract, 'contract_payment_bonus');
+    await multilevelService.payMultilevelBonus(contract.id, contract.user_id, contract.plan_price, contract_payment_bonus, 5, [10, 2, 1, 1, 1]);
 
     await contractModel.updateStatus(id, 'payment_confirmed');
 }
