@@ -80,8 +80,8 @@ async function deleteById(loggedInUser, id) {
         throw new ApiError(httpStatus.BAD_REQUEST, 'Este contrato não existe');
     }
 
-    if (contract.status == 'payment_confirmed') {
-        throw new ApiError(httpStatus.BAD_REQUEST, 'Não é possível deletar um contrato ativo');
+    if (contract.status != 'waiting_payment') {
+        throw new ApiError(httpStatus.BAD_REQUEST, 'Você só pode deletar contatos que estão aguardando pagamento');
     }
 
     if (loggedInUser.id != contract.user_id) {
