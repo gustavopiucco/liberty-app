@@ -1,7 +1,7 @@
 const mysql = require('../database/mysql');
 
 async function getAllByUserId(userId) {
-    const [rows, fields] = await mysql.pool.execute('SELECT * FROM uploads WHERE user_id = ?', [userId]);
+    const [rows, fields] = await mysql.pool.execute('SELECT * FROM uploads WHERE user_id = ? ORDER BY created_at DESC', [userId]);
     return rows;
 }
 

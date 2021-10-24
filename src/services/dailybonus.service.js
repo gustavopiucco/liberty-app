@@ -4,6 +4,7 @@ const { format } = require('date-fns');
 const dailybonusModel = require('../models/dailybonus.model');
 const contractModel = require('../models/contract.model');
 const userModel = require('../models/user.model');
+const dailyBonusRecordModel = require('../models/dailybonusrecord.model');
 
 async function getByDate(date) {
     const dailyBonus = await dailybonusModel.getByDate(date);
@@ -36,12 +37,16 @@ async function payDailyBonus() {
     const contracts = await contractModel.getAllWithPaymentConfirmed();
 
     for (contract of contracts) {
-        console.log(contract)
-    }
+        const baseValue = parseFloat((contract.price * (todayBonus.percentage / 100)).toFixed(2));
+        const userValue = parseFloat((baseValue * 0.6).toFixed(2));
+        const multilevelValue = parseFloat((baseValue * 0.2).toFixed(2));
 
-    //agora pega todo mundo q tem contrato ativo e paga o todayBonus.percentage baseado no plano dele ativo
-    //cria o registro q foi pago na tabela daily_bonus_records q ainda precisa criar no mysql
-    //chama o multilevel service pra pagar em 8 niveis
+        await userModel.addPendingBalance(contract.user_id, userValue);
+
+        await dailyBonusRecordModel.create(contract.user_id, contract.id, userValue, new Date());
+
+        //chama o multilevel service pra pagar em 8 niveis
+    }
 }
 
 module.exports = {

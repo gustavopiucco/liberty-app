@@ -11,7 +11,7 @@ async function getAll(userId) {
 }
 
 async function getAllByUserId(userId) {
-    const [rows, fields] = await mysql.pool.execute('SELECT * FROM contracts WHERE user_id = ?', [userId]);
+    const [rows, fields] = await mysql.pool.execute('SELECT * FROM contracts WHERE user_id = ? ORDER BY created_at DESC', [userId]);
     return rows;
 }
 
@@ -30,7 +30,11 @@ async function getByUserIdAndPaymentConfirmed(userId) {
 }
 
 async function getAllWithPaymentConfirmed() {
-    const [rows, fields] = await mysql.pool.execute(`SELECT * FROM contracts WHERE status = 'payment_confirmed'`);
+    const [rows, fields] = await mysql.pool.execute(`
+    SELECT contracts.id, contracts.user_id, plans.price FROM contracts
+    JOIN plans ON plans.id = contracts.plan_id
+    WHERE contracts.status = 'payment_confirmed'`);
+
     return rows;
 }
 
