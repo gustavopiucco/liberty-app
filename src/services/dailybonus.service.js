@@ -5,6 +5,8 @@ const dailybonusModel = require('../models/dailybonus.model');
 const contractModel = require('../models/contract.model');
 const userModel = require('../models/user.model');
 const dailyBonusRecordModel = require('../models/dailybonusrecord.model');
+const multilevelService = require('../services/multilevel.service');
+const cycleService = require('../services/cycle.service');
 
 async function getByDate(date) {
     const dailyBonus = await dailybonusModel.getByDate(date);
@@ -36,16 +38,16 @@ async function payDailyBonus() {
 
     const contracts = await contractModel.getAllWithPaymentConfirmed();
 
-    for (contract of contracts) {
+    for (const contract of contracts) {
         const baseValue = parseFloat((contract.price * (todayBonus.percentage / 100)).toFixed(2));
         const userValue = parseFloat((baseValue * 0.6).toFixed(2));
         const multilevelValue = parseFloat((baseValue * 0.2).toFixed(2));
 
-        await userModel.addPendingBalance(contract.user_id, userValue);
+        const cycleValue = await cycleService.handleUserCycle(contract, contract.price, userValue);
 
-        await dailyBonusRecordModel.create(contract.user_id, contract.id, userValue, new Date());
+        await dailyBonusRecordModel.create(contract.user_id, contract.id, cycleValue, new Date());
 
-        //chama o multilevel service pra pagar em 8 niveis
+        //await multilevelService.payMultilevelBonus(contract, 'daily_bonus');
     }
 }
 

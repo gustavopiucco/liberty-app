@@ -31,7 +31,7 @@ async function getByUserIdAndPaymentConfirmed(userId) {
 
 async function getAllWithPaymentConfirmed() {
     const [rows, fields] = await mysql.pool.execute(`
-    SELECT contracts.id, contracts.user_id, plans.price FROM contracts
+    SELECT contracts.id, contracts.user_id, contracts.total_received, plans.price FROM contracts
     JOIN plans ON plans.id = contracts.plan_id
     WHERE contracts.status = 'payment_confirmed'`);
 
