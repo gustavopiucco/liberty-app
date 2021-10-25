@@ -3,6 +3,7 @@ const httpStatus = require('http-status');
 const multilevelService = require('../services/multilevel.service');
 const contractModel = require('../models/contract.model');
 const planModel = require('../models/plan.model');
+const userModel = require('../models/user.model');
 
 async function getAll() {
     const contracts = await contractModel.getAll();
@@ -51,6 +52,12 @@ async function deny(id) {
 }
 
 async function create(loggedInUser, body) {
+    const user = await userModel.getById(loggedInUser.id);
+
+    if (user.kyc_verified == 0) {
+        throw new ApiError(httpStatus.BAD_REQUEST, 'Você precisa validar seus documentos (KYC)');
+    }
+
     const plan = await planModel.getById(body.plan_id);
 
     if (!plan) {
