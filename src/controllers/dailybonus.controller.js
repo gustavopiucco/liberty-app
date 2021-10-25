@@ -14,6 +14,12 @@ const getAll = catchAsync(async (req, res) => {
     res.status(httpStatus.OK).send(dailyBonuses);
 });
 
+const getAllDaysAgo = catchAsync(async (req, res) => {
+    const dailyBonuses = await dailybonusService.getAllDaysAgo(req.params.days);
+
+    res.status(httpStatus.OK).send(dailyBonuses);
+});
+
 const create = catchAsync(async (req, res) => {
     await dailybonusService.create(req.body.percentage, req.body.date);
 
@@ -23,5 +29,6 @@ const create = catchAsync(async (req, res) => {
 module.exports = {
     getByDate,
     getAll,
+    getAllDaysAgo,
     create
 }

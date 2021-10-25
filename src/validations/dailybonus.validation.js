@@ -7,6 +7,13 @@ const getByDate = {
     }),
 };
 
+const getAllDaysAgo = {
+    params: Joi.object().keys({
+        days: Joi.number().integer().required().max(15)
+    }),
+};
+
+
 const create = {
     body: Joi.object().keys({
         percentage: Joi.number().required(),
@@ -16,5 +23,6 @@ const create = {
 
 module.exports = {
     getByDate,
+    getAllDaysAgo,
     create
 }

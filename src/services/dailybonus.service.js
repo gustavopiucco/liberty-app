@@ -1,9 +1,8 @@
 const ApiError = require('../utils/ApiError');
 const httpStatus = require('http-status');
-const { format } = require('date-fns');
+const { format, subDays } = require('date-fns');
 const dailybonusModel = require('../models/dailybonus.model');
 const contractModel = require('../models/contract.model');
-const userModel = require('../models/user.model');
 const dailyBonusRecordModel = require('../models/dailybonusrecord.model');
 const multilevelService = require('../services/multilevel.service');
 const cycleService = require('../services/cycle.service');
@@ -22,6 +21,33 @@ async function getAll() {
     const dailyBonuses = await dailybonusModel.getAll();
 
     return dailyBonuses;
+}
+
+async function getAllDaysAgo(days) {
+    let data = [];
+    const todayDate = new Date();
+    const dailyBonuses = await dailybonusModel.getAll();
+
+    for (let i = 0; i < days; i++) {
+        let date = subDays(todayDate, i);
+        const dateFormatted = format(date, 'yyyy-MM-dd');
+
+        let percentage = 0;
+
+        for (let i = 0; i < dailyBonuses.length; i++) {
+            if (dailyBonuses[i].date == dateFormatted) {
+                percentage = dailyBonuses[i].percentage;
+                break;
+            }
+        }
+
+        data.push({
+            date: dateFormatted,
+            percentage: percentage
+        });
+    }
+
+    return data;
 }
 
 async function create(percentage, date) {
@@ -54,6 +80,7 @@ async function payDailyBonus() {
 module.exports = {
     getByDate,
     getAll,
+    getAllDaysAgo,
     create,
     payDailyBonus
 }

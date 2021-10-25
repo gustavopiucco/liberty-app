@@ -55,6 +55,7 @@ router.delete('/contracts/:id', auth('delete_contract'), validate(contractValida
 //Daily Bonus
 router.get('/daily-bonus/:date', auth('get_daily_bonus'), validate(dailyBonusValidation.getByDate), dailyBonusController.getByDate);
 router.get('/daily-bonus', auth('get_daily_bonus'), dailyBonusController.getAll);
+router.get('/daily-bonus/all/:days', auth('get_all_daily_bonus_days_ago'), validate(dailyBonusValidation.getAllDaysAgo), dailyBonusController.getAllDaysAgo);
 router.post('/daily-bonus', auth('create_daily_bonus'), validate(dailyBonusValidation.create), dailyBonusController.create);
 
 module.exports = router;

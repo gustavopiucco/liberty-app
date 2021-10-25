@@ -21,7 +21,8 @@ rolePermissions.set(roles[0],
         'deny_contract',
         'create_daily_bonus',
         'create_daily_bonus',
-        'get_daily_bonus'
+        'get_daily_bonus',
+        'get_all_daily_bonus_days_ago'
     ]);
 
 rolePermissions.set(roles[1],
@@ -35,7 +36,8 @@ rolePermissions.set(roles[1],
         'get_all_plans',
         'get_contracts_me',
         'delete_contract',
-        'get_all_uploads'
+        'get_all_uploads',
+        'get_all_daily_bonus_days_ago'
     ]);
 
 module.exports = {
