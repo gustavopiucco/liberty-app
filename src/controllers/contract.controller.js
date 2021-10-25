@@ -21,7 +21,7 @@ const approve = catchAsync(async (req, res) => {
 });
 
 const deny = catchAsync(async (req, res) => {
-    await contractService.deny(req.user, req.params.id);
+    await contractService.deny(req.params.id);
 
     res.status(httpStatus.OK).send();
 });

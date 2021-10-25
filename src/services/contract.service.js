@@ -36,7 +36,7 @@ async function approve(id) {
     await contractModel.updateStatus(id, 'payment_confirmed');
 }
 
-async function deny(loggedInUser, id) {
+async function deny(id) {
     const contract = await contractModel.getById(id);
 
     if (!contract) {

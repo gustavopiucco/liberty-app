@@ -43,7 +43,8 @@ async function payMultilevelBonus(baseContractId, baseContractUserId, baseValue,
 
         if (!contract) continue; //user does not have an active contract, so he does not receive the bonus
 
-        const cycleValue = await cycleService.handleUserCycle(contract.id, contract.user_id, contract.total_received, baseValue, value);
+        const cycleValue = await cycleService.handleUserCycle(contract.id, contract.user_id, contract.total_received, contract.plan_price, value);
+
         await multilevelRecordsModel.create(user.id, baseContractUserId, baseContractId, type, level, cycleValue, new Date());
     }
 }
