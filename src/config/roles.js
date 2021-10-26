@@ -26,7 +26,8 @@ rolePermissions.set(roles[0],
         'create_kyc',
         'get_kyc',
         'approve_kyc',
-        'deny_kyc'
+        'deny_kyc',
+        'upload_contract'
     ]);
 
 rolePermissions.set(roles[1],
@@ -43,7 +44,8 @@ rolePermissions.set(roles[1],
         'get_all_uploads',
         'get_all_daily_bonus_days_ago',
         'create_kyc',
-        'get_kyc'
+        'get_kyc',
+        'upload_contract'
     ]);
 
 module.exports = {

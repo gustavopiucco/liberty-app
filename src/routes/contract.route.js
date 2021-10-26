@@ -11,6 +11,7 @@ const contractValidation = require('../validations/contract.validation');
 const contractModel = require('../models/contract.model');
 const userModel = require('../models/user.model');
 const planModel = require('../models/plan.model');
+const contractUploadModel = require('../models/contractupload.model');
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -22,7 +23,7 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({
-    limits: { fileSize: 1024 * 1024 * 1 },
+    limits: { fileSize: 1024 * 1024 * 5 },
     storage,
     fileFilter: (req, file, cb) => {
         if (!file.originalname.match(/\.(jpg|JPG|jpeg|JPEG|png|PNG|gif|GIF|pdf|PDF)$/)) {
@@ -32,6 +33,30 @@ const upload = multer({
         cb(null, true);
     }
 });
+
+router.get('/:id/uploads', auth('get_all_uploads'), validate(contractValidation.getAllUploads), catchAsync(async (req, res) => {
+    const uploads = await contractUploadModel.getAllByContractId(req.params.id);
+
+    res.status(httpStatus.OK).send(uploads);
+}));
+
+router.post('/:id/upload', upload.array('files', 3), auth('upload_contract'), validate(contractValidation.upload), catchAsync(async (req, res) => {
+    const contract = await contractModel.getById(req.params.id);
+
+    if (req.user.id != contract.user_id) {
+        throw new ApiError(httpStatus.BAD_REQUEST, 'Sem permissão');
+    }
+
+    if (contract.status != 'waiting_payment') {
+        throw new ApiError(httpStatus.BAD_REQUEST, 'Este contrato não está aguardando pagamento');
+    }
+
+    for (let file of req.files) {
+        await contractUploadModel.create(req.params.id, file.filename, new Date());
+    }
+
+    res.status(httpStatus.OK).send();
+}));
 
 router.get('/', auth('get_all_contracts'), catchAsync(async (req, res) => {
     const contracts = await contractModel.getAll();
