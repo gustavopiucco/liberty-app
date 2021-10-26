@@ -3,13 +3,13 @@ const auth = require('../middlewares/auth');
 const validate = require('../middlewares/validate');
 const upload = require('../middlewares/upload');
 
+const contractRoute = require('./contract.route');
 const kycRoute = require('./kyc.route');
 
 const authValidation = require('../validations/auth.validation');
 const userValidation = require('../validations/user.validation');
 const uploadValidation = require('../validations/upload.validation');
 const multilevelValidation = require('../validations/multilevel.validation');
-const contractValidation = require('../validations/contract.validation');
 const dailyBonusValidation = require('../validations/dailybonus.validation');
 
 const authController = require('../controllers/auth.controller');
@@ -17,11 +17,11 @@ const userController = require('../controllers/user.controller');
 const uploadController = require('../controllers/upload.controller');
 const multilevelController = require('../controllers/multilevel.controller');
 const planController = require('../controllers/plan.controller');
-const contractController = require('../controllers/contract.controller');
 const dailyBonusController = require('../controllers/dailybonus.controller');
 
 const router = express.Router();
 
+router.use('/contracts', contractRoute);
 router.use('/kyc', kycRoute);
 
 //Auth
@@ -47,14 +47,6 @@ router.get('/multilevel/me/:level', auth('get_multilevel'), validate(multilevelV
 
 //Plans
 router.get('/plans', auth('get_all_plans'), planController.getAll);
-
-//Contracts
-router.post('/contracts', auth('create_contract'), validate(contractValidation.create), contractController.create);
-router.get('/contracts/me', auth('get_contracts_me'), contractController.getAllByUserId);
-router.get('/contracts', auth('get_all_contracts'), contractController.getAll);
-router.patch('/contracts/:id/approve', auth('approve_contract'), validate(contractValidation.approve), contractController.approve);
-router.patch('/contracts/:id/deny', auth('deny_contract'), validate(contractValidation.deny), contractController.deny);
-router.delete('/contracts/:id', auth('delete_contract'), validate(contractValidation.deleteById), contractController.deleteById);
 
 //Daily Bonus
 router.get('/daily-bonus/:date', auth('get_daily_bonus'), validate(dailyBonusValidation.getByDate), dailyBonusController.getByDate);

@@ -8,7 +8,7 @@ async function getById(id) {
     return rows[0];
 }
 
-async function getAll(userId) {
+async function getAll() {
     const [rows, fields] = await mysql.pool.execute('SELECT * FROM contracts ORDER BY created_at DESC');
     return rows;
 }
