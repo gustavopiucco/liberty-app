@@ -16,9 +16,9 @@ const upload = multer({
     limits: { fileSize: 1024 * 1024 * 5 },
     storage,
     fileFilter: (req, file, cb) => {
-        if (!file.originalname.match(/\.(jpg|JPG|jpeg|JPEG|png|PNG|gif|GIF)$/)) {
-            req.fileValidationError = 'Only image files are allowed';
-            return cb(new Error('Only image files are allowed'), false);
+        if (!file.originalname.match(/\.(jpg|JPG|jpeg|JPEG|png|PNG|gif|GIF|pdf|PDF)$/)) {
+            req.fileValidationError = 'Apenas arquivos de imagens e PDF são permitidos';
+            return cb(new Error('Apenas arquivos de imagens e PDF são permitidos'), false);
         }
         cb(null, true);
     }

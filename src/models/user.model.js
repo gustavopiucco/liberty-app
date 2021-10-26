@@ -48,6 +48,10 @@ async function setEmailVerified(id) {
     await mysql.pool.execute('UPDATE users SET email_verified = 1 WHERE id = ?', [id]);
 }
 
+async function setKycVerified(id) {
+    await mysql.pool.execute('UPDATE users SET kyc_verified = 1 WHERE id = ?', [id]);
+}
+
 async function updatePasswordHash(id, passwordHash) {
     await mysql.pool.execute('UPDATE users SET password_hash = ? WHERE id = ?', [passwordHash, id]);
 }
@@ -78,6 +82,7 @@ module.exports = {
     getSponsorUnilevel,
     getAllDirectsById,
     setEmailVerified,
+    setKycVerified,
     updatePasswordHash,
     addPendingBalance,
     subtractPendingBalance,

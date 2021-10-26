@@ -3,6 +3,8 @@ const auth = require('../middlewares/auth');
 const validate = require('../middlewares/validate');
 const upload = require('../middlewares/upload');
 
+const kycRoute = require('./kyc.route');
+
 const authValidation = require('../validations/auth.validation');
 const userValidation = require('../validations/user.validation');
 const uploadValidation = require('../validations/upload.validation');
@@ -19,6 +21,8 @@ const contractController = require('../controllers/contract.controller');
 const dailyBonusController = require('../controllers/dailybonus.controller');
 
 const router = express.Router();
+
+router.use('/kyc', kycRoute);
 
 //Auth
 router.post('/auth/login', validate(authValidation.login), authController.login);

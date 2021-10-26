@@ -113,6 +113,24 @@ CREATE TABLE reset_password_validations (
   CONSTRAINT uc_code UNIQUE (code)
 );
 
+CREATE TABLE kyc_requests (
+  id int NOT NULL AUTO_INCREMENT,
+  user_id INT NOT NULL,
+  status enum('pending', 'approved', 'denied') NOT NULL,
+  created_at TIMESTAMP NOT NULL,
+  CONSTRAINT pk_id PRIMARY KEY (id),
+  CONSTRAINT fk_kycr_user_id_users_id FOREIGN KEY (user_id) REFERENCES users( id)
+) ENGINE=InnoDB;
+
+CREATE TABLE kyc_requests_uploads (
+  id int NOT NULL AUTO_INCREMENT,
+  kyc_request_id int NOT NULL,
+  filename varchar(100) NOT NULL,
+  created_at TIMESTAMP NOT NULL,
+  CONSTRAINT pk_id PRIMARY KEY (id),
+  CONSTRAINT fk_kycru_kyc_request_kycr_id FOREIGN KEY (kyc_request_id) REFERENCES kyc_requests (id)
+);
+
 CREATE TABLE uploads (
   id int NOT NULL AUTO_INCREMENT,
   user_id int NOT NULL,
