@@ -2,22 +2,22 @@ const express = require('express');
 const auth = require('../middlewares/auth');
 const validate = require('../middlewares/validate');
 
+const userRoute = require('./user.route');
 const contractRoute = require('./contract.route');
 const kycRoute = require('./kyc.route');
 
 const authValidation = require('../validations/auth.validation');
-const userValidation = require('../validations/user.validation');
 const multilevelValidation = require('../validations/multilevel.validation');
 const dailyBonusValidation = require('../validations/dailybonus.validation');
 
 const authController = require('../controllers/auth.controller');
-const userController = require('../controllers/user.controller');
 const multilevelController = require('../controllers/multilevel.controller');
 const planController = require('../controllers/plan.controller');
 const dailyBonusController = require('../controllers/dailybonus.controller');
 
 const router = express.Router();
 
+router.use('/users', userRoute);
 router.use('/contracts', contractRoute);
 router.use('/kyc', kycRoute);
 
@@ -28,12 +28,6 @@ router.post('/auth/reset-password/request', validate(authValidation.resetPasswor
 router.post('/auth/reset-password/validation', validate(authValidation.resetPasswordValidation), authController.resetPasswordValidation);
 router.post('/auth/email/validation', validate(authValidation.emailValidation), authController.emailValidation);
 router.patch('/auth/password', auth('update_password'), validate(authValidation.updatePassword), authController.updatePassword);
-
-//Users
-router.post('/users', validate(userValidation.create), userController.create);
-router.get('/users/me', auth('get_user'), userController.getMe);
-router.get('/users/:id', auth('admin_get_user'), validate(userValidation.getById), userController.getById);
-router.get('/users/directs/me', auth('get_directs'), userController.getAllDirects);
 
 //Multilevel
 router.get('/multilevel/me/:level', auth('get_multilevel'), validate(multilevelValidation.getByLevel), multilevelController.getByLevel);
