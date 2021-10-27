@@ -1,20 +1,17 @@
 const express = require('express');
 const auth = require('../middlewares/auth');
 const validate = require('../middlewares/validate');
-const upload = require('../middlewares/upload');
 
 const contractRoute = require('./contract.route');
 const kycRoute = require('./kyc.route');
 
 const authValidation = require('../validations/auth.validation');
 const userValidation = require('../validations/user.validation');
-const uploadValidation = require('../validations/upload.validation');
 const multilevelValidation = require('../validations/multilevel.validation');
 const dailyBonusValidation = require('../validations/dailybonus.validation');
 
 const authController = require('../controllers/auth.controller');
 const userController = require('../controllers/user.controller');
-const uploadController = require('../controllers/upload.controller');
 const multilevelController = require('../controllers/multilevel.controller');
 const planController = require('../controllers/plan.controller');
 const dailyBonusController = require('../controllers/dailybonus.controller');
@@ -31,10 +28,6 @@ router.post('/auth/reset-password/request', validate(authValidation.resetPasswor
 router.post('/auth/reset-password/validation', validate(authValidation.resetPasswordValidation), authController.resetPasswordValidation);
 router.post('/auth/email/validation', validate(authValidation.emailValidation), authController.emailValidation);
 router.patch('/auth/password', auth('update_password'), validate(authValidation.updatePassword), authController.updatePassword);
-
-//Upload
-router.get('/uploads/user/:user_id', auth('get_all_uploads'), validate(uploadValidation.getAllByUserId), uploadController.getAllByUserId);
-router.post('/uploads', auth('upload'), upload('file'), validate(uploadValidation.upload), uploadController.upload);
 
 //Users
 router.post('/users', validate(userValidation.create), userController.create);
