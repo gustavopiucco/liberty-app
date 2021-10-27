@@ -7,6 +7,28 @@ const getById = {
     }),
 };
 
+const update = {
+    params: Joi.object().keys({
+        id: Joi.number().integer().required(),
+    }),
+    body: Joi.object().keys({
+        kyc_verified: Joi.number().integer().valid(0, 1),
+        email_verified: Joi.number().integer().valid(0, 1),
+        email: Joi.string().email().max(100),
+        password: Joi.string().min(6).max(50),
+        role: Joi.string().valid('admin', 'user'),
+        first_name: Joi.string().max(30),
+        last_name: Joi.string().max(60),
+        cpf: Joi.string().length(11),
+        phone: Joi.string().max(20),
+        birth_date: Joi.custom(date),
+        country: Joi.string().max(30),
+        city: Joi.string().max(50),
+        state: Joi.string().max(50),
+        postal_code: Joi.string().max(20),
+    }),
+};
+
 const create = {
     body: Joi.object().keys({
         invite_code: Joi.string().required(),
@@ -26,5 +48,6 @@ const create = {
 
 module.exports = {
     getById,
+    update,
     create
 }

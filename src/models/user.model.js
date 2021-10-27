@@ -56,6 +56,10 @@ async function updatePasswordHash(id, passwordHash) {
     await mysql.pool.execute('UPDATE users SET password_hash = ? WHERE id = ?', [passwordHash, id]);
 }
 
+async function update(id, kycVerified, emailVerified, email, passwordHash, role, firstName, lastName, cpf, phone, birthDate, county, city, state, postalCode) {
+    await mysql.pool.execute('UPDATE users SET kyc_verified = ?, email_verified = ?, email = ?, password_hash = ?, role = ?, first_name = ?, last_name = ?, cpf = ?, phone = ?, birth_date = ?, country = ?, city = ?, state = ?, postal_code = ? WHERE id = ?', [kycVerified, emailVerified, email, passwordHash, role, firstName, lastName, cpf, phone, birthDate, county, city, state, postalCode, id]);
+}
+
 async function addPendingBalance(id, value) {
     await mysql.pool.execute('UPDATE users SET pending_balance = pending_balance + ?, total_balance_received = total_balance_received + ? WHERE id = ?', [value, value, id]);
 }
@@ -84,6 +88,7 @@ module.exports = {
     setEmailVerified,
     setKycVerified,
     updatePasswordHash,
+    update,
     addPendingBalance,
     subtractPendingBalance,
     addAvailableBalance,

@@ -1,3 +1,5 @@
+const { format } = require('date-fns');
+
 const password = (value, helpers) => {
     if (value.length < 8) {
         return helpers.message('A senha precisa ter no mínimo 8 caracteres');

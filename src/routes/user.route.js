@@ -12,8 +12,6 @@ const userValidation = require('../validations/user.validation');
 const userModel = require('../models/user.model');
 const contractModel = require('../models/contract.model');
 
-// router.get('/users/directs/me', auth('get_directs'), userController.getAllDirects);
-
 router.get('/me', auth('get_user'), catchAsync(async (req, res) => {
     const user = await userModel.getById(req.user.id);
 
@@ -36,6 +34,29 @@ router.get('/directs/me', auth('get_directs'), catchAsync(async (req, res) => {
     }
 
     res.status(httpStatus.OK).send(directs);
+}));
+
+router.put('/:id', auth('admin_update_user'), validate(userValidation.update), catchAsync(async (req, res) => {
+    const user = await userModel.getById(req.params.id);
+
+    const kycVerified = (req.body.kyc_verified != undefined) ? req.body.kyc_verified : user.kyc_verified;
+    const emailVerified = (req.body.email_verified != undefined) ? req.body.email_verified : user.email_verified;
+    const email = (req.body.email != undefined) ? req.body.email : user.email;
+    const passwordHash = (req.body.password != undefined) ? await bcrypt.hash(req.body.password, 8) : user.password_hash;
+    const role = (req.body.role) ? req.body.role : user.role;
+    const firstName = (req.body.first_name) ? req.body.first_name : user.first_name;
+    const lastName = (req.body.last_name) ? req.body.last_name : user.last_name;
+    const cpf = (req.body.cpf) ? req.body.cpf : user.cpf;
+    const phone = (req.body.phone) ? req.body.phone : user.phone;
+    const birthDate = (req.body.birth_date) ? req.body.birth_date : user.birth_date;
+    const country = (req.body.country) ? req.body.country : user.country;
+    const city = (req.body.city) ? req.body.city : user.city;
+    const state = (req.body.state) ? req.body.state : user.state;
+    const postalCode = (req.body.postal_code) ? req.body.postal_code : user.postal_code;
+
+    await userModel.update(user.id, kycVerified, emailVerified, email, passwordHash, role, firstName, lastName, cpf, phone, birthDate, country, city, state, postalCode);
+
+    res.status(httpStatus.OK).send();
 }));
 
 router.post('/', validate(userValidation.create), catchAsync(async (req, res) => {
