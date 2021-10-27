@@ -33,8 +33,16 @@ const upload = multer({
     }
 });
 
-router.get('/', auth('get_kyc'), catchAsync(async (req, res) => {
+router.get('/me', auth('get_kyc'), catchAsync(async (req, res) => {
     const kycRequests = await kycRequestModel.getByUserId(req.user.id);
+
+    res.status(httpStatus.OK).send(kycRequests);
+}));
+
+router.get('/', auth('get_all_kyc'), catchAsync(async (req, res) => {
+    const kycRequests = await kycRequestModel.getAll();
+
+    console.log(kycRequests)
 
     for (let i = 0; i < kycRequests.length; i++) {
         const kycRequestsUploads = await kycRequestUploadModel.getAllByKycRequestId(kycRequests[i].id);

@@ -25,6 +25,7 @@ rolePermissions.set(roles[0],
         'get_all_daily_bonus_days_ago',
         'create_kyc',
         'get_kyc',
+        'get_all_kyc',
         'approve_kyc',
         'deny_kyc',
         'upload_contract'
