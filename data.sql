@@ -13,7 +13,7 @@ CREATE TABLE users (
   email_verified boolean NOT NULL DEFAULT false,
   email varchar(100) NOT NULL,
   password_hash char(60) NOT NULL,
-  role enum('admin', 'user') DEFAULT 'user',
+  role ENUM('admin', 'user') DEFAULT 'user',
   first_name varchar(30) NOT NULL,
   last_name varchar(60) NOT NULL,
   cpf char(11) NOT NULL,
@@ -48,13 +48,23 @@ CREATE TABLE contracts (
   id int NOT NULL AUTO_INCREMENT,
   user_id int NOT NULL,
   plan_id int NOT NULL,
-  status enum('waiting_payment', 'payment_confirmed', 'payment_denied', 'completed') NOT NULL DEFAULT 'waiting_payment',
-  payment_type enum('pix') NOT NULL,
+  status ENUM('waiting_payment', 'payment_confirmed', 'payment_denied', 'completed') NOT NULL DEFAULT 'waiting_payment',
+  payment_type ENUM('pix') NOT NULL,
   total_received DECIMAL(5,2) NOT NULL DEFAULT 0,
   created_at TIMESTAMP NOT NULL,
   CONSTRAINT pk_id PRIMARY KEY (id),
   CONSTRAINT fk_contracts_user_id_users_id FOREIGN KEY (user_id) REFERENCES users (id),
   CONSTRAINT fk_contracts_plan_id_plans_id FOREIGN KEY (plan_id) REFERENCES plans (id)
+) ENGINE=InnoDB;
+
+CREATE TABLE withdraws (
+  id int NOT NULL AUTO_INCREMENT,
+  user_id INT NOT NULL,
+  status ENUM('pending', 'paid'),
+  value DECIMAL(12, 2) NOT NULL,
+  created_at TIMESTAMP NOT NULL,
+  CONSTRAINT pk_id PRIMARY KEY (id),
+  CONSTRAINT pk_wiwhdraws_user_id_users_id FOREIGN KEY (user_id) REFERENCES users (id)
 ) ENGINE=InnoDB;
 
 CREATE TABLE contracts_uploads (
@@ -71,7 +81,7 @@ CREATE TABLE multilevel_records (
   user_id INT NOT NULL,
   from_user_id INT NOT NULL,
   from_contract_id INT NOT NULL,
-  type enum('contract_payment_bonus', 'daily_bonus') NOT NULL,
+  type ENUM('contract_payment_bonus', 'daily_bonus') NOT NULL,
   level SMALLINT NOT NULL,
   value DECIMAL(12, 2) NOT NULL,
   created_at TIMESTAMP NOT NULL,
@@ -125,7 +135,7 @@ CREATE TABLE reset_password_validations (
 CREATE TABLE kyc_requests (
   id int NOT NULL AUTO_INCREMENT,
   user_id INT NOT NULL,
-  status enum('pending', 'approved', 'denied') NOT NULL,
+  status ENUM('pending', 'approved', 'denied') NOT NULL,
   created_at TIMESTAMP NOT NULL,
   CONSTRAINT pk_id PRIMARY KEY (id),
   CONSTRAINT fk_kycr_user_id_users_id FOREIGN KEY (user_id) REFERENCES users( id)

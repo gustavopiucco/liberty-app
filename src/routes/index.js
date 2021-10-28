@@ -5,6 +5,7 @@ const validate = require('../middlewares/validate');
 const userRoute = require('./user.route');
 const contractRoute = require('./contract.route');
 const kycRoute = require('./kyc.route');
+const withdawRoute = require('./withdraw.route');
 
 const authValidation = require('../validations/auth.validation');
 const multilevelValidation = require('../validations/multilevel.validation');
@@ -20,6 +21,7 @@ const router = express.Router();
 router.use('/users', userRoute);
 router.use('/contracts', contractRoute);
 router.use('/kyc', kycRoute);
+router.use('/withdraws', withdawRoute);
 
 //Auth
 router.post('/auth/login', validate(authValidation.login), authController.login);

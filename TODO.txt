@@ -1,1 +1,3 @@
-- Onde tiver funções nos models (MYSQL command) de incrementar ou decrementar, também incrementar ou decrementar o total_balance_received pra ir somando e ter essa métrica disponivel
+- criar os cronjobs que transformam o saldo de pendente pra disponivel
+- daily bonus (licenças) por plano
+- plano de carreira
