@@ -8,16 +8,10 @@ const validate = require('../middlewares/validate');
 const walletValidation = require('../validations/wallet.validation');
 const walletModel = require('../models/wallet.model');
 
-router.get('/me', auth('get_withdraws'), catchAsync(async (req, res) => {
-    //const withdraws = await withdrawModel.getAllByUserId(req.user.id);
+router.get('/me', auth('get_wallet_me'), catchAsync(async (req, res) => {
+    const wallets = await walletModel.getAllByUserId(req.user.id);
 
-    res.status(httpStatus.OK).send();
-}));
-
-router.get('/', auth('get_all_withdraws'), catchAsync(async (req, res) => {
-    //const withdraws = await withdrawModel.getAll(req.user.id);
-
-    res.status(httpStatus.OK).send();
+    res.status(httpStatus.OK).send(wallets);
 }));
 
 router.post('/', auth('create_wallet'), validate(walletValidation.create), catchAsync(async (req, res) => {
