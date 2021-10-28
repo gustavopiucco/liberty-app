@@ -98,7 +98,7 @@ router.post('/', auth('create_contract'), validate(contractValidation.create), c
 
     const insertId = await contractModel.create(req.user.id, req.body.plan_id, 'pix', new Date);
 
-    res.status(httpStatus.CREATED).send({ contract_id: insertId });
+    res.status(httpStatus.CREATED).send({ id: insertId });
 }));
 
 router.patch('/:id/approve', auth('approve_contract'), validate(contractValidation.approve), catchAsync(async (req, res) => {
