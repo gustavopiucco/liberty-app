@@ -57,6 +57,15 @@ CREATE TABLE contracts (
   CONSTRAINT fk_contracts_plan_id_plans_id FOREIGN KEY (plan_id) REFERENCES plans (id)
 ) ENGINE=InnoDB;
 
+CREATE TABLE contracts_uploads (
+  id int NOT NULL AUTO_INCREMENT,
+  contract_id int NOT NULL,
+  filename varchar(100) NOT NULL,
+  created_at TIMESTAMP NOT NULL,
+  CONSTRAINT pk_id PRIMARY KEY (id),
+  CONSTRAINT fk_cu_contract_id_contracts_id FOREIGN KEY (contract_id) REFERENCES contracts (id)
+);
+
 CREATE TABLE withdraws (
   id int NOT NULL AUTO_INCREMENT,
   user_id INT NOT NULL,
@@ -67,14 +76,15 @@ CREATE TABLE withdraws (
   CONSTRAINT pk_wiwhdraws_user_id_users_id FOREIGN KEY (user_id) REFERENCES users (id)
 ) ENGINE=InnoDB;
 
-CREATE TABLE contracts_uploads (
+CREATE TABLE wallets (
   id int NOT NULL AUTO_INCREMENT,
-  contract_id int NOT NULL,
-  filename varchar(100) NOT NULL,
+  user_id INT NOT NULL,
+  type ENUM('pix'),
+  value VARCHAR(100) NOT NULL,
   created_at TIMESTAMP NOT NULL,
   CONSTRAINT pk_id PRIMARY KEY (id),
-  CONSTRAINT fk_cu_contract_id_contracts_id FOREIGN KEY (contract_id) REFERENCES contracts (id)
-);
+  CONSTRAINT pk_wallets_user_id_users_id FOREIGN KEY (user_id) REFERENCES users (id)
+) ENGINE=InnoDB;
 
 CREATE TABLE multilevel_records (
   id int NOT NULL AUTO_INCREMENT,

@@ -6,6 +6,7 @@ const userRoute = require('./user.route');
 const contractRoute = require('./contract.route');
 const kycRoute = require('./kyc.route');
 const withdawRoute = require('./withdraw.route');
+const walletRoute = require('./wallet.route');
 
 const authValidation = require('../validations/auth.validation');
 const multilevelValidation = require('../validations/multilevel.validation');
@@ -22,6 +23,7 @@ router.use('/users', userRoute);
 router.use('/contracts', contractRoute);
 router.use('/kyc', kycRoute);
 router.use('/withdraws', withdawRoute);
+router.use('/wallets', walletRoute);
 
 //Auth
 router.post('/auth/login', validate(authValidation.login), authController.login);
