@@ -40,8 +40,8 @@ router.patch('/:id/approve', auth('approve_withdraw'), validate(withdrawValidati
 router.post('/', auth('create_withdraw'), validate(withdrawValidation.create), catchAsync(async (req, res) => {
     const user = await userModel.getById(req.user.id);
 
-    if (req.body.value < 10) {
-        throw new ApiError(httpStatus.BAD_REQUEST, 'O saque deve ser maior que R$ 10,00');
+    if (req.body.value < 100) {
+        throw new ApiError(httpStatus.BAD_REQUEST, 'O saque deve ser maior que R$ 100,00');
     }
 
     if (user.available_balance < req.body.value) {
