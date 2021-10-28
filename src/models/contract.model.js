@@ -47,7 +47,8 @@ async function getAllWithPaymentConfirmed() {
 
 async function create(userId, planId, paymentType, createdAt) {
     const [rows, fields] = await mysql.pool.execute('INSERT INTO contracts (user_id, plan_id, payment_type, created_at) VALUES (?, ?, ?, ?)', [userId, planId, paymentType, createdAt]);
-    return rows;
+
+    return rows.insertId;
 }
 
 async function updateStatus(id, status) {
