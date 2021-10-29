@@ -1,3 +1,2 @@
-- criar os cronjobs que transformam o saldo de pendente pra disponivel
 - plano de carreira
 - nenhum ganho dentro do sistema pode exceder o limitado diario do usuário, q é o valor do plano dele
