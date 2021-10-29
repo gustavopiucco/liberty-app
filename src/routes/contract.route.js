@@ -43,6 +43,10 @@ router.get('/:id/uploads', auth('get_all_uploads'), validate(contractValidation.
 router.post('/:id/upload', upload.array('files', 3), auth('upload_contract'), validate(contractValidation.upload), catchAsync(async (req, res) => {
     const contract = await contractModel.getById(req.params.id);
 
+    if (!contract) {
+        throw new ApiError(httpStatus.BAD_REQUEST, 'Este contrato não existe');
+    }
+
     if (req.user.id != contract.user_id) {
         throw new ApiError(httpStatus.BAD_REQUEST, 'Sem permissão');
     }
