@@ -62,7 +62,7 @@ async function payDailyBonus() {
 
     if (!todayBonus) return;
 
-    const contracts = await contractModel.getAllWithPaymentConfirmed();
+    const contracts = await contractModel.getAllApproved();
 
     for (const contract of contracts) {
         const baseValue = parseFloat((contract.plan_price * (todayBonus.percentage / 100)).toFixed(2));

@@ -39,7 +39,7 @@ async function payMultilevelBonus(baseContractId, baseContractUserId, baseValue,
     for (let level = 1; level <= sponsors.length; level++) {
         const user = sponsors[level - 1];
         const value = ((bonusPercentageByLevel[level - 1]) / 100) * baseValue;
-        const contract = await contractModel.getByUserIdAndPaymentConfirmed(user.id);
+        const contract = await contractModel.getByUserIdAndApproved(user.id);
 
         if (!contract) continue; //user does not have an active contract, so he does not receive the bonus
 

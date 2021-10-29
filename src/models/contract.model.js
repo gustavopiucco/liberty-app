@@ -27,26 +27,26 @@ async function getAllByUserIdWithPlan(userId) {
     return rows;
 }
 
-async function getByUserIdAndPaymentConfirmed(userId) {
+async function getByUserIdAndApproved(userId) {
     const [rows, fields] = await mysql.pool.execute(`
     SELECT contracts.*, plans.price AS plan_price FROM contracts
     JOIN plans ON plans.id = contracts.plan_id
     WHERE contracts.user_id = ?
-    AND contracts.status = 'payment_confirmed'`, [userId]);
+    AND contracts.status = 'approved'`, [userId]);
     return rows[0];
 }
 
-async function getAllWithPaymentConfirmed() {
+async function getAllApproved() {
     const [rows, fields] = await mysql.pool.execute(`
     SELECT contracts.*, plans.id AS plan_id, plans.price AS plan_price FROM contracts
     JOIN plans ON plans.id = contracts.plan_id
-    WHERE contracts.status = 'payment_confirmed'`);
+    WHERE contracts.status = 'approved'`);
 
     return rows;
 }
 
-async function create(userId, planId, paymentType, createdAt) {
-    const [rows, fields] = await mysql.pool.execute('INSERT INTO contracts (user_id, plan_id, payment_type, created_at) VALUES (?, ?, ?, ?)', [userId, planId, paymentType, createdAt]);
+async function create(userId, planId, status, paymentType, createdAt) {
+    const [rows, fields] = await mysql.pool.execute('INSERT INTO contracts (user_id, plan_id, status, payment_type, created_at) VALUES (?, ?, ?, ?, ?)', [userId, planId, status, paymentType, createdAt]);
 
     return rows.insertId;
 }
@@ -68,8 +68,8 @@ module.exports = {
     getAll,
     getAllByUserId,
     getAllByUserIdWithPlan,
-    getByUserIdAndPaymentConfirmed,
-    getAllWithPaymentConfirmed,
+    getByUserIdAndApproved,
+    getAllApproved,
     create,
     updateStatus,
     addTotalReceived,

@@ -47,8 +47,8 @@ router.post('/:id/upload', upload.array('files', 3), auth('upload_contract'), va
         throw new ApiError(httpStatus.BAD_REQUEST, 'Sem permissão');
     }
 
-    if (contract.status != 'waiting_payment') {
-        throw new ApiError(httpStatus.BAD_REQUEST, 'Este contrato não está aguardando pagamento');
+    if (contract.status != 'pending') {
+        throw new ApiError(httpStatus.BAD_REQUEST, 'Este contrato não está pendente');
     }
 
     for (let file of req.files) {
@@ -86,17 +86,17 @@ router.post('/', auth('create_contract'), validate(contractValidation.create), c
     const contracts = await contractModel.getAllByUserId(req.user.id);
 
     for (contract of contracts) {
-        if (contract.status == 'waiting_payment') {
-            throw new ApiError(httpStatus.BAD_REQUEST, 'Já existe um contrato aguardando pagamento');
+        if (contract.status == 'pending') {
+            throw new ApiError(httpStatus.BAD_REQUEST, 'Já existe um contrato pendente');
         }
 
         //permitir apenas um contrato no sistema, futuramente vai permitir mais
-        if (contract.status == 'payment_confirmed') {
+        if (contract.status == 'approved') {
             throw new ApiError(httpStatus.BAD_REQUEST, 'Já existe um contrato em aberto');
         }
     }
 
-    const insertId = await contractModel.create(req.user.id, req.body.plan_id, 'pix', new Date);
+    const insertId = await contractModel.create(req.user.id, req.body.plan_id, 'pending', 'pix', new Date);
 
     res.status(httpStatus.CREATED).send({ id: insertId });
 }));
@@ -108,7 +108,7 @@ router.patch('/:id/approve', auth('approve_contract'), validate(contractValidati
         throw new ApiError(httpStatus.BAD_REQUEST, 'Este contrato não existe');
     }
 
-    if (contract.status == 'payment_confirmed') {
+    if (contract.status == 'approved') {
         throw new ApiError(httpStatus.BAD_REQUEST, 'Este contrato já foi aprovado');
     }
 
@@ -118,7 +118,7 @@ router.patch('/:id/approve', auth('approve_contract'), validate(contractValidati
 
     await multilevelService.payMultilevelBonus(contract.id, contract.user_id, contract.plan_price, 'contract_payment_bonus', 5, [10, 2, 1, 1, 1]);
 
-    await contractModel.updateStatus(req.params.id, 'payment_confirmed');
+    await contractModel.updateStatus(req.params.id, 'approved');
 
     res.status(httpStatus.OK).send();
 }));
@@ -146,8 +146,8 @@ router.delete('/:id', auth('delete_contract'), validate(contractValidation.delet
         throw new ApiError(httpStatus.BAD_REQUEST, 'Este contrato não existe');
     }
 
-    if (contract.status != 'waiting_payment') {
-        throw new ApiError(httpStatus.BAD_REQUEST, 'Você só pode deletar contatos que estão aguardando pagamento');
+    if (contract.status != 'pending') {
+        throw new ApiError(httpStatus.BAD_REQUEST, 'Você só pode deletar contratos que estão pendentes');
     }
 
     if (req.user.id != contract.user_id) {
