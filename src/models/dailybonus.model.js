@@ -10,8 +10,8 @@ async function getAll() {
     return rows;
 }
 
-async function create(percentage, date) {
-    await mysql.pool.execute('INSERT INTO daily_bonus (percentage, date) VALUES (?, ?) ON DUPLICATE KEY UPDATE percentage = ?, date = ?', [percentage, date, percentage, date]);
+async function create(planId, percentage, date) {
+    await mysql.pool.execute('INSERT INTO daily_bonus (plan_id, percentage, date) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE percentage = ?, date = ?', [planId, percentage, date, percentage, date]);
 }
 
 module.exports = {

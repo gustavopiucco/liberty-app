@@ -16,6 +16,7 @@ const getAllDaysAgo = {
 
 const create = {
     body: Joi.object().keys({
+        plan_id: Joi.number().integer().required(),
         percentage: Joi.number().required(),
         date: Joi.string().required().custom(date)
     }),

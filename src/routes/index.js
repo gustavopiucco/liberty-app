@@ -7,6 +7,7 @@ const contractRoute = require('./contract.route');
 const kycRoute = require('./kyc.route');
 const withdawRoute = require('./withdraw.route');
 const walletRoute = require('./wallet.route');
+const dailyBonusRoute = require('./dailybonus.route');
 
 const authValidation = require('../validations/auth.validation');
 const multilevelValidation = require('../validations/multilevel.validation');
@@ -24,6 +25,7 @@ router.use('/contracts', contractRoute);
 router.use('/kyc', kycRoute);
 router.use('/withdraws', withdawRoute);
 router.use('/wallets', walletRoute);
+router.use('/daily-bonus', dailyBonusRoute);
 
 //Auth
 router.post('/auth/login', validate(authValidation.login), authController.login);
@@ -38,11 +40,5 @@ router.get('/multilevel/me/:level', auth('get_multilevel'), validate(multilevelV
 
 //Plans
 router.get('/plans', auth('get_all_plans'), planController.getAll);
-
-//Daily Bonus
-router.get('/daily-bonus/:date', auth('get_daily_bonus'), validate(dailyBonusValidation.getByDate), dailyBonusController.getByDate);
-router.get('/daily-bonus', auth('get_daily_bonus'), dailyBonusController.getAll);
-router.get('/daily-bonus/all/:days', auth('get_all_daily_bonus_days_ago'), validate(dailyBonusValidation.getAllDaysAgo), dailyBonusController.getAllDaysAgo);
-router.post('/daily-bonus', auth('create_daily_bonus'), validate(dailyBonusValidation.create), dailyBonusController.create);
 
 module.exports = router;
