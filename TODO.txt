@@ -1,5 +1,3 @@
-- pra cada plano no sistema, terá uma % diferente pro pagamento daily bonus, então no cadastro de daily bonus, 
-    precisa informar qual o plano q a % ta relacionada, e quando o cronjob pagar, pagar a % referente ao plano q ele tem ativo
-    
 - criar os cronjobs que transformam o saldo de pendente pra disponivel
 - plano de carreira
+- nenhum ganho dentro do sistema pode exceder o limitado diario do usuário, q é o valor do plano dele

@@ -1,8 +1,8 @@
 const mysql = require('../database/mysql');
 
-async function getByDate(date) {
+async function getAllByDate(date) {
     const [rows, fields] = await mysql.pool.execute('SELECT * FROM daily_bonus WHERE date = ?', [date]);
-    return rows[0];
+    return rows;
 }
 
 async function getAll() {
@@ -15,7 +15,7 @@ async function create(planId, percentage, date) {
 }
 
 module.exports = {
-    getByDate,
+    getAllByDate,
     getAll,
     create
 }
