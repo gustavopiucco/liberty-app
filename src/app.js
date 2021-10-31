@@ -38,7 +38,7 @@ app.use(cors());
 app.options('*', cors());
 
 //api routes
-app.use('/api', routes);
+app.use('/', routes);
 
 //static public files with auth
 app.use('/public', auth('download_uploaded_files'), (req, res, next) => {

@@ -1,12 +1,14 @@
 const userModel = require('../models/user.model');
 const contractModel = require('../models/contract.model');
 
-const maxCyclePercentage = 50;
+const maxCyclePercentage = 100;
 
 async function handleUserCycle(contractId, contractUserId, contractTotalReceived, contractPlanPrice, value) {
     const maxUserCycleValue = contractPlanPrice + (contractPlanPrice * (maxCyclePercentage / 100));
 
     //TODO: adicionar a restrição do teto diario aqui
+    //soma todos os value do multilevel_records e daily_bonus_records do userId e do DATE(created_at) = hoje
+    //paga até o teto do plano dele
 
     if (contractTotalReceived + value < maxUserCycleValue) {
         await contractModel.addTotalReceived(contractId, value);

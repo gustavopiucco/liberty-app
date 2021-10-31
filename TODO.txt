@@ -1,2 +1,3 @@
 - plano de carreira
 - nenhum ganho dentro do sistema pode exceder o limitado diario do usuário, q é o valor do plano dele
+- permitir apenas um saque por vez
