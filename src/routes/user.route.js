@@ -15,11 +15,15 @@ const contractModel = require('../models/contract.model');
 router.get('/me', auth('get_user'), catchAsync(async (req, res) => {
     const user = await userModel.getById(req.user.id);
 
+    delete user.password_hash;
+
     res.status(httpStatus.OK).send(user);
 }));
 
 router.get('/:id', auth('admin_get_user'), validate(userValidation.getById), catchAsync(async (req, res) => {
     const user = await userModel.getById(req.params.id);
+
+    delete user.password_hash;
 
     res.status(httpStatus.OK).send(user);
 }));
