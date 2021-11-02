@@ -44,6 +44,17 @@ async function getAllDirectsById(id) {
     return rows;
 }
 
+async function getAllWithActiveOrCompletedContract() {
+    const [rows, fields] = await mysql.pool.execute(`
+    SELECT users.id
+    FROM users
+    JOIN contracts ON contracts.user_id = users.id
+    WHERE contracts.status = 'approved'
+    OR contracts.status = 'completed'`);
+
+    return rows;
+}
+
 async function setEmailVerified(id) {
     await mysql.pool.execute('UPDATE users SET email_verified = 1 WHERE id = ?', [id]);
 }
@@ -54,6 +65,10 @@ async function setKycVerified(id) {
 
 async function updatePasswordHash(id, passwordHash) {
     await mysql.pool.execute('UPDATE users SET password_hash = ? WHERE id = ?', [passwordHash, id]);
+}
+
+async function updateCareerPlan(id, careerPlan, careerPlanTotal) {
+    await mysql.pool.execute('UPDATE users SET career_plan = ?, career_plan_total = ? WHERE id = ?', [careerPlan, careerPlanTotal, id]);
 }
 
 async function update(id, kycVerified, emailVerified, email, passwordHash, role, firstName, lastName, cpf, phone, birthDate, county, city, state, postalCode) {
@@ -85,9 +100,11 @@ module.exports = {
     getByInviteCode,
     getSponsorUnilevel,
     getAllDirectsById,
+    getAllWithActiveOrCompletedContract,
     setEmailVerified,
     setKycVerified,
     updatePasswordHash,
+    updateCareerPlan,
     update,
     addPendingBalance,
     subtractPendingBalance,

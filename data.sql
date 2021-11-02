@@ -9,6 +9,8 @@ CREATE TABLE users (
   available_balance decimal(12, 2) NOT NULL DEFAULT 0,
   pending_balance decimal(12, 2) NOT NULL DEFAULT 0,
   total_balance_received decimal(12, 2) NOT NULL DEFAULT 0,
+  career_plan ENUM('trader', 'trader_vip', 'broker', 'broker_vip', 'diretor'),
+  career_plan_total decimal(12, 2) NOT NULL DEFAULT 0,
   kyc_verified boolean NOT NULL DEFAULT false,
   email_verified boolean NOT NULL DEFAULT false,
   email varchar(100) NOT NULL,

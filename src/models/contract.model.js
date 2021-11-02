@@ -27,12 +27,23 @@ async function getAllByUserIdWithPlan(userId) {
     return rows;
 }
 
+async function getAllByUserIdNotPending(userId) {
+    const [rows, fields] = await mysql.pool.execute(`
+    SELECT contracts.id, contracts.plan_id, plans.price AS plan_price, plans.name AS plan_name, contracts.status, contracts.payment_type, contracts.total_received, contracts.created_at FROM contracts
+    JOIN plans ON plans.id = contracts.plan_id
+    WHERE contracts.user_id = ?
+    AND contracts.status != 'pending'`, [userId]);
+
+    return rows;
+}
+
 async function getByUserIdAndApproved(userId) {
     const [rows, fields] = await mysql.pool.execute(`
     SELECT contracts.*, plans.price AS plan_price FROM contracts
     JOIN plans ON plans.id = contracts.plan_id
     WHERE contracts.user_id = ?
     AND contracts.status = 'approved'`, [userId]);
+
     return rows[0];
 }
 
@@ -68,6 +79,7 @@ module.exports = {
     getAll,
     getAllByUserId,
     getAllByUserIdWithPlan,
+    getAllByUserIdNotPending,
     getByUserIdAndApproved,
     getAllApproved,
     create,

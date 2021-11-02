@@ -1,10 +1,12 @@
 const schedule = require('node-schedule');
 const dailyBonusService = require('../services/dailybonus.service');
+const careerPlanSerivde = require('../services/careerplan.service');
 const withdrawModel = require('../models/withdraw.model');
 
 function start() {
     handleAvailableBalances();
     handleDailyBonus();
+    handleCareerPlan();
     console.log('Scheduled jobs started');
 }
 
@@ -24,6 +26,13 @@ function handleDailyBonus() {
     //todo dia as 12:00
     schedule.scheduleJob('0 12 * * *', async () => {
         await dailyBonusService.payDailyBonus();
+    });
+}
+
+function handleCareerPlan() {
+    //todo dia as 05:00
+    schedule.scheduleJob('0 5 * * *', async () => {
+        await careerPlanSerivde.checkCareerPlan();
     });
 }
 
