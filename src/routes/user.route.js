@@ -13,9 +13,23 @@ const userModel = require('../models/user.model');
 const contractModel = require('../models/contract.model');
 
 router.get('/me', auth('get_user'), catchAsync(async (req, res) => {
-    const user = await userModel.getById(req.user.id);
+    let user;
 
+    user = await userModel.getById(req.user.id);
     delete user.password_hash;
+
+    const contract = await contractModel.getByUserIdAndApproved(user.id);
+
+    if (contract) {
+        user.contract = {
+            status: 'approved',
+            plan_price: contract.plan_price,
+            total_received: contract.total_received
+        };
+    }
+    else {
+        user.contract = null;
+    }
 
     res.status(httpStatus.OK).send(user);
 }));
