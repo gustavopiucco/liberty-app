@@ -26,7 +26,7 @@ async function checkCareerPlan() {
         else if (total >= 5000 && total < 150000) {
             await userModel.updateCareerPlan(user.id, 'trader', total);
         }
-        else if (total >= 15000 && total < 300000) {
+        else if (total >= 150000 && total < 300000) {
             await userModel.updateCareerPlan(user.id, 'trader_vip', total);
         }
         else if (total >= 300000 && total < 1500000) {
