@@ -95,7 +95,7 @@ router.post('/', auth('create_kyc'), upload.array('files', 3), catchAsync(async 
 
     for (request of kycRequests) {
         if (request.status == 'approved') {
-            throw new ApiError(httpStatus.BAD_REQUEST, 'Sua solicitação foi aprovada');
+            throw new ApiError(httpStatus.BAD_REQUEST, 'Sua solicitação já foi aprovada');
         }
 
         if (request.status == 'pending') {
