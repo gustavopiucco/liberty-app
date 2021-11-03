@@ -9,7 +9,11 @@ async function getById(id) {
 }
 
 async function getAll() {
-    const [rows, fields] = await mysql.pool.execute('SELECT * FROM contracts ORDER BY created_at DESC');
+    const [rows, fields] = await mysql.pool.execute(`
+    SELECT contracts.*, users.first_name, users.last_name, users.email FROM contracts
+    JOIN users ON users.id = contracts.user_id
+    ORDER BY contracts.created_at DESC`);
+
     return rows;
 }
 
