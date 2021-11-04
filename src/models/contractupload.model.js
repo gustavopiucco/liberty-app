@@ -5,8 +5,8 @@ async function getAllByContractId(contractId) {
     return rows;
 }
 
-async function create(contractId, fileName, createdAt) {
-    const [rows, fields] = await mysql.pool.execute('INSERT contracts_uploads (contract_id, filename, created_at) VALUES (?, ?, ?)', [contractId, fileName, createdAt]);
+async function create(contractId, url, createdAt) {
+    const [rows, fields] = await mysql.pool.execute('INSERT contracts_uploads (contract_id, url, created_at) VALUES (?, ?, ?)', [contractId, url, createdAt]);
     return rows;
 }
 

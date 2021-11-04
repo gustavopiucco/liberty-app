@@ -1,4 +1,3 @@
-const path = require('path');
 const express = require('express');
 const router = express.Router();
 const catchAsync = require('../utils/catchAsync');
@@ -6,34 +5,13 @@ const auth = require('../middlewares/auth');
 const httpStatus = require('http-status');
 const ApiError = require('../utils/ApiError');
 const validate = require('../middlewares/validate');
-const multer = require('multer');
+const upload = require('../utils/upload');
 const contractValidation = require('../validations/contract.validation');
 const contractModel = require('../models/contract.model');
 const userModel = require('../models/user.model');
 const planModel = require('../models/plan.model');
 const contractUploadModel = require('../models/contractupload.model');
 const multilevelService = require('../services/multilevel.service');
-
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, path.join(__dirname, '../../public/uploads/'));
-    },
-    filename: (req, file, cb) => {
-        cb(null, Date.now() + '-' + file.originalname);
-    }
-});
-
-const upload = multer({
-    limits: { fileSize: 1024 * 1024 * 5 },
-    storage,
-    fileFilter: (req, file, cb) => {
-        if (!file.originalname.match(/\.(jpg|JPG|jpeg|JPEG|png|PNG|gif|GIF|pdf|PDF)$/)) {
-            req.fileValidationError = 'Apenas arquivos de imagens e PDF são permitidos';
-            return cb(new Error('Apenas arquivos de imagens e PDF são permitidos'), false);
-        }
-        cb(null, true);
-    }
-});
 
 router.get('/:id/uploads', auth('get_all_uploads'), validate(contractValidation.getAllUploads), catchAsync(async (req, res) => {
     const uploads = await contractUploadModel.getAllByContractId(req.params.id);
@@ -57,7 +35,7 @@ router.post('/:id/upload', upload.array('files', 3), auth('upload_contract'), va
     }
 
     for (let file of req.files) {
-        await contractUploadModel.create(req.params.id, file.filename, new Date());
+        await contractUploadModel.create(req.params.id, file.location, new Date());
     }
 
     res.status(httpStatus.OK).send();

@@ -1,4 +1,3 @@
-const path = require('path');
 const express = require('express');
 const router = express.Router();
 const catchAsync = require('../utils/catchAsync');
@@ -6,32 +5,11 @@ const auth = require('../middlewares/auth');
 const httpStatus = require('http-status');
 const ApiError = require('../utils/ApiError');
 const validate = require('../middlewares/validate');
-const multer = require('multer');
+const upload = require('../utils/upload');
 const kycValidation = require('../validations/kyc.validation');
 const kycRequestModel = require('../models/kycrequest.model');
 const kycRequestUploadModel = require('../models/kycrequestupload.model');
 const userModel = require('../models/user.model');
-
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, path.join(__dirname, '../../public/uploads/'));
-    },
-    filename: (req, file, cb) => {
-        cb(null, Date.now() + '-' + file.originalname);
-    }
-});
-
-const upload = multer({
-    limits: { fileSize: 1024 * 1024 * 5 },
-    storage,
-    fileFilter: (req, file, cb) => {
-        if (!file.originalname.match(/\.(jpg|JPG|jpeg|JPEG|png|PNG|gif|GIF|pdf|PDF)$/)) {
-            req.fileValidationError = 'Apenas arquivos de imagens e PDF são permitidos';
-            return cb(new Error('Apenas arquivos de imagens e PDF são permitidos'), false);
-        }
-        cb(null, true);
-    }
-});
 
 router.get('/me', auth('get_kyc'), catchAsync(async (req, res) => {
     const kycRequests = await kycRequestModel.getByUserId(req.user.id);
@@ -104,7 +82,7 @@ router.post('/', auth('create_kyc'), upload.array('files', 3), catchAsync(async 
     const insertId = await kycRequestModel.create(req.user.id, 'pending', new Date());
 
     for (let file of req.files) {
-        await kycRequestUploadModel.create(insertId, file.filename, new Date());
+        await kycRequestUploadModel.create(insertId, file.location, new Date());
     }
 
     res.status(httpStatus.CREATED).send();

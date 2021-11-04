@@ -62,7 +62,7 @@ CREATE TABLE contracts (
 CREATE TABLE contracts_uploads (
   id int NOT NULL AUTO_INCREMENT,
   contract_id int NOT NULL,
-  filename varchar(100) NOT NULL,
+  url varchar(500) NOT NULL,
   created_at TIMESTAMP NOT NULL,
   CONSTRAINT pk_id PRIMARY KEY (id),
   CONSTRAINT fk_cu_contract_id_contracts_id FOREIGN KEY (contract_id) REFERENCES contracts (id)
@@ -157,7 +157,7 @@ CREATE TABLE kyc_requests (
 CREATE TABLE kyc_requests_uploads (
   id int NOT NULL AUTO_INCREMENT,
   kyc_request_id int NOT NULL,
-  filename varchar(100) NOT NULL,
+  url varchar(500) NOT NULL,
   created_at TIMESTAMP NOT NULL,
   CONSTRAINT pk_id PRIMARY KEY (id),
   CONSTRAINT fk_kycru_kyc_request_kycr_id FOREIGN KEY (kyc_request_id) REFERENCES kyc_requests (id)

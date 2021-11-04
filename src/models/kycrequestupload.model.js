@@ -5,8 +5,8 @@ async function getAllByKycRequestId(kycRequestId) {
     return rows;
 }
 
-async function create(kycRequestId, fileName, createdAt) {
-    const [rows, fields] = await mysql.pool.execute('INSERT kyc_requests_uploads (kyc_request_id, filename, created_at) VALUES (?, ?, ?)', [kycRequestId, fileName, createdAt]);
+async function create(kycRequestId, url, createdAt) {
+    const [rows, fields] = await mysql.pool.execute('INSERT kyc_requests_uploads (kyc_request_id, url, created_at) VALUES (?, ?, ?)', [kycRequestId, url, createdAt]);
     return rows;
 }
 
