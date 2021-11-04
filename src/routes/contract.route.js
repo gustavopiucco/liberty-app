@@ -20,6 +20,10 @@ router.get('/:id/uploads', auth('get_all_uploads'), validate(contractValidation.
 }));
 
 router.post('/:id/upload', upload.array('files', 3), auth('upload_contract'), validate(contractValidation.upload), catchAsync(async (req, res) => {
+    if (req.files.length == 0) {
+        throw new ApiError(httpStatus.BAD_REQUEST, 'Nenhum arquivo foi enviado');
+    }
+
     const contract = await contractModel.getById(req.params.id);
 
     if (!contract) {

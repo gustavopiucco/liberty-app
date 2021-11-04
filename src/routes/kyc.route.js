@@ -67,6 +67,10 @@ router.patch('/:id/deny', auth('deny_kyc'), validate(kycValidation.approve), cat
 }));
 
 router.post('/', auth('create_kyc'), upload.array('files', 3), catchAsync(async (req, res) => {
+    if (req.files.length == 0) {
+        throw new ApiError(httpStatus.BAD_REQUEST, 'Nenhum arquivo foi enviado');
+    }
+
     const kycRequests = await kycRequestModel.getByUserId(req.user.id);
 
     for (request of kycRequests) {
