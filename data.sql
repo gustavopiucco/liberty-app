@@ -39,6 +39,7 @@ CREATE TABLE plans (
   id int NOT NULL AUTO_INCREMENT,
   name varchar(30) NOT NULL,
   price decimal(12, 2) NOT NULL,
+  pix VARCHAR(500) NOT NULL,
   CONSTRAINT pk_id PRIMARY KEY (id)
 ) ENGINE=InnoDB;
 INSERT INTO plans (name, price) VALUES ('starter', 100.00);

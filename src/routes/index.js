@@ -8,6 +8,7 @@ const kycRoute = require('./kyc.route');
 const withdawRoute = require('./withdraw.route');
 const walletRoute = require('./wallet.route');
 const dailyBonusRoute = require('./dailybonus.route');
+const planRoute = require('./plan.route');
 
 const authValidation = require('../validations/auth.validation');
 const multilevelValidation = require('../validations/multilevel.validation');
@@ -26,6 +27,7 @@ router.use('/kyc', kycRoute);
 router.use('/withdraws', withdawRoute);
 router.use('/wallets', walletRoute);
 router.use('/daily-bonus', dailyBonusRoute);
+router.use('/plans', planRoute);
 
 //Auth
 router.post('/auth/login', validate(authValidation.login), authController.login);
@@ -37,8 +39,5 @@ router.patch('/auth/password', auth('update_password'), validate(authValidation.
 
 //Multilevel
 router.get('/multilevel/me/:level', auth('get_multilevel'), validate(multilevelValidation.getByLevel), multilevelController.getByLevel);
-
-//Plans
-router.get('/plans', auth('get_all_plans'), planController.getAll);
 
 module.exports = router;
