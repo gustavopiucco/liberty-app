@@ -58,12 +58,6 @@ router.get('/me', auth('get_contracts_me'), catchAsync(async (req, res) => {
 }));
 
 router.post('/', auth('create_contract'), validate(contractValidation.create), catchAsync(async (req, res) => {
-    const user = await userModel.getById(req.user.id);
-
-    if (user.kyc_verified == 0) {
-        throw new ApiError(httpStatus.BAD_REQUEST, 'Você precisa validar seus documentos (KYC)');
-    }
-
     const plan = await planModel.getById(req.body.plan_id);
 
     if (!plan) {
