@@ -12,12 +12,9 @@ const planRoute = require('./plan.route');
 
 const authValidation = require('../validations/auth.validation');
 const multilevelValidation = require('../validations/multilevel.validation');
-const dailyBonusValidation = require('../validations/dailybonus.validation');
 
 const authController = require('../controllers/auth.controller');
 const multilevelController = require('../controllers/multilevel.controller');
-const planController = require('../controllers/plan.controller');
-const dailyBonusController = require('../controllers/dailybonus.controller');
 
 const router = express.Router();
 
