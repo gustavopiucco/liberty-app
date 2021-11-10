@@ -8,7 +8,6 @@ const planModel = require('../models/plan.model');
 const multilevelService = require('../services/multilevel.service');
 const cycleService = require('../services/cycle.service');
 
-//essa função vai ser chamada no cron 1x por dia
 async function payDailyBonus() {
     const todayDate = format(new Date(), 'yyyy-MM-dd');
 
