@@ -31,11 +31,7 @@ function handleDailyBonus() {
 
 function handleCareerPlan() {
     //todo dia as 05:00
-    // schedule.scheduleJob('0 5 * * *', async () => {
-    //     await careerPlanSerivde.checkCareerPlan();
-    // });
-
-    schedule.scheduleJob('*/5 * * * *', async () => {
+    schedule.scheduleJob('0 5 * * *', async () => {
         await careerPlanSerivde.checkCareerPlan();
     });
 }
