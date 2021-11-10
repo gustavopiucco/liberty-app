@@ -9,6 +9,7 @@ const withdawRoute = require('./withdraw.route');
 const walletRoute = require('./wallet.route');
 const dailyBonusRoute = require('./dailybonus.route');
 const planRoute = require('./plan.route');
+const reportRoute = require('./report.route');
 
 const authValidation = require('../validations/auth.validation');
 const multilevelValidation = require('../validations/multilevel.validation');
@@ -25,6 +26,7 @@ router.use('/withdraws', withdawRoute);
 router.use('/wallets', walletRoute);
 router.use('/daily-bonus', dailyBonusRoute);
 router.use('/plans', planRoute);
+router.use('/reports', reportRoute);
 
 //Auth
 router.post('/auth/login', validate(authValidation.login), authController.login);

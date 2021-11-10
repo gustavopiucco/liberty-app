@@ -36,7 +36,8 @@ rolePermissions.set(roles[0],
         'approve_withdraw',
         'get_wallet_me',
         'create_wallet',
-        'delete_wallet'
+        'delete_wallet',
+        'get_reports_me'
     ]);
 
 rolePermissions.set(roles[1],
@@ -60,6 +61,7 @@ rolePermissions.set(roles[1],
         'get_wallet_me',
         'create_wallet',
         'delete_wallet',
+        'get_reports_me'
     ]);
 
 module.exports = {
