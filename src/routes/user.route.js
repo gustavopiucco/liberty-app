@@ -54,6 +54,12 @@ router.get('/directs/me', auth('get_directs'), catchAsync(async (req, res) => {
     res.status(httpStatus.OK).send(directs);
 }));
 
+router.get('/multilevel/me/:level', auth('get_multilevel'), validate(userValidation.getMultilevelByLevel), catchAsync(async (req, res) => {
+    const multilevel = await userModel.getMultilevelByLevel(req.user.id, req.params.level);
+
+    res.status(httpStatus.OK).send(multilevel);
+}));
+
 router.put('/:id', auth('admin_update_user'), validate(userValidation.update), catchAsync(async (req, res) => {
     const user = await userModel.getById(req.params.id);
 

@@ -12,10 +12,8 @@ const planRoute = require('./plan.route');
 const reportRoute = require('./report.route');
 
 const authValidation = require('../validations/auth.validation');
-const multilevelValidation = require('../validations/multilevel.validation');
 
 const authController = require('../controllers/auth.controller');
-const multilevelController = require('../controllers/multilevel.controller');
 
 const router = express.Router();
 
@@ -35,8 +33,5 @@ router.post('/auth/reset-password/request', validate(authValidation.resetPasswor
 router.post('/auth/reset-password/validation', validate(authValidation.resetPasswordValidation), authController.resetPasswordValidation);
 router.post('/auth/email/validation', validate(authValidation.emailValidation), authController.emailValidation);
 router.patch('/auth/password', auth('update_password'), validate(authValidation.updatePassword), authController.updatePassword);
-
-//Multilevel
-router.get('/multilevel/me/:level', auth('get_multilevel'), validate(multilevelValidation.getByLevel), multilevelController.getByLevel);
 
 module.exports = router;

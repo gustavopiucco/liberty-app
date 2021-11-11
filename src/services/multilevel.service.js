@@ -7,12 +7,6 @@ const planModel = require('../models/plan.model');
 const contractModel = require('../models/contract.model');
 const multilevelRecordsModel = require('../models/multilevelrecords.model');
 
-async function getByLevel(userId, level) {
-    const multilevel = await multilevelModel.getByLevel(userId, level);
-
-    return multilevel;
-}
-
 async function getSponsorsByUserId(rootUserId, maxLevels) {
     let sponsors = [];
 
@@ -50,6 +44,5 @@ async function payMultilevelBonus(baseContractId, baseContractUserId, baseValue,
 }
 
 module.exports = {
-    getByLevel,
     payMultilevelBonus
 }

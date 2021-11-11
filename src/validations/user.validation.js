@@ -7,6 +7,12 @@ const getById = {
     }),
 };
 
+const getMultilevelByLevel = {
+    params: Joi.object().keys({
+        level: Joi.number().integer().required()
+    }),
+};
+
 const update = {
     params: Joi.object().keys({
         id: Joi.number().integer().required(),
@@ -48,6 +54,7 @@ const create = {
 
 module.exports = {
     getById,
+    getMultilevelByLevel,
     update,
     create
 }
