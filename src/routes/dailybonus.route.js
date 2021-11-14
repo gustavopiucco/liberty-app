@@ -28,11 +28,12 @@ router.get('/all/:days', auth('get_all_daily_bonus_days_ago'), validate(dailyBon
 
         let percentage = 0;
 
-        for (let i = 0; i < dailyBonuses.length; i++) {
-            if (dailyBonuses[i].date == dateFormatted) {
-                percentage = dailyBonuses[i].percentage;
-                break;
-            }
+        const dates = dailyBonuses.filter((e) => {
+            return format(new Date(e.date), 'yyyy-MM-dd') == dateFormatted;
+        });
+
+        for (let d of dates) {
+            percentage += d.percentage
         }
 
         data.push({
@@ -44,24 +45,26 @@ router.get('/all/:days', auth('get_all_daily_bonus_days_ago'), validate(dailyBon
     res.status(httpStatus.OK).send(data);
 }));
 
-router.get('/:date', auth('get_daily_bonus'), validate(dailyBonusValidation.getByDate), catchAsync(async (req, res) => {
-    const dailyBonus = await dailyBonusModel.getByDate(req.params.date);
+// router.get('/:date', auth('get_daily_bonus'), validate(dailyBonusValidation.getByDate), catchAsync(async (req, res) => {
+//     const dailyBonus = await dailyBonusModel.getByDate(req.params.date);
 
-    if (!dailyBonus) {
-        throw new ApiError(httpStatus.NOT_FOUND, 'Não foi encontrado nenhum registro para esta data');
-    }
+//     if (!dailyBonus) {
+//         throw new ApiError(httpStatus.NOT_FOUND, 'Não foi encontrado nenhum registro para esta data');
+//     }
 
-    res.status(httpStatus.OK).send(dailyBonus);
-}));
+//     res.status(httpStatus.OK).send(dailyBonus);
+// }));
 
 router.post('/', auth('create_daily_bonus'), validate(dailyBonusValidation.create), catchAsync(async (req, res) => {
     const plan = await planModel.getById(req.body.plan_id);
+
+    const dateFormatted = format(new Date(req.body.date), 'yyyy-MM-dd HH:mm');
 
     if (!plan) {
         throw new ApiError(httpStatus.NOT_FOUND, 'Plano não encontrado');
     }
 
-    await dailyBonusModel.create(req.body.plan_id, req.body.percentage, req.body.date);
+    await dailyBonusModel.create(req.body.plan_id, req.body.percentage, dateFormatted);
 
     res.status(httpStatus.CREATED).send();
 }));
