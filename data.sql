@@ -108,7 +108,7 @@ CREATE TABLE daily_bonus (
   id int NOT NULL AUTO_INCREMENT,
   plan_id INT NOT NULL,
   percentage DECIMAL(5, 2) NOT NULL,
-  date DATE NOT NULL,
+  date DATETIME NOT NULL,
   CONSTRAINT pk_id PRIMARY KEY (id),
   CONSTRAINT uc_plan_id_date UNIQUE (plan_id, date)
 ) ENGINE=InnoDB;

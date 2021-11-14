@@ -9,7 +9,7 @@ mysql.testConnection().then(() => {
 });
 
 async function test() {
-    //await dailyBonusService.payDailyBonus();
+    await dailyBonusService.payDailyBonus();
     //await cycleService.handleUserCycle();
     //await careerPlanService.checkCareerPlan();
     //const contract = await contractModel.getById(3);

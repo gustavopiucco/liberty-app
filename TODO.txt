@@ -1,3 +1,30 @@
-- plano de carreira
-- nenhum ganho dentro do sistema pode exceder o limitado diario do usuário, q é o valor do plano dele
+Usuários:
+
+- os ganhos provenientes de rede não podem ultrapassar o limite diário q é o valor do contrato dele
+
+- o ciclo do contrato tem o limite de 200% do plano dele
+
 - permitir apenas um saque por vez
+
+- Número de contratos ativos na rede
+
+- Limite de ganho diário limitado apenas para rendimento diário
+
+- visualização até 8 nível
+
+- adicionar nome, valor total de contratos ativos, qualificação atual e telefone no retorno do get da rede até 8 nível 
+
+- Histórico de ganhos de bônus diário para cada usuário 
+
+- Histórico de bônus de rede para cada usuário 
+
+- retirar obrigatoriedade de informações no cadastro
+
+- criar endpoint de atualização de dados para cada usuário.
+
+ADMIN
+
+- get de todos os usuários do banco
+
+- ajuste para por cronjob 3 vezes ao dia.
+
