@@ -1,9 +1,6 @@
 const ApiError = require('../utils/ApiError');
 const httpStatus = require('http-status');
-const cycleService = require('../services/cycle.service');
-const multilevelModel = require('../models/multilevel.model');
 const userModel = require('../models/user.model');
-const planModel = require('../models/plan.model');
 const contractModel = require('../models/contract.model');
 const multilevelRecordsModel = require('../models/multilevelrecords.model');
 
@@ -30,6 +27,10 @@ async function getSponsorsByUserId(rootUserId, maxLevels) {
 async function payMultilevelBonus(baseContractId, baseContractUserId, baseValue, type, maxLevels, bonusPercentageByLevel) {
     const sponsors = await getSponsorsByUserId(baseContractUserId, maxLevels);
 
+    //TODO: adicionar a restrição do teto diario aqui
+    //soma todos os value do multilevel_records e daily_bonus_records do userId e do DATE(created_at) = hoje
+    //paga até o teto do plano dele
+
     for (let level = 1; level <= sponsors.length; level++) {
         const user = sponsors[level - 1];
         const value = ((bonusPercentageByLevel[level - 1]) / 100) * baseValue;
@@ -37,9 +38,9 @@ async function payMultilevelBonus(baseContractId, baseContractUserId, baseValue,
 
         if (!contract) continue; //user does not have an active contract, so he does not receive the bonus
 
-        const cycleValue = await cycleService.handleUserCycle(contract.id, contract.user_id, contract.total_received, contract.plan_price, value);
+        //const cycleValue = await cycleService.handleUserCycle(contract.id, contract.user_id, contract.total_received, contract.plan_price, value);
 
-        await multilevelRecordsModel.create(user.id, baseContractUserId, baseContractId, type, level, cycleValue, new Date());
+        //await multilevelRecordsModel.create(user.id, baseContractUserId, baseContractId, type, level, cycleValue, new Date());
     }
 }
 
