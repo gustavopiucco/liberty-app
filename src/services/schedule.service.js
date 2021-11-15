@@ -23,8 +23,8 @@ function handleAvailableBalances() {
 }
 
 function handleDailyBonus() {
-    //todo dia as 12:00
-    schedule.scheduleJob('0 12 * * *', async () => {
+    //a cada minuto
+    schedule.scheduleJob('* * * * *', async () => {
         await dailyBonusService.payDailyBonus();
     });
 }
