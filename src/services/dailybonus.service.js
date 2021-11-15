@@ -4,6 +4,7 @@ const { format, subDays } = require('date-fns');
 const dailybonusModel = require('../models/dailybonus.model');
 const contractModel = require('../models/contract.model');
 const dailyBonusRecordModel = require('../models/dailybonusrecord.model');
+const userModel = require('../models/user.model');
 const multilevelService = require('../services/multilevel.service');
 
 async function payDailyBonus() {
@@ -34,13 +35,13 @@ async function payDailyBonus() {
 
         if (contract.total_received + userValue < maxUserCycleValue) {
             await contractModel.addTotalReceived(contract.id, userValue);
-            await userModel.addPendingBalance(contractUserId, userValue);
+            await userModel.addPendingBalance(contract.user_id, userValue);
             await dailyBonusRecordModel.create(contract.user_id, contract.id, userValue, new Date());
         }
         else {
             const differenceValue = parseFloat((maxUserCycleValue - contract.total_received).toFixed(2));
             await contractModel.addTotalReceived(contract.id, differenceValue);
-            await userModel.addPendingBalance(contractUserId, differenceValue);
+            await userModel.addPendingBalance(contract.user_id, differenceValue);
             await contractModel.updateStatus(contract.id, 'completed');
             await dailyBonusRecordModel.create(contract.user_id, contract.id, differenceValue, new Date());
         }
