@@ -4,7 +4,7 @@ const userModel = require('../models/user.model');
 const contractModel = require('../models/contract.model');
 const multilevelRecordsModel = require('../models/multilevelrecords.model');
 
-async function getSponsorsByUserId(rootUserId, maxLevels) {
+async function getSponsorsByUserId(rootUserId, maxLevels = 0) {
     let sponsors = [];
 
     const rootUser = await userModel.getById(rootUserId);
@@ -27,23 +27,28 @@ async function getSponsorsByUserId(rootUserId, maxLevels) {
 async function payMultilevelBonus(baseContractId, baseContractUserId, baseValue, type, maxLevels, bonusPercentageByLevel) {
     const sponsors = await getSponsorsByUserId(baseContractUserId, maxLevels);
 
-    //TODO: adicionar a restrição do teto diario aqui
-    //soma todos os value do multilevel_records e daily_bonus_records do userId e do DATE(created_at) = hoje
-    //paga até o teto do plano dele
+    //aqui pegar todos os contratos ativos desse usuario e somar o valor do contrato
+    //pegar tb a soma de tudo q ele ganhou no dia de bonus de multinivel
+    //e pagar apenas se nao atingiu o teto diario dele q é a soma dos contratos
 
     for (let level = 1; level <= sponsors.length; level++) {
         const user = sponsors[level - 1];
-        const value = ((bonusPercentageByLevel[level - 1]) / 100) * baseValue;
-        const contract = await contractModel.getByUserIdAndApproved(user.id);
+        const value = parseFloat((((bonusPercentageByLevel[level - 1]) / 100) * baseValue).toFixed(4));
+        const userContract = await contractModel.getByUserIdAndApproved(user.id);
 
-        if (!contract) continue; //user does not have an active contract, so he does not receive the bonus
+        if (!userContract) continue;
 
-        //const cycleValue = await cycleService.handleUserCycle(contract.id, contract.user_id, contract.total_received, contract.plan_price, value);
+        if (type == 'daily_bonus') {
+            if (!user.career_plan) continue;
+        }
 
-        //await multilevelRecordsModel.create(user.id, baseContractUserId, baseContractId, type, level, cycleValue, new Date());
+        await userModel.addPendingBalance(user.id, value);
+
+        await multilevelRecordsModel.create(user.id, baseContractUserId, baseContractId, type, level, value, new Date());
     }
 }
 
 module.exports = {
+    getSponsorsByUserId,
     payMultilevelBonus
 }

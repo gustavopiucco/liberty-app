@@ -4,17 +4,14 @@ const { format, subDays } = require('date-fns');
 const dailybonusModel = require('../models/dailybonus.model');
 const contractModel = require('../models/contract.model');
 const dailyBonusRecordModel = require('../models/dailybonusrecord.model');
+const multilevelRecordsModel = require('../models/multilevelrecords.model');
 const userModel = require('../models/user.model');
 const multilevelService = require('../services/multilevel.service');
 
 async function payDailyBonus() {
     const todayDate = format(new Date(), 'yyyy-MM-dd HH:mm:00');
 
-    console.log(todayDate)
-
     const todayBonuses = await dailybonusModel.getAllByDate(todayDate);
-
-    console.log(todayBonuses)
 
     if (todayBonuses.length == 0) return;
 
@@ -27,16 +24,16 @@ async function payDailyBonus() {
 
         if (!bonus) return;
 
-        const baseValue = parseFloat((contract.plan_price * (bonus.percentage / 100)).toFixed(2));
-        const userValue = parseFloat((baseValue * 0.6).toFixed(2)); //60%
-        const multilevelValue = parseFloat((baseValue * 0.2).toFixed(2)); //20%
+        const baseValue = parseFloat((contract.plan_price * (bonus.percentage / 100)).toFixed(4));
+        const bonusValue = parseFloat((baseValue * 0.6).toFixed(4)); //60%
+        const multilevelValue = parseFloat((baseValue * 0.2).toFixed(4)); //20%
 
         const maxUserCycleValue = contract.plan_price * 2; //200%
 
-        if (contract.total_received + userValue < maxUserCycleValue) {
-            await contractModel.addTotalReceived(contract.id, userValue);
-            await userModel.addPendingBalance(contract.user_id, userValue);
-            await dailyBonusRecordModel.create(contract.user_id, contract.id, userValue, new Date());
+        if (contract.total_received + bonusValue < maxUserCycleValue) {
+            await contractModel.addTotalReceived(contract.id, bonusValue);
+            await userModel.addPendingBalance(contract.user_id, bonusValue);
+            await dailyBonusRecordModel.create(contract.user_id, contract.id, bonusValue, new Date());
         }
         else {
             const differenceValue = parseFloat((maxUserCycleValue - contract.total_received).toFixed(2));
@@ -46,9 +43,7 @@ async function payDailyBonus() {
             await dailyBonusRecordModel.create(contract.user_id, contract.id, differenceValue, new Date());
         }
 
-        //se o usuario tiver algum plano de carreira, então paga em 8 niveis
-
-        //await multilevelService.payMultilevelBonus(contract.id, contract.user_id, multilevelValue, 'daily_bonus', 8, [8, 5, 2, 1, 1, 1, 1, 1]);
+        await multilevelService.payMultilevelBonus(contract.id, contract.user_id, multilevelValue, 'daily_bonus', 8, [8, 5, 2, 1, 1, 1, 1, 1]);
     }
 }
 
