@@ -54,8 +54,6 @@ async function payMultilevelBonus(baseContractId, baseContractUserId, baseValue,
             multilevelRecordsTotalPrice += multilevelRecord.value;
         }
 
-        console.log(contractsTotalPrice, multilevelRecordsTotalPrice)
-
         if (multilevelRecordsTotalPrice + value <= contractsTotalPrice) {
             await userModel.addPendingBalance(user.id, value);
             await multilevelRecordsModel.create(user.id, baseContractUserId, baseContractId, type, level, value, new Date());
