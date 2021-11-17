@@ -34,6 +34,38 @@ router.get('/me', auth('get_user'), catchAsync(async (req, res) => {
     res.status(httpStatus.OK).send(user);
 }));
 
+router.get('/query', auth('admin_get_user'), validate(userValidation.getByQuery), catchAsync(async (req, res) => {
+    let user = null;
+
+    if (Object.keys(req.query).length == 0) {
+        throw new ApiError(httpStatus.BAD_REQUEST, 'Você precisa passar pelo menos uma query');
+    }
+
+    if (req.query.email) {
+        user = await userModel.getByEmail(req.query.email);
+    }
+
+    if (req.query.cpf) {
+        user = await userModel.getByCpf(req.query.cpf);
+    }
+
+    if (req.query.first_name) {
+        user = await userModel.getByFirstName(req.query.first_name);
+    }
+
+    if (req.query.last_name) {
+        user = await userModel.getByLastName(req.query.last_name);
+    }
+
+    if (!user) {
+        throw new ApiError(httpStatus.NOT_FOUND, 'Usuário não encontrado');
+    }
+
+    delete user.password_hash;
+
+    res.status(httpStatus.OK).send(user);
+}));
+
 router.get('/:id', auth('admin_get_user'), validate(userValidation.getById), catchAsync(async (req, res) => {
     const user = await userModel.getById(req.params.id);
 

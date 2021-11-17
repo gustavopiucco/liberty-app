@@ -2,31 +2,55 @@ const mysql = require('../database/mysql');
 
 async function emailExists(email) {
     const [rows, fields] = await mysql.pool.execute('SELECT 1 FROM users WHERE email = ?', [email]);
+
     return rows.length > 0;
 }
 
 async function cpfExists(cpf) {
     const [rows, fields] = await mysql.pool.execute('SELECT 1 FROM users WHERE cpf = ?', [cpf]);
+
     return rows.length > 0;
 }
 
 async function create(sponsorId, inviteCode, email, passwordHash, firstName, lastName, cpf, phone, birthDate, country, city, state, postalCode, createdAt) {
     const [rows, fields] = await mysql.pool.execute('INSERT INTO users (sponsor_id, invite_code, email, password_hash, first_name, last_name, cpf, phone, birth_date, country, city, state, postal_code, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [sponsorId, inviteCode, email, passwordHash, firstName, lastName, cpf, phone, birthDate, country, city, state, postalCode, createdAt]);
+
     return rows;
 }
 
 async function getById(id) {
     const [rows, fields] = await mysql.pool.execute('SELECT * FROM users WHERE id = ?', [id]);
+
     return rows[0];
 }
 
 async function getByEmail(email) {
     const [rows, fields] = await mysql.pool.execute('SELECT * FROM users WHERE email = ?', [email]);
+
+    return rows[0];
+}
+
+async function getByCpf(cpf) {
+    const [rows, fields] = await mysql.pool.execute('SELECT * FROM users WHERE cpf = ?', [cpf]);
+
+    return rows[0];
+}
+
+async function getByFirstName(firstName) {
+    const [rows, fields] = await mysql.pool.execute('SELECT * FROM users WHERE first_name = ?', [firstName]);
+
+    return rows[0];
+}
+
+async function getByLastName(lastName) {
+    const [rows, fields] = await mysql.pool.execute('SELECT * FROM users WHERE last_name = ?', [lastName]);
+
     return rows[0];
 }
 
 async function getByInviteCode(inviteCode) {
     const [rows, fields] = await mysql.pool.execute('SELECT * FROM users WHERE invite_code = ?', [inviteCode]);
+
     return rows[0];
 }
 
@@ -113,6 +137,9 @@ module.exports = {
     create,
     getById,
     getByEmail,
+    getByCpf,
+    getByFirstName,
+    getByLastName,
     getByInviteCode,
     getSponsorUnilevel,
     getAllDirectsById,

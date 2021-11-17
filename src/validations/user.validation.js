@@ -7,6 +7,16 @@ const getById = {
     }),
 };
 
+const getByQuery = {
+    query: Joi.object().keys({
+        email: Joi.string(),
+        cpf: Joi.string(),
+        first_name: Joi.string(),
+        last_name: Joi.string(),
+    }),
+};
+
+
 const getMultilevelByLevel = {
     params: Joi.object().keys({
         level: Joi.number().integer().required()
@@ -54,6 +64,7 @@ const create = {
 
 module.exports = {
     getById,
+    getByQuery,
     getMultilevelByLevel,
     update,
     create
