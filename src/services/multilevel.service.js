@@ -54,14 +54,18 @@ async function payMultilevelBonus(baseContractId, baseContractUserId, baseValue,
             multilevelRecordsTotalPrice += multilevelRecord.value;
         }
 
+        console.log(contractsTotalPrice, multilevelRecordsTotalPrice)
+
         if (multilevelRecordsTotalPrice + value <= contractsTotalPrice) {
             await userModel.addPendingBalance(user.id, value);
             await multilevelRecordsModel.create(user.id, baseContractUserId, baseContractId, type, level, value, new Date());
         }
         else {
             const differenceValue = parseFloat((contractsTotalPrice - multilevelRecordsTotalPrice).toFixed(2));
-            await userModel.addPendingBalance(user.id, differenceValue);
-            await multilevelRecordsModel.create(user.id, baseContractUserId, baseContractId, type, level, differenceValue, new Date());
+            if (differenceValue > 0) {
+                await userModel.addPendingBalance(user.id, differenceValue);
+                await multilevelRecordsModel.create(user.id, baseContractUserId, baseContractId, type, level, differenceValue, new Date());
+            }
         }
     }
 }
