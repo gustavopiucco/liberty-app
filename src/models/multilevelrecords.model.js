@@ -11,6 +11,12 @@ async function getAllByUserId(userId) {
     return rows;
 }
 
+async function getAllByUserIdAndCreatedAt(userId, createdAt) {
+    const [rows, fields] = await mysql.pool.execute(`SELECT * FROM multilevel_records WHERE user_id = ? AND DATE(created_at) = ?`, [userId, createdAt]);
+
+    return rows;
+}
+
 async function create(userId, fromUserId, fromContractId, type, level, value, createdAt) {
     const [rows, fields] = await mysql.pool.execute('INSERT multilevel_records (user_id, from_user_id, from_contract_id, type, level, value, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)', [userId, fromUserId, fromContractId, type, level, value, createdAt]);
     return rows;
@@ -18,5 +24,6 @@ async function create(userId, fromUserId, fromContractId, type, level, value, cr
 
 module.exports = {
     getAllByUserId,
+    getAllByUserIdAndCreatedAt,
     create
 }

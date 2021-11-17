@@ -3,6 +3,7 @@ const httpStatus = require('http-status');
 const userModel = require('../models/user.model');
 const contractModel = require('../models/contract.model');
 const multilevelRecordsModel = require('../models/multilevelrecords.model');
+const { format } = require('date-fns');
 
 async function getSponsorsByUserId(rootUserId, maxLevels = 0) {
     let sponsors = [];
@@ -27,24 +28,41 @@ async function getSponsorsByUserId(rootUserId, maxLevels = 0) {
 async function payMultilevelBonus(baseContractId, baseContractUserId, baseValue, type, maxLevels, bonusPercentageByLevel) {
     const sponsors = await getSponsorsByUserId(baseContractUserId, maxLevels);
 
-    //aqui pegar todos os contratos ativos desse usuario e somar o valor do contrato
-    //pegar tb a soma de tudo q ele ganhou no dia de bonus de multinivel
-    //e pagar apenas se nao atingiu o teto diario dele q é a soma dos contratos
-
     for (let level = 1; level <= sponsors.length; level++) {
         const user = sponsors[level - 1];
         const value = parseFloat((((bonusPercentageByLevel[level - 1]) / 100) * baseValue).toFixed(4));
-        const userContract = await contractModel.getByUserIdAndApproved(user.id);
-
-        if (!userContract) continue;
 
         if (type == 'daily_bonus') {
             if (!user.career_plan) continue;
         }
 
-        await userModel.addPendingBalance(user.id, value);
+        const userContracts = await contractModel.getAllByUserIdAndApproved(user.id);
 
-        await multilevelRecordsModel.create(user.id, baseContractUserId, baseContractId, type, level, value, new Date());
+        if (userContracts.length == 0) continue;
+
+        let contractsTotalPrice = 0;
+
+        for (let userContract of userContracts) {
+            contractsTotalPrice += userContract.plan_price;
+        }
+
+        let multilevelRecordsTotalPrice = 0
+
+        const multilevelRecords = await multilevelRecordsModel.getAllByUserIdAndCreatedAt(user.id, format(new Date(), 'yyyy-MM-dd'));
+
+        for (multilevelRecord of multilevelRecords) {
+            multilevelRecordsTotalPrice += multilevelRecord.value;
+        }
+
+        if (multilevelRecordsTotalPrice + value <= contractsTotalPrice) {
+            await userModel.addPendingBalance(user.id, value);
+            await multilevelRecordsModel.create(user.id, baseContractUserId, baseContractId, type, level, value, new Date());
+        }
+        else {
+            const differenceValue = parseFloat((contractsTotalPrice - multilevelRecordsTotalPrice).toFixed(2));
+            await userModel.addPendingBalance(user.id, differenceValue);
+            await multilevelRecordsModel.create(user.id, baseContractUserId, baseContractId, type, level, differenceValue, new Date());
+        }
     }
 }
 

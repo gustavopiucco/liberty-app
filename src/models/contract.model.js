@@ -51,6 +51,16 @@ async function getByUserIdAndApproved(userId) {
     return rows[0];
 }
 
+async function getAllByUserIdAndApproved(userId) {
+    const [rows, fields] = await mysql.pool.execute(`
+    SELECT contracts.*, plans.price AS plan_price FROM contracts
+    JOIN plans ON plans.id = contracts.plan_id
+    WHERE contracts.user_id = ?
+    AND contracts.status = 'approved'`, [userId]);
+
+    return rows;
+}
+
 async function getAllApproved() {
     const [rows, fields] = await mysql.pool.execute(`
     SELECT contracts.*, plans.id AS plan_id, plans.price AS plan_price FROM contracts
@@ -85,6 +95,7 @@ module.exports = {
     getAllByUserIdWithPlan,
     getAllByUserIdNotPending,
     getByUserIdAndApproved,
+    getAllByUserIdAndApproved,
     getAllApproved,
     create,
     updateStatus,
