@@ -149,7 +149,7 @@ router.post('/', validate(userValidation.create), catchAsync(async (req, res) =>
     const inviteCode = random.generateString(8);
     const emailValidationCode = random.generateString(30);
 
-    const createUserResult = await userModel.create(sponsor.id, inviteCode, req.body.email, passwordHash, req.body.first_name, req.body.last_name, req.body.cpf, req.body.phone, req.body.birth_date, req.body.country, req.body.city, req.body.state, req.body.postal_code, new Date);
+    const createUserResult = await userModel.create(sponsor.id, inviteCode, req.body.email, passwordHash, req.body.first_name, req.body.last_name, req.body.cpf, new Date);
 
     if (process.env.NODE_ENV == 'development') {
         await userModel.setEmailVerified(createUserResult.insertId);

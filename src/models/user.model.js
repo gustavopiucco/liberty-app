@@ -13,8 +13,8 @@ async function cpfExists(cpf) {
     return rows.length > 0;
 }
 
-async function create(sponsorId, inviteCode, email, passwordHash, firstName, lastName, cpf, phone, birthDate, country, city, state, postalCode, createdAt) {
-    const [rows, fields] = await mysql.pool.execute('INSERT INTO users (sponsor_id, invite_code, email, password_hash, first_name, last_name, cpf, phone, birth_date, country, city, state, postal_code, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [sponsorId, inviteCode, email, passwordHash, firstName, lastName, cpf, phone, birthDate, country, city, state, postalCode, createdAt]);
+async function create(sponsorId, inviteCode, email, passwordHash, firstName, lastName, cpf, createdAt) {
+    const [rows, fields] = await mysql.pool.execute('INSERT INTO users (sponsor_id, invite_code, email, password_hash, first_name, last_name, cpf, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', [sponsorId, inviteCode, email, passwordHash, firstName, lastName, cpf, createdAt]);
 
     return rows;
 }
