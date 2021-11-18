@@ -9,6 +9,7 @@ const walletRoute = require('./wallet.route');
 const dailyBonusRoute = require('./dailybonus.route');
 const planRoute = require('./plan.route');
 const reportRoute = require('./report.route');
+const serverInfoRoute = require('./serverinfo.route');
 
 const router = express.Router();
 
@@ -21,5 +22,6 @@ router.use('/wallets', walletRoute);
 router.use('/daily-bonus', dailyBonusRoute);
 router.use('/plans', planRoute);
 router.use('/reports', reportRoute);
+router.use('/serverinfo', serverInfoRoute);
 
 module.exports = router;

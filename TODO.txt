@@ -2,5 +2,3 @@ Usuários:
 
 - adicionar nome, valor total de contratos ativos, qualificação atual e telefone no retorno do get da rede até 8 nível 
 
-- retirar obrigatoriedade de informações no cadastro
-
