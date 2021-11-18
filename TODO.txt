@@ -1,14 +1,6 @@
 Usuários:
 
-- permitir apenas um saque por vez
-
 - adicionar nome, valor total de contratos ativos, qualificação atual e telefone no retorno do get da rede até 8 nível 
 
 - retirar obrigatoriedade de informações no cadastro
-
-- criar endpoint de atualização de dados para cada usuário.
-
-ADMIN
-
-- get de todos os usuários do banco
 

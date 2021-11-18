@@ -44,6 +44,14 @@ router.post('/', auth('create_withdraw'), validate(withdrawValidation.create), c
         throw new ApiError(httpStatus.BAD_REQUEST, 'Você precisa validar seus documentos (KYC) para realizar o saque');
     }
 
+    const withdraws = await withdrawModel.getAllByUserId(user.id);
+
+    for (let withdraw of withdraws) {
+        if (withdraw.status == 'pending') {
+            throw new ApiError(httpStatus.BAD_REQUEST, 'Você já tem uma solicitação de saque em aberto');
+        }
+    }
+
     if (req.body.value < 100) {
         throw new ApiError(httpStatus.BAD_REQUEST, 'O saque deve ser maior que R$ 100,00');
     }
