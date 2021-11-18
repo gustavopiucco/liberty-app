@@ -22,7 +22,7 @@ async function payDailyBonus() {
             return bonus.plan_id == contract.plan_id;
         });
 
-        if (!bonus) return;
+        if (!bonus) continue;
 
         const baseValue = parseFloat((contract.plan_price * (bonus.percentage / 100)).toFixed(4));
         const bonusValue = parseFloat((baseValue * 0.6).toFixed(4)); //60%
