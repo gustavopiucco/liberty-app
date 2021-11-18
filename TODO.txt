@@ -2,8 +2,6 @@ Usuários:
 
 - permitir apenas um saque por vez
 
-- Número de contratos ativos na rede
-
 - adicionar nome, valor total de contratos ativos, qualificação atual e telefone no retorno do get da rede até 8 nível 
 
 - retirar obrigatoriedade de informações no cadastro
@@ -13,6 +11,4 @@ Usuários:
 ADMIN
 
 - get de todos os usuários do banco
-
-- ajuste para por cronjob 3 vezes ao dia.
 

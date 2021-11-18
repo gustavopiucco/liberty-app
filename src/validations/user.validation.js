@@ -23,6 +23,20 @@ const getMultilevelByLevel = {
     }),
 };
 
+const updateMe = {
+    body: Joi.object().keys({
+        password: Joi.string().min(6).max(50),
+        first_name: Joi.string().max(30),
+        last_name: Joi.string().max(60),
+        phone: Joi.string().max(20),
+        birth_date: Joi.custom(date),
+        country: Joi.string().max(30),
+        city: Joi.string().max(50),
+        state: Joi.string().max(50),
+        postal_code: Joi.string().max(20),
+    }),
+};
+
 const update = {
     params: Joi.object().keys({
         id: Joi.number().integer().required(),
@@ -66,6 +80,7 @@ module.exports = {
     getById,
     getByQuery,
     getMultilevelByLevel,
+    updateMe,
     update,
     create
 }

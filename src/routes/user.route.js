@@ -92,25 +92,36 @@ router.get('/multilevel/me/:level', auth('get_multilevel'), validate(userValidat
     res.status(httpStatus.OK).send(multilevel);
 }));
 
+router.put('/me', auth('update_user'), validate(userValidation.updateMe), catchAsync(async (req, res) => {
+    let fields = req.body;
+
+    if (req.body.password) {
+        const password_hash = await bcrypt.hash(req.body.password, 8);
+        delete fields.password;
+        fields.password_hash = password_hash;
+    }
+
+    await userModel.update(req.user.id, fields);
+
+    res.status(httpStatus.OK).send();
+}));
+
 router.put('/:id', auth('admin_update_user'), validate(userValidation.update), catchAsync(async (req, res) => {
     const user = await userModel.getById(req.params.id);
 
-    const kycVerified = (req.body.kyc_verified != undefined) ? req.body.kyc_verified : user.kyc_verified;
-    const emailVerified = (req.body.email_verified != undefined) ? req.body.email_verified : user.email_verified;
-    const email = (req.body.email != undefined) ? req.body.email : user.email;
-    const passwordHash = (req.body.password != undefined) ? await bcrypt.hash(req.body.password, 8) : user.password_hash;
-    const role = (req.body.role) ? req.body.role : user.role;
-    const firstName = (req.body.first_name) ? req.body.first_name : user.first_name;
-    const lastName = (req.body.last_name) ? req.body.last_name : user.last_name;
-    const cpf = (req.body.cpf) ? req.body.cpf : user.cpf;
-    const phone = (req.body.phone) ? req.body.phone : user.phone;
-    const birthDate = (req.body.birth_date) ? req.body.birth_date : user.birth_date;
-    const country = (req.body.country) ? req.body.country : user.country;
-    const city = (req.body.city) ? req.body.city : user.city;
-    const state = (req.body.state) ? req.body.state : user.state;
-    const postalCode = (req.body.postal_code) ? req.body.postal_code : user.postal_code;
+    if (!user) {
+        throw new ApiError(httpStatus.BAD_REQUEST, 'Este usuário não existe');
+    }
 
-    await userModel.update(user.id, kycVerified, emailVerified, email, passwordHash, role, firstName, lastName, cpf, phone, birthDate, country, city, state, postalCode);
+    let fields = req.body;
+
+    if (req.body.password) {
+        const password_hash = await bcrypt.hash(req.body.password, 8);
+        delete fields.password;
+        fields.password_hash = password_hash;
+    }
+
+    await userModel.update(user.id, fields);
 
     res.status(httpStatus.OK).send();
 }));

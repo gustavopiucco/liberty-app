@@ -1,4 +1,5 @@
 const mysql = require('../database/mysql');
+const { sqlBuilder } = require('../utils/sql');
 
 async function emailExists(email) {
     const [rows, fields] = await mysql.pool.execute('SELECT 1 FROM users WHERE email = ?', [email]);
@@ -111,8 +112,10 @@ async function updateCareerPlan(id, careerPlan, careerPlanTotal) {
     await mysql.pool.execute('UPDATE users SET career_plan = ?, career_plan_total = ? WHERE id = ?', [careerPlan, careerPlanTotal, id]);
 }
 
-async function update(id, kycVerified, emailVerified, email, passwordHash, role, firstName, lastName, cpf, phone, birthDate, county, city, state, postalCode) {
-    await mysql.pool.execute('UPDATE users SET kyc_verified = ?, email_verified = ?, email = ?, password_hash = ?, role = ?, first_name = ?, last_name = ?, cpf = ?, phone = ?, birth_date = ?, country = ?, city = ?, state = ?, postal_code = ? WHERE id = ?', [kycVerified, emailVerified, email, passwordHash, role, firstName, lastName, cpf, phone, birthDate, county, city, state, postalCode, id]);
+async function update(id, fields) {
+    const builder = sqlBuilder('users', fields, 'id', id);
+
+    await mysql.pool.execute(builder.sql, builder.values);
 }
 
 async function addPendingBalance(id, value) {
