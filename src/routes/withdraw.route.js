@@ -21,7 +21,7 @@ router.get('/', auth('get_all_withdraws'), catchAsync(async (req, res) => {
     res.status(httpStatus.OK).send(withdraws);
 }));
 
-router.patch('/:id/approve', auth('approve_withdraw'), validate(withdrawValidation.getById), catchAsync(async (req, res) => {
+router.post('/:id/approve', auth('approve_withdraw'), validate(withdrawValidation.getById), catchAsync(async (req, res) => {
     const withdraw = await withdrawModel.getById(req.params.id);
 
     if (!withdraw) {

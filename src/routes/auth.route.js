@@ -35,7 +35,7 @@ router.post('/login', validate(authValidation.login), catchAsync(async (req, res
     });
 }));
 
-router.patch('/password', auth('update_password'), validate(authValidation.updatePassword), catchAsync(async (req, res) => {
+router.post('/password', auth('update_password'), validate(authValidation.updatePassword), catchAsync(async (req, res) => {
     let passwordHash = await bcrypt.hash(req.body.new_password, 8);
     await userModel.updatePasswordHash(req.user.id, passwordHash);
 

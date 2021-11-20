@@ -28,7 +28,7 @@ router.get('/', auth('get_all_kyc'), catchAsync(async (req, res) => {
     res.status(httpStatus.OK).send(kycRequests);
 }));
 
-router.patch('/:id/approve', auth('approve_kyc'), validate(kycValidation.approve), catchAsync(async (req, res) => {
+router.post('/:id/approve', auth('approve_kyc'), validate(kycValidation.approve), catchAsync(async (req, res) => {
     const kycRequest = await kycRequestModel.getById(req.params.id);
 
     if (!kycRequest) {
@@ -50,7 +50,7 @@ router.patch('/:id/approve', auth('approve_kyc'), validate(kycValidation.approve
     res.status(httpStatus.OK).send();
 }));
 
-router.patch('/:id/deny', auth('deny_kyc'), validate(kycValidation.approve), catchAsync(async (req, res) => {
+router.post('/:id/deny', auth('deny_kyc'), validate(kycValidation.approve), catchAsync(async (req, res) => {
     const kycRequest = await kycRequestModel.getById(req.params.id);
 
     if (!kycRequest) {

@@ -82,7 +82,7 @@ router.post('/', auth('create_contract'), validate(contractValidation.create), c
     res.status(httpStatus.CREATED).send({ id: insertId });
 }));
 
-router.patch('/:id/approve', auth('approve_contract'), validate(contractValidation.approve), catchAsync(async (req, res) => {
+router.post('/:id/approve', auth('approve_contract'), validate(contractValidation.approve), catchAsync(async (req, res) => {
     const contract = await contractModel.getById(req.params.id);
 
     if (!contract) {
@@ -104,7 +104,7 @@ router.patch('/:id/approve', auth('approve_contract'), validate(contractValidati
     res.status(httpStatus.OK).send();
 }));
 
-router.patch('/:id/deny', auth('deny_contract'), validate(contractValidation.deny), catchAsync(async (req, res) => {
+router.post('/:id/deny', auth('deny_contract'), validate(contractValidation.deny), catchAsync(async (req, res) => {
     const contract = await contractModel.getById(req.params.id);
 
     if (!contract) {
