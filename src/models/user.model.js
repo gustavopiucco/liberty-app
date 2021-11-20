@@ -89,7 +89,7 @@ async function getMultilevelByLevel(userId, level) {
         INNER JOIN multilevel m ON u.sponsor_id = m.id
     )
     
-    SELECT u.id, u.first_name, u.last_name, u.country, level FROM multilevel m
+    SELECT u.id, u.first_name, u.last_name, u.phone, u.career_plan, u.country, level FROM multilevel m
     INNER JOIN users u ON u.id = m.id
     WHERE u.id <> ? AND m.level = ?`, [userId, userId, level]);
 
