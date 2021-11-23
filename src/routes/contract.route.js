@@ -51,7 +51,7 @@ router.get('/', auth('get_all_contracts'), catchAsync(async (req, res) => {
     res.status(httpStatus.OK).send(contracts);
 }));
 
-router.get('/user/:userId', auth('get_all_contracts'), validate(contractValidation.getAllByUserId), catchAsync(async (req, res) => {
+router.get('/user/:userId', auth('get_all_contracts_by_user_id'), validate(contractValidation.getAllByUserId), catchAsync(async (req, res) => {
     const contracts = await contractModel.getAllByUserId(req.params.userId);
 
     res.status(httpStatus.OK).send(contracts);
