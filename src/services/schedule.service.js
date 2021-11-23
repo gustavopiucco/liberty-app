@@ -6,7 +6,7 @@ const withdrawModel = require('../models/withdraw.model');
 function start() {
     handleAvailableBalances();
     handleDailyBonus();
-    handleCareerPlan();
+    //handleCareerPlan();
     console.log('Scheduled jobs started');
 }
 
@@ -29,12 +29,12 @@ function handleDailyBonus() {
     });
 }
 
-function handleCareerPlan() {
-    //todo dia as 05:00
-    schedule.scheduleJob('0 5 * * *', async () => {
-        await careerPlanSerivde.checkCareerPlan();
-    });
-}
+// function handleCareerPlan() {
+//     //todo dia as 05:00
+//     schedule.scheduleJob('0 5 * * *', async () => {
+//         await careerPlanSerivde.checkCareerPlan();
+//     });
+// }
 
 module.exports = {
     start

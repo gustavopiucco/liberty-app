@@ -1,12 +1,10 @@
-const ApiError = require('../utils/ApiError');
-const httpStatus = require('http-status');
-const { format, subDays } = require('date-fns');
+const { format } = require('date-fns');
 const dailybonusModel = require('../models/dailybonus.model');
 const contractModel = require('../models/contract.model');
 const dailyBonusRecordModel = require('../models/dailybonusrecord.model');
-const multilevelRecordsModel = require('../models/multilevelrecords.model');
 const userModel = require('../models/user.model');
-const multilevelService = require('../services/multilevel.service');
+const multilevelService = require('./multilevel.service');
+const careerPlanService = require('./careerplan.service');
 
 async function payDailyBonus() {
     const todayDate = format(new Date(), 'yyyy-MM-dd HH:mm:00');
@@ -14,6 +12,8 @@ async function payDailyBonus() {
     const todayBonuses = await dailybonusModel.getAllByDate(todayDate);
 
     if (todayBonuses.length == 0) return;
+
+    await careerPlanService.checkCareerPlan();
 
     const contracts = await contractModel.getAllApproved();
 
