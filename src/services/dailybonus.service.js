@@ -26,7 +26,7 @@ async function payDailyBonus() {
 
         const baseValue = parseFloat((contract.plan_price * (bonus.percentage / 100)).toFixed(4));
         const bonusValue = parseFloat((baseValue * 0.6).toFixed(4)); //60%
-        const multilevelValue = parseFloat((baseValue * 0.2).toFixed(4)); //20%
+        const multilevelValue = parseFloat((baseValue * 0.4).toFixed(4)); //40%
 
         const maxUserCycleValue = contract.plan_price * 2; //200%
 
