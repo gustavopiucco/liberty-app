@@ -99,8 +99,8 @@ router.post('/:id/approve', auth('approve_contract'), validate(contractValidatio
         throw new ApiError(httpStatus.BAD_REQUEST, 'Este contrato já foi aprovado');
     }
 
-    if (contract.status == 'payment_denied') {
-        throw new ApiError(httpStatus.BAD_REQUEST, 'Este contrato já foi negado anteriormente');
+    if (contract.status != 'pending') {
+        throw new ApiError(httpStatus.BAD_REQUEST, 'Este contrato não está pendente');
     }
 
     await multilevelService.payMultilevelBonus(contract.id, contract.user_id, contract.plan_price, 'contract_payment_bonus', 5, [10, 2, 1, 1, 1]);
@@ -117,11 +117,15 @@ router.post('/:id/deny', auth('deny_contract'), validate(contractValidation.deny
         throw new ApiError(httpStatus.BAD_REQUEST, 'Este contrato não existe');
     }
 
-    if (contract.status == 'payment_denied') {
+    if (contract.status == 'denied') {
         throw new ApiError(httpStatus.BAD_REQUEST, 'Este contrato já foi negado');
     }
 
-    await contractModel.updateStatus(req.params.id, 'payment_denied');
+    if (contract.status != 'pending') {
+        throw new ApiError(httpStatus.BAD_REQUEST, 'Este contrato não está pendente');
+    }
+
+    await contractModel.updateStatus(req.params.id, 'denied');
 
     res.status(httpStatus.OK).send();
 }));
