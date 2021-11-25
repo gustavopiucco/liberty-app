@@ -13,7 +13,7 @@ async function checkCareerPlan() {
         let total = 0;
 
         for (let user of network) {
-            const contracts = await contractModel.getAllByUserIdNotPending(user.id);
+            const contracts = await contractModel.getAllByUserIdApprovedOrCompleted(user.id);
 
             for (let contract of contracts) {
                 total += contract.plan_price;
