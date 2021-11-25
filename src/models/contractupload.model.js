@@ -10,7 +10,12 @@ async function create(contractId, url, createdAt) {
     return rows;
 }
 
+async function deleteByContractId(contractId) {
+    await mysql.pool.execute('DELETE FROM contracts_uploads WHERE contract_id = ?', [contractId]);
+}
+
 module.exports = {
     getAllByContractId,
-    create
+    create,
+    deleteByContractId
 }

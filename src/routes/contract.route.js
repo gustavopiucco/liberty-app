@@ -145,6 +145,7 @@ router.delete('/:id', auth('delete_contract'), validate(contractValidation.delet
         throw new ApiError(httpStatus.FORBIDDEN, 'Sem permissão');
     }
 
+    await contractUploadModel.deleteByContractId(req.params.id);
     await contractModel.deleteById(req.params.id);
 
     res.status(httpStatus.OK).send();
