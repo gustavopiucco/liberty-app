@@ -11,6 +11,8 @@ const validate = require('../middlewares/validate');
 const userValidation = require('../validations/user.validation');
 const userModel = require('../models/user.model');
 const contractModel = require('../models/contract.model');
+const emailValidationModel = require('../models/emailvalidation.model');
+const emailService = require('../services/email.service');
 
 router.get('/me', auth('get_user'), catchAsync(async (req, res) => {
     let user;
