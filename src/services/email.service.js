@@ -6,7 +6,7 @@ const mg = mailgun({ apiKey: process.env.MAILGUN_API_KEY, domain: process.env.MA
 
 async function sendResetPasswordValidation(toEmail, code) {
     const data = {
-        from: 'Liberty <liberty@test.com>',
+        from: 'Liberty <no-reply@libertytrade.io>',
         to: toEmail,
         subject: 'Liberty - Reset Password',
         html: `
@@ -21,7 +21,7 @@ async function sendResetPasswordValidation(toEmail, code) {
 
 async function sendEmailValidation(toEmail, code) {
     const data = {
-        from: 'Liberty <liberty@test.com>',
+        from: 'Liberty <no-reply@libertytrade.io>',
         to: toEmail,
         subject: 'Liberty - Email Validation',
         html: `
