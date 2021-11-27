@@ -5,19 +5,42 @@ const auth = require('../middlewares/auth');
 const httpStatus = require('http-status');
 const ApiError = require('../utils/ApiError');
 const validate = require('../middlewares/validate');
-const dailyBonusRecords = require('../models/dailybonusrecord.model');
-const multilevelRecords = require('../models/multilevelrecords.model');
+const reportValidation = require('../validations/report.validation');
+const { format } = require('date-fns');
+const dailyBonusRecordModel = require('../models/dailybonusrecord.model');
+const multilevelRecordModel = require('../models/multilevelrecords.model');
+const contractModel = require('../models/contract.model');
 
 router.get('/daily-bonus/me', auth('get_reports_me'), catchAsync(async (req, res) => {
-    const reports = await dailyBonusRecords.getAllByUserId(req.user.id);
+    const reports = await dailyBonusRecordModel.getAllByUserId(req.user.id);
 
     res.status(httpStatus.OK).send(reports);
 }));
 
 router.get('/multilevel-bonus/me', auth('get_reports_me'), catchAsync(async (req, res) => {
-    const reports = await multilevelRecords.getAllByUserId(req.user.id);
+    const reports = await multilevelRecordModel.getAllByUserId(req.user.id);
 
     res.status(httpStatus.OK).send(reports);
+}));
+
+router.get('/admin/contracts', validate(reportValidation.contracts), catchAsync(async (req, res) => {
+    const fromDate = req.query.from_date;
+    const toDate = req.query.to_date;
+
+    let totalContractsApproved = 0;
+    let totalValueApproved = 0;
+
+    const contracts = await contractModel.getAllBetweenDates(fromDate, toDate);
+
+    for (contract of contracts) {
+        totalContractsApproved += 1;
+        totalValueApproved += contract.plan_price;
+    }
+
+    res.status(httpStatus.OK).send({
+        total_contracts_approved: totalContractsApproved,
+        total_value_approved: totalValueApproved
+    });
 }));
 
 module.exports = router;

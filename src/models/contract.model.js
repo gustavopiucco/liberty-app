@@ -70,6 +70,15 @@ async function getAllApproved() {
     return rows;
 }
 
+async function getAllBetweenDates(fromDate, toDate) {
+    const [rows, fields] = await mysql.pool.execute(`
+    SELECT contracts.*, plans.id AS plan_id, plans.price AS plan_price FROM contracts
+    JOIN plans ON plans.id = contracts.plan_id
+    WHERE contracts.created_at BETWEEN ? AND ?`, [fromDate, toDate]);
+
+    return rows;
+}
+
 async function create(userId, planId, status, paymentType, createdAt) {
     const [rows, fields] = await mysql.pool.execute('INSERT INTO contracts (user_id, plan_id, status, payment_type, created_at) VALUES (?, ?, ?, ?, ?)', [userId, planId, status, paymentType, createdAt]);
 
@@ -97,6 +106,7 @@ module.exports = {
     getByUserIdAndApproved,
     getAllByUserIdAndApproved,
     getAllApproved,
+    getAllBetweenDates,
     create,
     updateStatus,
     addTotalReceived,
