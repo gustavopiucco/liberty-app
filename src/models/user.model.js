@@ -96,6 +96,12 @@ async function getMultilevelByLevel(userId, level) {
     return rows;
 }
 
+async function getTotalBalances() {
+    const [rows, fields] = await mysql.pool.execute('SELECT SUM(available_balance) AS available_balance, SUM(pending_balance) AS pending_balance, SUM(total_balance_received) AS total_balance_received FROM users');
+
+    return rows;
+}
+
 async function setEmailVerified(id) {
     await mysql.pool.execute('UPDATE users SET email_verified = 1 WHERE id = ?', [id]);
 }
@@ -148,6 +154,7 @@ module.exports = {
     getAllDirectsById,
     getAllWithActiveOrCompletedContract,
     getMultilevelByLevel,
+    getTotalBalances,
     setEmailVerified,
     setKycVerified,
     updatePasswordHash,

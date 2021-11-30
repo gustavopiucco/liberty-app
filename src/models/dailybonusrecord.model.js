@@ -11,7 +11,7 @@ async function getAllByUserId(userId) {
 }
 
 async function getAllBeetwenDate(fromDate, toDate) {
-    const [rows, fields] = await mysql.pool.execute('SELECT * FROM daily_bonus_records WHERE date BETWEEN ? AND ?', [fromDate, toDate]);
+    const [rows, fields] = await mysql.pool.execute('SELECT * FROM daily_bonus_records WHERE created_at BETWEEN ? AND ?', [fromDate, toDate]);
 
     return rows;
 }
