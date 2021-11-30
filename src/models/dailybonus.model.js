@@ -2,11 +2,19 @@ const mysql = require('../database/mysql');
 
 async function getAllByDate(date) {
     const [rows, fields] = await mysql.pool.execute('SELECT * FROM daily_bonus WHERE date = ?', [date]);
+
+    return rows;
+}
+
+async function getAllBeetwenDate(fromDate, toDate) {
+    const [rows, fields] = await mysql.pool.execute('SELECT * FROM daily_bonus WHERE date BETWEEN ? AND ?', [fromDate, toDate]);
+
     return rows;
 }
 
 async function getAll() {
     const [rows, fields] = await mysql.pool.execute('SELECT * FROM daily_bonus ORDER BY date DESC');
+
     return rows;
 }
 
@@ -16,6 +24,7 @@ async function create(planId, percentage, date) {
 
 module.exports = {
     getAllByDate,
+    getAllBeetwenDate,
     getAll,
     create
 }

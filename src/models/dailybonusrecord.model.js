@@ -10,11 +10,18 @@ async function getAllByUserId(userId) {
     return rows;
 }
 
+async function getAllBeetwenDate(fromDate, toDate) {
+    const [rows, fields] = await mysql.pool.execute('SELECT * FROM daily_bonus_records WHERE date BETWEEN ? AND ?', [fromDate, toDate]);
+
+    return rows;
+}
+
 async function create(userId, fromContractId, value, createdAt) {
     await mysql.pool.execute('INSERT daily_bonus_records (user_id, from_contract_id, value, created_at) VALUES (?, ?, ?, ?)', [userId, fromContractId, value, createdAt]);
 }
 
 module.exports = {
     getAllByUserId,
+    getAllBeetwenDate,
     create
 }

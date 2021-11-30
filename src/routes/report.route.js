@@ -6,7 +6,7 @@ const httpStatus = require('http-status');
 const ApiError = require('../utils/ApiError');
 const validate = require('../middlewares/validate');
 const reportValidation = require('../validations/report.validation');
-const { format } = require('date-fns');
+const dailyBonusModel = require('../models/dailybonus.model');
 const dailyBonusRecordModel = require('../models/dailybonusrecord.model');
 const multilevelRecordModel = require('../models/multilevelrecords.model');
 const contractModel = require('../models/contract.model');
@@ -23,7 +23,7 @@ router.get('/multilevel-bonus/me', auth('get_reports_me'), catchAsync(async (req
     res.status(httpStatus.OK).send(reports);
 }));
 
-router.get('/admin/contracts', validate(reportValidation.contracts), catchAsync(async (req, res) => {
+router.get('/admin/contracts', validate(reportValidation.getContractsReports), catchAsync(async (req, res) => {
     const fromDate = req.query.from_date;
     const toDate = req.query.to_date;
 
@@ -40,6 +40,23 @@ router.get('/admin/contracts', validate(reportValidation.contracts), catchAsync(
     res.status(httpStatus.OK).send({
         total_contracts_approved: totalContractsApproved,
         total_value_approved: totalValueApproved
+    });
+}));
+
+router.get('/admin/daily-bonus', validate(reportValidation.getContractsReports), catchAsync(async (req, res) => {
+    const fromDate = req.query.from_date;
+    const toDate = req.query.to_date;
+
+    let totalDailyBonusPercentage = 0;
+
+    const dailyBonuses = await dailyBonusModel.getAllBeetwenDate(fromDate, toDate);
+
+    for (let dailyBonus of dailyBonuses) {
+        totalDailyBonusPercentage += dailyBonus.percentage;
+    }
+
+    res.status(httpStatus.OK).send({
+        total_daily_bonus_percentage: totalDailyBonusPercentage
     });
 }));
 
