@@ -1,0 +1,7 @@
+- endpoint para setar um usuario com voucher e adicionar o valor do voucher (que é o teto do que ele pode ganhar por dia de bonus multinivel)
+- endpoint para remover um usuario com voucher
+- se o usuario tiver um contrato ativo, nao permitir ativar voucher
+- ao remover o usuario, setar o voucher pra null novamente e o role para user
+- restringir o ganho de bonus diario para quem for voucher
+- permitir que o usuario voucher receba multinivel mesmo nao tendo contrato ativo
+- limite teto diario do multinivel de voucher = valor do voucher

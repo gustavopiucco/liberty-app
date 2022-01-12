@@ -140,6 +140,14 @@ async function subtractAvailableBalance(id, value) {
     await mysql.pool.execute('UPDATE users SET available_balance = available_balance - ? WHERE id = ?', [value, id]);
 }
 
+async function updateVoucher(id, voucher) {
+    await mysql.pool.execute(`UPDATE users SET role = 'voucher', voucher = ? WHERE id = ?`, [voucher, id]);
+}
+
+async function deleteVoucher(id) {
+    await mysql.pool.execute(`UPDATE users SET role = 'user', voucher = NULL WHERE id = ?`, [id]);
+}
+
 module.exports = {
     emailExists,
     cpfExists,
@@ -163,5 +171,7 @@ module.exports = {
     addPendingBalance,
     subtractPendingBalance,
     addAvailableBalance,
-    subtractAvailableBalance
+    subtractAvailableBalance,
+    updateVoucher,
+    deleteVoucher
 }

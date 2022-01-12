@@ -39,7 +39,9 @@ rolePermissions.set(roles[0],
         'get_wallet_me',
         'create_wallet',
         'delete_wallet',
-        'get_reports_me'
+        'get_reports_me',
+        'update_voucher',
+        'delete_voucher'
     ]);
 
 rolePermissions.set(roles[1],

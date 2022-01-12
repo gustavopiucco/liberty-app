@@ -36,14 +36,19 @@ async function payMultilevelBonus(baseContractId, baseContractUserId, baseValue,
             if (!user.career_plan) continue;
         }
 
-        const userContracts = await contractModel.getAllByUserIdAndApproved(user.id);
-
-        if (userContracts.length == 0) continue;
-
         let contractsTotalPrice = 0;
 
-        for (let userContract of userContracts) {
-            contractsTotalPrice += userContract.plan_price;
+        if (user.role == 'voucher') {
+            contractsTotalPrice = user.voucher;
+        }
+        else {
+            const userContracts = await contractModel.getAllByUserIdAndApproved(user.id);
+
+            if (userContracts.length == 0) continue;
+
+            for (let userContract of userContracts) {
+                contractsTotalPrice += userContract.plan_price;
+            }
         }
 
         let multilevelRecordsTotalPrice = 0

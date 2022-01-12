@@ -164,4 +164,50 @@ router.post('/', validate(userValidation.create), catchAsync(async (req, res) =>
     res.status(httpStatus.OK).send();
 }));
 
+router.put('/:id/voucher', auth('update_voucher'), validate(userValidation.updateVoucher), catchAsync(async (req, res) => {
+    const user = await userModel.getById(req.params.id);
+
+    if (!user) {
+        throw new ApiError(httpStatus.BAD_REQUEST, 'Este usuário não existe');
+    }
+
+    const contracts = await contractModel.getAllByUserIdAndApproved(user.id);
+
+    if (contracts.length > 0) {
+        throw new ApiError(httpStatus.BAD_REQUEST, 'O usuário não pode ter nenhum contrato ativo');
+    }
+
+    if (user.role == 'admin') {
+        throw new ApiError(httpStatus.BAD_REQUEST, 'Admin não pode ter voucher');
+    }
+
+    if (user.role == 'voucher') {
+        throw new ApiError(httpStatus.BAD_REQUEST, 'Este usuário já tem um voucher ativo');
+    }
+
+    await userModel.updateVoucher(req.params.id, req.body.voucher);
+
+    res.status(httpStatus.OK).send();
+}));
+
+router.delete('/:id/voucher', auth('delete_voucher'), validate(userValidation.deleteVoucher), catchAsync(async (req, res) => {
+    const user = await userModel.getById(req.params.id);
+
+    if (!user) {
+        throw new ApiError(httpStatus.BAD_REQUEST, 'Este usuário não existe');
+    }
+
+    if (user.role == 'admin') {
+        throw new ApiError(httpStatus.BAD_REQUEST, 'Admin não pode ter voucher');
+    }
+
+    if (user.role != 'voucher') {
+        throw new ApiError(httpStatus.BAD_REQUEST, 'Este usuário não tem um voucher para ser deletado');
+    }
+
+    await userModel.deleteVoucher(req.params.id);
+
+    res.status(httpStatus.OK).send();
+}));
+
 module.exports = router;

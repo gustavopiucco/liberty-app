@@ -68,11 +68,28 @@ const create = {
     }),
 };
 
+const updateVoucher = {
+    params: Joi.object().keys({
+        id: Joi.number().integer().required(),
+    }),
+    body: Joi.object().keys({
+        voucher: Joi.number().integer().required()
+    }),
+};
+
+const deleteVoucher = {
+    params: Joi.object().keys({
+        id: Joi.number().integer().required(),
+    })
+};
+
 module.exports = {
     getById,
     getByQuery,
     getMultilevelByLevel,
     updateMe,
     update,
-    create
+    create,
+    updateVoucher,
+    deleteVoucher
 }
